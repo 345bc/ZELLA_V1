@@ -1,0 +1,152 @@
+﻿@*@model ESHOPPER.Models.User
+
+    @{
+        ViewBag.Title = "Create";
+        Layout = "~/Views/Shared/Admin_layout.cshtml";
+    }
+
+    <h2>Create</h2>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <h4>User</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Role, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Role, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Role, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.PasswordHash, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.PasswordHash, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.PasswordHash, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.CreatedAt, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CreatedAt, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CreatedAt, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    }
+
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>*@
+
+@model ESHOPPER.Models.User
+
+@{
+    ViewBag.Title = "Create New User";
+    Layout = "~/Views/Shared/Admin_layout.cshtml";
+}
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h4 class="m-0 font-weight-bold text-primary">@ViewBag.Title</h4>
+        @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-secondary btn-sm" })
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            @* Hiển thị lỗi tổng quan nếu có *@
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="row mb-3">
+                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "col-md-3 col-form-label" })
+                <div class="col-md-9">
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "col-md-3 col-form-label" })
+                <div class="col-md-9">
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", type = "email" } })
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                @* Thay đổi quan trọng:
+                    1. Đổi nhãn thành "Password" cho dễ hiểu.
+                    2. Thêm "type = password" để ẩn nội dung gõ vào.
+                    3. Controller của bạn CẦN PHẢI băm (hash) mật khẩu này trước khi lưu.
+                *@
+                @Html.LabelFor(model => model.PasswordHash, "Password", htmlAttributes: new { @class = "col-md-3 col-form-label" })
+                <div class="col-md-9">
+                    @Html.EditorFor(model => model.PasswordHash, new { htmlAttributes = new { @class = "form-control", type = "password" } })
+                    @Html.ValidationMessageFor(model => model.PasswordHash, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                @*
+                    Thay đổi quan trọng:
+                    Chuyển từ ô nhập text sang DropdownList (danh sách chọn)
+                    để đảm bảo tính toàn vẹn dữ liệu (tránh gõ sai "Admin", "User", "admin"...)
+                    Bạn hãy thay đổi danh sách các vai trò (roles) cho phù hợp với hệ thống của bạn.
+                *@
+                @Html.LabelFor(model => model.Role, htmlAttributes: new { @class = "col-md-3 col-form-label" })
+                <div class="col-md-9">
+                    @Html.DropDownListFor(
+                        model => model.Role,
+                        new SelectList(new[] { "Admin", "Employee" }), // <-- THAY ĐỔI CÁC VAI TRÒ (ROLES) TẠI ĐÂY
+                        "Select a Role",
+                        new { @class = "form-select" } // Dùng 'form-select' cho dropdown của Bootstrap 5
+                    )
+                    @Html.ValidationMessageFor(model => model.Role, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            @*
+                Trường "CreatedAt" đã bị XÓA khỏi form.
+                Đây là thông tin nên được tạo tự động bởi server (Controller hoặc Database)
+                khi bản ghi được tạo (ví dụ: model.CreatedAt = DateTime.Now;),
+                không nên để người dùng tự nhập.
+            *@
+
+            <div class="row mb-3">
+                <div class="col-md-9 offset-md-3">
+                    <input type="submit" value="Create User" class="btn btn-primary" />
+                </div>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,76 @@
+﻿@model ESHOPPER.Models.User
+
+@{
+    ViewBag.Title = "Delete User";
+    Layout = "~/Views/Shared/Admin_layout.cshtml";
+}
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header py-3">
+        @* Dùng text-danger để làm nổi bật tiêu đề của hành động nguy hiểm *@
+        <h4 class="m-0 font-weight-bold text-danger">@ViewBag.Title</h4>
+    </div>
+    <div class="card-body">
+
+        @* Sử dụng "Alert" của Bootstrap để làm nổi bật cảnh báo *@
+        <div class="alert alert-danger" role="alert">
+            <h5 class="alert-heading">⚠️ Are you sure?</h5>
+            <p>
+                Bạn có chắc chắn muốn xóa vĩnh viễn người dùng:
+                <strong>@Html.DisplayFor(model => model.Name) (@Html.DisplayFor(model => model.Email))</strong>?
+            </p>
+            <hr>
+            <p class="mb-0">Hành động này không thể hoàn tác.</p>
+        </div>
+
+        @* Hiển thị lại thông tin để admin xác nhận lần cuối *@
+        <h5 class="mt-4">Details:</h5>
+        <dl class="row">
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Email)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Email)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Role)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Role)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.CreatedAt)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.CreatedAt)
+            </dd>
+
+            @* PasswordHash đã được cố tình loại bỏ khỏi hiển thị *@
+        </dl>
+
+        <hr />
+
+        @* Form xác nhận xóa *@
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-actions">
+                @* Đổi nút "Delete" thành "btn-danger" để có màu đỏ cảnh báo *@
+                <input type="submit" value="Yes, Delete This User" class="btn btn-danger" />
+
+                @* Nút "Back to List" dùng "btn-secondary" *@
+                @Html.ActionLink("Cancel (Back to List)", "Index", null, new { @class = "btn btn-secondary" })
+            </div>
+        }
+    </div>
+</div>

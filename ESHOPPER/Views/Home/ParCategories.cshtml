@@ -1,0 +1,42 @@
+﻿@model IEnumerable<ESHOPPER.Models.DanhMucSanPham>
+
+<nav class="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0 bg-light" id="navbar-vertical" style="width: calc(100% - 30px); z-index: 1050;">
+    <div class="navbar-nav w-100 " style="height: 410px;overflow-y: auto;">
+
+        <a href="@Url.Action("Shop","Home")"
+           class="nav-item nav-link @(ViewBag.SelectedCategoryID == null ? "active" : "")">
+            Tất cả sản phẩm
+        </a>
+
+        @foreach (var parent in Model.Where(dm => dm.MaDanhMucCha == null))
+        {
+            var subDanhMucs = Model.Where(c => c.MaDanhMucCha == parent.MaDM).ToList();
+
+            if (subDanhMucs.Any())
+            {
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link" data-toggle="dropdown">
+                        @parent.TenDanhMuc <i class="fa fa-angle-down float-right mt-1"></i>
+                    </a>
+                    <div class="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
+
+                        @foreach (var child in subDanhMucs)
+                        {
+                            <a href="@Url.Action("Shop", "Home", new { maDM = child.MaDM })"
+                               class="dropdown-item @(ViewBag.SelectedCategoryID == child.MaDM ? "active" : "")">
+                                @child.TenDanhMuc
+                            </a>
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                <a href="@Url.Action("Shop", "Home", new { maDM = parent.MaDM })"
+                   class="nav-item nav-link @(ViewBag.SelectedCategoryID == parent.MaDM ? "active" : "")">
+                    @parent.TenDanhMuc
+                </a>
+            }
+        }
+    </div>
+</nav>

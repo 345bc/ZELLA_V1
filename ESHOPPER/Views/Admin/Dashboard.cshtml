@@ -1,0 +1,179 @@
+﻿@model ESHOPPER.Models.AdminViewModel
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/Admin_layout.cshtml";
+}
+<div class="admin_content_main">
+    <div class="admin_content_main_title mb-3">
+        <h3>Dashboard</h3>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-3 col-md-6">
+            <div class="card text-white bg-primary shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        @* THAY ĐỔI ICON TẠI ĐÂY *@
+                        <i class="fas fa-tshirt me-2"></i> Sản phẩm
+                    </h5>
+                    <p class="card-text fs-4 fw-bold">@Model.ProductCount</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card text-white bg-success shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-shopping-cart me-2"></i> Đơn hàng
+                    </h5>
+                    <p class="card-text fs-4 fw-bold">350</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card text-white bg-warning shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-users me-2"></i> Khách hàng
+                    </h5>
+                    <p class="card-text fs-4 fw-bold">@Model.CustomerCount</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card text-white bg-danger shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-dollar-sign me-2"></i> Doanh thu
+                    </h5>
+                    <p class="card-text fs-4 fw-bold">150,000,000₫</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mt-2">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <i class="fas fa-chart-line me-2"></i> Thống kê Doanh thu
+                </div>
+                <div class="card-body">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <i class="fas fa-chart-pie me-2"></i> Tỷ lệ Sản phẩm
+                </div>
+                <div class="card-body">
+                    <canvas id="productPieChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mt-4">
+        <div class="card-header">
+            <i class="fas fa-list-alt me-2"></i> Đơn hàng gần đây
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Mã ĐH</th>
+                            <th scope="col">Khách hàng</th>
+                            <th scope="col">Ngày đặt</th>
+                            <th scope="col">Tổng tiền</th>
+                            <th scope="col">Trạng thái</th>
+                            <th scope="col">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">#1234</th>
+                            <td>Nguyễn Văn A</td>
+                            <td>01/11/2025</td>
+                            <td>2,500,000₫</td> @* Sửa giá cho hợp lý *@
+                            <td><span class="badge bg-success">Đã giao</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-primary">Xem</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">#1235</th>
+                            <td>Trần Thị B</td>
+                            <td>02/11/2025</td>
+                            <td>1,850,000₫</td> @* Sửa giá cho hợp lý *@
+                            <td>
+                                <span class="badge bg-warning text-dark">Đang xử lý</span>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-primary">Xem</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">#1236</th>
+                            <td>Lê Văn C</td>
+                            <td>03/11/2025</td>
+                            <td>3,200,000₫</td> @* Sửa giá cho hợp lý *@
+                            <td><span class="badge bg-danger">Đã hủy</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-primary">Xem</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-end mb-0">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Trước</a>
+                    </li>
+                    <li class="page-item active">
+                        <a class="page-link" href="#">1</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">2</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">3</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Sau</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row g-4 mt-2">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <i class="fas fa-clipboard-check me-2"></i> Thống kê nhanh
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Top sản phẩm bán chạy
+                            @* THAY ĐỔI TÊN SẢN PHẨM TẠI ĐÂY *@
+                            <span class="badge bg-info rounded-pill">Áo Sơ Mi</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Khách hàng mới (Tháng)
+                            <span class="badge bg-primary rounded-pill">52</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Đơn hàng đang giao
+                            <span class="badge bg-warning rounded-pill">18</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

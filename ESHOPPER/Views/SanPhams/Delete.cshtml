@@ -1,0 +1,84 @@
+﻿@model ESHOPPER.Models.SanPham
+
+@{
+    ViewBag.Title = "Delete Product";
+    Layout = "~/Views/Shared/Admin_layout.cshtml";
+}
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header py-3">
+        @* Dùng text-danger để nhấn mạnh hành động nguy hiểm *@
+        <h4 class="m-0 font-weight-bold text-danger">@ViewBag.Title</h4>
+    </div>
+
+    <div class="card-body">
+
+        @* Hộp cảnh báo nổi bật *@
+        <div class="alert alert-danger" role="alert">
+            <h5 class="alert-heading">⚠️ Bạn có chắc chắn không?</h5>
+            <p>
+                Bạn sắp xóa vĩnh viễn sản phẩm:
+                <strong>@Html.DisplayFor(model => model.TenSanPham)</strong>.
+            </p>
+            <hr>
+            <p class="mb-0">Hành động này không thể hoàn tác.</p>
+        </div>
+
+        <h5 class="mt-4">Tóm tắt sản phẩm sắp xóa:</h5>
+
+        @* Hiển thị tóm tắt trực quan (giống trang Details) *@
+        <div class="row p-3 bg-light border rounded">
+            @* CỘT HÌNH ẢNH *@
+            <div class="col-md-3 text-center">
+                @if (!string.IsNullOrEmpty(Model.AnhSP))
+                {
+                    @* Logic hiển thị ảnh (từ tên file) *@
+                    <img src="@Url.Content("~/Images/Products/" + Model.AnhSP)"
+                         alt="@Model.TenSanPham"
+                         class="img-fluid rounded"
+                         style="max-height: 150px; object-fit: contain;" />
+                }
+                else
+                {
+                    <div class="d-flex align-items-center justify-content-center bg-secondary-subtle rounded" style="height: 150px;">
+                        <span class="text-muted small">No Image</span>
+                    </div>
+                }
+            </div>
+
+            @* CỘT THÔNG TIN *@
+            <div class="col-md-9">
+                <h4>@Html.DisplayFor(model => model.TenSanPham)</h4>
+                <h5 class="text-danger">
+                    @(Model.GiaBanLe.HasValue ? Model.GiaBanLe.Value.ToString("N0") : "N/A") đ
+                </h5>
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Trạng thái</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.TrangThai)</dd>
+
+                    <dt class="col-sm-4">Danh mục</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.DanhMucSanPham.TenDanhMuc)</dd>
+
+                    <dt class="col-sm-4">Nhà cung cấp</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.NhaCungCap.TenNCC)</dd>
+                </dl>
+            </div>
+        </div>
+
+        <hr />
+
+        @* Form xác nhận xóa *@
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-actions">
+                @* Nút Delete màu đỏ để cảnh báo *@
+                <input type="submit" value="Vâng, Xóa Sản Phẩm Này" class="btn btn-danger" />
+
+                @* Nút Cancel (Hủy) *@
+                @Html.ActionLink("Hủy (Quay về Danh sách)", "Index", null, new { @class = "btn btn-secondary" })
+            </div>
+        }
+    </div>
+</div>

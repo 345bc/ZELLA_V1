@@ -1,0 +1,78 @@
+﻿@* Lưu ý: View này không cần Model, chỉ cần ViewBag *@
+@{
+    ViewBag.Title = "Payment Failed";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    /* Style thống nhất với trang Success, nhưng tông màu Đỏ */
+    .fail-container {
+        padding: 80px 0;
+        text-align: center;
+        background: #f8f9fa;
+    }
+
+    .fail-card {
+        background: #fff;
+        border-radius: 15px;
+        padding: 50px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        display: inline-block;
+        max-width: 600px;
+    }
+
+    .fail-icon {
+        color: #dc3545; /* Màu đỏ */
+        font-size: 5rem;
+        margin-bottom: 25px;
+        animation: pulseFail 1s infinite alternate;
+    }
+
+    @@keyframes pulseFail {
+        from {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        to {
+            transform: scale(1.05);
+            opacity: 0.8;
+        }
+    }
+
+    .btn-action-fail {
+        padding: 12px 30px;
+        border-radius: 30px;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+</style>
+
+<div class="container-fluid fail-container">
+    <div class="fail-card">
+
+        <i class="fa fa-times-circle fail-icon"></i>
+
+        <h2 class="font-weight-bold text-dark mb-3">Thanh toán Thất bại!</h2>
+
+        <div class="alert alert-danger mb-4" role="alert">
+            <i class="fa fa-exclamation-circle mr-2"></i>
+            <strong>Lỗi giao dịch:</strong> @ViewBag.ErrorMessage
+        </div>
+
+        <p class="text-muted mb-4">
+            Quá trình thanh toán không được hoàn tất. Tài khoản của bạn **chưa bị trừ tiền**.
+            Bạn có thể thử lại ngay hoặc chọn phương thức khác.
+        </p>
+
+        <div class="d-flex justify-content-center gap-3">
+            @* Nếu bạn lưu thông tin cần thiết vào TempData, có thể đặt link thử lại ở đây *@
+            <a href="@Url.Action("Cart", "Home")" class="btn btn-action-fail btn-primary">
+                <i class="fa fa-shopping-cart mr-2"></i> Quay lại Giỏ hàng
+            </a>
+            <a href="@Url.Action("Index", "Home")" class="btn btn-action-fail btn-outline-secondary">
+                <i class="fa fa-home mr-2"></i> Về Trang chủ
+            </a>
+        </div>
+    </div>
+</div>

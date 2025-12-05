@@ -1,0 +1,941 @@
+﻿@*﻿@model ESHOPPER.Models.ProductDetailsViewModel
+    @using Newtonsoft.Json
+
+    @{
+        ViewBag.Title = "Shop Detail";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+        // Đã xóa dòng kiểm tra Session["MaKH"] vì không cần bắt buộc đăng nhập nữa
+    }
+
+    <style>
+        /* Layout chính */
+        .product-detail-section {
+            padding: 60px 0;
+            background-color: #fcfcfc;
+        }
+
+        /* Cột Ảnh */
+        .product-gallery-wrapper {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            background: #fff;
+        }
+
+        .main-img-container {
+            position: relative;
+            height: 500px;
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .main-img-container img {
+                max-width: 100%;
+                max-height: 100%;
+                object-fit: contain;
+                transition: transform 0.3s ease;
+            }
+
+            .main-img-container:hover img {
+                transform: scale(1.05);
+            }
+
+        /* Cột Thông tin (Sticky) */
+        .product-info-wrapper {
+            position: sticky;
+            top: 100px;
+            padding-left: 30px;
+        }
+
+        .product-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #333;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .product-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #D19C97;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .product-desc {
+            font-size: 0.95rem;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        /* Swatches */
+        .variant-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* SIZE */
+        .size-option {
+            display: inline-block;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+            .size-option input {
+                display: none;
+            }
+
+            .size-option label {
+                display: block;
+                min-width: 45px;
+                height: 45px;
+                line-height: 45px;
+                text-align: center;
+                border: 1px solid #ddd;
+                background: #fff;
+                cursor: pointer;
+                border-radius: 8px;
+                font-weight: 600;
+                transition: all 0.2s;
+                padding: 0 10px;
+            }
+
+            .size-option input:checked + label {
+                background-color: #333;
+                color: #fff;
+                border-color: #333;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            }
+
+        /* COLOR */
+        .color-option {
+            display: inline-block;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+            .color-option input {
+                display: none;
+            }
+
+            .color-option label {
+                display: block;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                border: 2px solid #fff;
+                box-shadow: 0 0 0 1px #eee;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+
+            .color-option input:checked + label {
+                box-shadow: 0 0 0 2px #333;
+                transform: scale(1.1);
+            }
+
+        /* Quantity & Button */
+        .qty-box {
+            display: flex;
+            align-items: center;
+            border: 2px solid #eee;
+            border-radius: 30px;
+            width: 140px;
+            overflow: hidden;
+            margin-right: 20px;
+        }
+
+        .qty-btn {
+            width: 40px;
+            height: 45px;
+            background: transparent;
+            border: none;
+            font-size: 1.2rem;
+            color: #333;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+            .qty-btn:hover {
+                background-color: #f8f9fa;
+            }
+
+        .qty-input {
+            width: 60px;
+            border: none;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            background: transparent;
+        }
+
+            .qty-input:focus {
+                outline: none;
+            }
+
+        .btn-add-cart {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 12px 40px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            flex-grow: 1;
+        }
+
+            .btn-add-cart:hover {
+                background-color: #D19C97;
+                transform: translateY(-3px);
+                box-shadow: 0 8px 20px rgba(209, 156, 151, 0.4);
+                color: #fff;
+            }
+    </style>
+
+    <div class="container-fluid bg-secondary mb-5">
+        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 200px">
+            <h1 class="font-weight-semi-bold text-uppercase mb-3">Shop Detail</h1>
+            <div class="d-inline-flex">
+                <p class="m-0"><a href="@Url.Action("index","Home")" class="text-dark">Home</a></p>
+                <p class="m-0 px-2">-</p>
+                <p class="m-0 text-muted">Detail</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-detail-section container-fluid px-5">
+        <div class="container-fluid px-5">
+            <div class="row">
+                <div class="col-lg-6 pb-5">
+                    <div class="product-gallery-wrapper">
+                        <div class="main-img-container">
+                            <img id="main-product-image"
+                                 src="@Url.Content("~/Images/Products/"+ Model.SanPhamChinh.AnhSP)"
+                                 alt="@Model.SanPhamChinh.TenSanPham">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 pb-5">
+                    <div class="product-info-wrapper">
+                        <h2 class="product-title">@Model.SanPhamChinh.TenSanPham</h2>
+
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="text-primary mr-2">
+                                <small class="fas fa-star"></small>
+                                <small class="fas fa-star"></small>
+                                <small class="fas fa-star"></small>
+                                <small class="fas fa-star-half-alt"></small>
+                                <small class="far fa-star"></small>
+                            </div>
+                            <small class="pt-1 text-muted">(50 Reviews)</small>
+                        </div>
+
+                        <h3 class="product-price" id="product-price">
+                            @string.Format("{0:N0} ₫", Model.SanPhamChinh.GiaBanLe)
+                        </h3>
+
+                        <p class="product-desc">@Model.SanPhamChinh.MoTa</p>
+
+                        @using (Html.BeginForm("AddToCart", "Home", FormMethod.Post, new { id = "addToCartForm" }))
+                        {
+                            <input type="hidden" name="productId" value="@Model.SanPhamChinh.MaSP" />
+
+                            <div class="mb-4">
+                                <span class="variant-label">Select Size:</span>
+                                <div class="d-flex flex-wrap">
+                                    @foreach (var size in Model.CacSizeDuyNhat)
+                                    {
+                                        <div class="size-option">
+                                            <input type="radio" class="variant-radio" id="size-@size" name="selectedSize" value="@size" required>
+                                            <label for="size-@size">@size</label>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <span class="variant-label">Select Color:</span>
+                                <div class="d-flex flex-wrap">
+                                    @foreach (var color in Model.CacMauDuyNhat)
+                                    {
+                                        string colorHex = "#ccc";
+                                        string c = color.ToLower();
+                                        if (c == "black") { colorHex = "#000"; }
+                                        else if (c == "white") { colorHex = "#fff"; }
+                                        else if (c == "red") { colorHex = "#ff0000"; }
+                                        else if (c == "blue") { colorHex = "#0000ff"; }
+                                        else if (c == "green") { colorHex = "#008000"; }
+                                        else if (c == "yellow") { colorHex = "#ffff00"; }
+                                        else if (c == "pink") { colorHex = "#ffc0cb"; }
+                                        else if (c == "purple") { colorHex = "#800080"; }
+                                        else if (c == "grey" || c == "gray") { colorHex = "#808080"; }
+
+                                        <div class="color-option">
+                                            <input type="radio" class="variant-radio" id="color-@color" name="selectedColor" value="@color" required>
+                                            <label for="color-@color"
+                                                   style="background-color: @colorHex; @(c == "white" ? "border: 1px solid #ccc;" : "")"
+                                                   title="@color">
+                                            </label>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="d-flex align-items-center mb-4 pt-2">
+                                <div class="qty-box quantity">
+                                    <button type="button" class="qty-btn btn-minus"><i class="fa fa-minus"></i></button>
+                                    <input type="text" name="quantity" class="qty-input" value="1" min="1">
+                                    <button type="button" class="qty-btn btn-plus"><i class="fa fa-plus"></i></button>
+                                </div>
+
+                                <button type="button" id="btnAddToCart" class="btn-add-cart">
+                                    <i class="fa fa-shopping-bag mr-2"></i> Add To Cart
+                                </button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-5">
+                <div class="col-12">
+                    <div class="bg-white p-5 rounded shadow-sm">
+                        <h4 class="mb-4 font-weight-bold">Reviews (0)</h4>
+                        <p class="text-muted">Chức năng này đang được cập nhật...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid pt-5 px-5">
+        <div class="section-title-modern">
+            <h2>New Arrivals</h2>
+        </div>
+        <div class="row px-xl-5 pb-3">
+            @foreach (var item in Model.SanPhamNgauNhiens.Take(4))
+            {
+                <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+                    <div class="product-card-modern">
+                        <div class="product-img-wrap">
+                            <img src="@Url.Content("~/Images/Products/" + item.AnhSP)" alt="@item.TenSanPham">
+                            <div class="product-actions">
+                                <a href="@Url.Action("ProductDetails", "Home", new { id = item.MaSP })" class="btn-action" title="View Detail">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <a href="@Url.Action("ProductDetails", "Home", new { id = item.MaSP })" class="text-decoration-none">
+                                <h6 class="product-name">@item.TenSanPham</h6>
+                            </a>
+                            <div class="product-price">
+                                @String.Format("{0:N0} ₫", item.GiaBanLe)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+
+    @section Scripts {
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const btnAddToCart = document.getElementById('btnAddToCart');
+                if (!btnAddToCart) return;
+
+                // Biến thể từ server
+                const variants = @Html.Raw(JsonConvert.SerializeObject(
+                    Model.SanPhamChinh.BienTheSanPhams.Select(b => new {
+                        b.MaSize,
+                        b.MaMau,
+                        b.GiaBan,
+                        b.AnhBienThe
+                    })
+                ));
+
+                const defaultPrice = @(Model.SanPhamChinh.GiaBanLe ?? 0);
+                const defaultImage = '@Url.Content("~/Images/Products/" + (Model.SanPhamChinh.AnhSP ?? "no-image.jpg"))';
+
+                // Cập nhật giá + ảnh
+                function updateProductDetails() {
+                    const size = document.querySelector('input[name="selectedSize"]:checked')?.value;
+                    const color = document.querySelector('input[name="selectedColor"]:checked')?.value;
+
+                    let price = defaultPrice;
+                    let image = defaultImage;
+
+                    if (size && color) {
+                        const v = variants.find(x => x.MaSize === size && x.MaMau === color);
+                        if (v) {
+                            price = v.GiaBan || defaultPrice;
+                            if (v.AnhBienThe && v.AnhBienThe.trim() !== '') {
+                                image = '@Url.Content("~/Images/Products/")' + v.AnhBienThe;
+                            }
+                        }
+                    }
+
+                    const priceEl = document.getElementById('product-price');
+                    const imgEl = document.getElementById('main-product-image');
+                    if (priceEl) priceEl.textContent = price.toLocaleString('vi-VN') + ' ₫';
+                    if (imgEl) {
+                        // Fix 404: nếu ảnh lỗi → fallback về ảnh mặc định
+                        imgEl.onerror = () => imgEl.src = defaultImage;
+                        imgEl.src = image;
+                    }
+                }
+
+                // Sự kiện chọn size/color
+                document.querySelectorAll('input[name="selectedSize"], input[name="selectedColor"]').forEach(el => {
+                    el.addEventListener('change', updateProductDetails);
+                });
+
+                // Tăng/giảm số lượng - FIX NULL ERROR
+                document.addEventListener('click', function (e) {
+                    if (e.target.closest('.btn-plus')) {
+                        e.preventDefault();
+                        const qtyInput = e.target.closest('.quantity')?.querySelector('input[name="quantity"]');
+                        if (qtyInput) qtyInput.value = (parseInt(qtyInput.value) || 1) + 1;
+                    }
+                    if (e.target.closest('.btn-minus')) {
+                        e.preventDefault();
+                        const qtyInput = e.target.closest('.quantity')?.querySelector('input[name="quantity"]');
+                        if (qtyInput) {
+                            const val = parseInt(qtyInput.value) || 1;
+                            if (val > 1) qtyInput.value = val - 1;
+                        }
+                    }
+                });
+
+                // Add to Cart bằng AJAX
+                btnAddToCart.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    const hasSize = document.querySelector('input[name="selectedSize"]') !== null;
+                    const hasColor = document.querySelector('input[name="selectedColor"]') !== null;
+
+                    const selectedSize = document.querySelector('input[name="selectedSize"]:checked')?.value || '';
+                    const selectedColor = document.querySelector('input[name="selectedColor"]:checked')?.value || '';
+
+                    if ((hasSize && !selectedSize) || (hasColor && !selectedColor)) {
+                        Swal.fire('Thiếu!', 'Vui lòng chọn Size và Màu sắc', 'warning');
+                        return;
+                    }
+
+                    const quantity = parseInt(document.querySelector('input[name="quantity"]')?.value || 1);
+
+                    fetch('@Url.Action("AddToCart", "Home")', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                        },
+                        body: JSON.stringify({
+                            productId: '@Model.SanPhamChinh.MaSP',
+                            quantity: quantity,
+                            selectedSize: selectedSize,
+                            selectedColor: selectedColor
+                        })
+                    })
+                    .then(r => r.json())
+                    .then(res => {
+                        if (res.success) {
+                            // Cập nhật badge giỏ hàng
+                            const badge = document.querySelector('#cartBadge') || document.querySelector('.cart-count');
+                            if (badge) badge.textContent = res.totalItems || 0;
+
+                            Swal.fire('Thành công!', res.message, 'success');
+                        } else {
+                            Swal.fire('Lỗi', res.message, 'error');
+                        }
+                    })
+                    .catch(() => Swal.fire('Lỗi', 'Không thể kết nối server', 'error'));
+                });
+
+                // Khởi chạy lần đầu
+                updateProductDetails();
+            });
+        </script>
+    }*@
+@model ESHOPPER.Models.ProductDetailsViewModel
+@using Newtonsoft.Json
+
+@{
+    ViewBag.Title = "Chi tiết sản phẩm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@* --- PHẦN CSS (Giữ nguyên style của bạn) --- *@
+<style>
+    /* Layout chính */
+    .product-detail-section {
+        padding: 60px 0;
+        background-color: #fcfcfc;
+    }
+
+    .product-gallery-wrapper {
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        background: #fff;
+    }
+
+    .main-img-container {
+        position: relative;
+        height: 500px;
+        background-color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .main-img-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .main-img-container:hover img {
+            transform: scale(1.05);
+        }
+
+    /* Cột Thông tin */
+    .product-info-wrapper {
+        position: sticky;
+        top: 100px;
+        padding-left: 30px;
+    }
+
+    .product-title {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #333;
+        margin-bottom: 10px;
+        line-height: 1.2;
+    }
+
+    .product-price {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #D19C97;
+        margin-bottom: 20px;
+        display: inline-block;
+    }
+
+    .product-desc {
+        font-size: 0.95rem;
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 30px;
+    }
+
+    /* Size & Color Option */
+    .variant-label {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .size-option {
+        display: inline-block;
+        margin-right: 10px;
+        margin-bottom: 10px;
+    }
+
+        .size-option input {
+            display: none;
+        }
+
+        .size-option label {
+            display: block;
+            min-width: 45px;
+            height: 45px;
+            line-height: 45px;
+            text-align: center;
+            border: 1px solid #ddd;
+            background: #fff;
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s;
+            padding: 0 10px;
+        }
+
+        .size-option input:checked + label {
+            background-color: #333;
+            color: #fff;
+            border-color: #333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+    .color-option {
+        display: inline-block;
+        margin-right: 10px;
+        margin-bottom: 10px;
+    }
+
+        .color-option input {
+            display: none;
+        }
+
+        .color-option label {
+            display: block;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 0 0 1px #eee;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .color-option input:checked + label {
+            box-shadow: 0 0 0 2px #333;
+            transform: scale(1.1);
+        }
+
+    /* Quantity & Button */
+    .qty-box {
+        display: flex;
+        align-items: center;
+        border: 2px solid #eee;
+        border-radius: 30px;
+        width: 140px;
+        overflow: hidden;
+        margin-right: 20px;
+    }
+
+    .qty-btn {
+        width: 40px;
+        height: 45px;
+        background: transparent;
+        border: none;
+        font-size: 1.2rem;
+        color: #333;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+        .qty-btn:hover {
+            background-color: #f8f9fa;
+        }
+
+    .qty-input {
+        width: 60px;
+        border: none;
+        text-align: center;
+        font-weight: 700;
+        font-size: 1.1rem;
+        background: transparent;
+    }
+
+        .qty-input:focus {
+            outline: none;
+        }
+
+    .btn-add-cart {
+        background-color: #333;
+        color: #fff;
+        border: none;
+        padding: 12px 40px;
+        border-radius: 30px;
+        font-weight: 700;
+        font-size: 1rem;
+        letter-spacing: 1px;
+        transition: all 0.3s;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        flex-grow: 1;
+        cursor: pointer;
+    }
+
+        .btn-add-cart:hover {
+            background-color: #D19C97;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(209, 156, 151, 0.4);
+            color: #fff;
+        }
+</style>
+
+@* --- BREADCRUMB --- *@
+
+
+@* --- MAIN CONTENT --- *@
+<div class="product-detail-section container-fluid px-5">
+    <div class="container-fluid px-5">
+
+        @* Hiển thị thông báo Lỗi/Thành công từ Controller (TempData) *@
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fa fa-check-circle mr-2"></i> @TempData["SuccessMessage"]
+                <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+            </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fa fa-exclamation-triangle mr-2"></i> @TempData["ErrorMessage"]
+                <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+            </div>
+        }
+
+        <div class="row">
+            @* --- CỘT TRÁI: ẢNH SẢN PHẨM --- *@
+            <div class="col-lg-6 pb-5">
+                <div class="product-gallery-wrapper">
+                    <div class="main-img-container">
+                        <img id="main-product-image"
+                             src="@Url.Content("~/Images/Products/"+ Model.SanPhamChinh.AnhSP)"
+                             alt="@Model.SanPhamChinh.TenSanPham">
+                    </div>
+                </div>
+            </div>
+
+            @* --- CỘT PHẢI: THÔNG TIN & FORM --- *@
+            <div class="col-lg-6 pb-5">
+                <div class="product-info-wrapper">
+                    <h2 class="product-title">@Model.SanPhamChinh.TenSanPham</h2>
+
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="text-primary mr-2">
+                            <small class="fas fa-star"></small><small class="fas fa-star"></small><small class="fas fa-star"></small><small class="fas fa-star-half-alt"></small><small class="far fa-star"></small>
+                        </div>
+                        <small class="pt-1 text-muted">(50 Reviews)</small>
+                    </div>
+
+                    <h3 class="product-price" id="product-price">
+                        @string.Format("{0:N0} ₫", Model.SanPhamChinh.GiaBanLe)
+                    </h3>
+
+                    <p class="product-desc">@Model.SanPhamChinh.MoTa</p>
+
+                    @* --- FORM BẮT ĐẦU TẠI ĐÂY --- *@
+                    @* Lưu ý: ActionName là "AddToCart", ControllerName là "Home" (hoặc GioHang tùy bạn) *@
+                    @using (Html.BeginForm("AddToCart", "Home", FormMethod.Post, new { id = "addToCartForm" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @* Input ẩn chứa Mã Sản Phẩm *@
+                        <input type="hidden" name="productId" value="@Model.SanPhamChinh.MaSP" />
+
+                        @* 1. CHỌN SIZE *@
+                        <div class="mb-4">
+                            <span class="variant-label">Select Size:</span>
+                            <div class="d-flex flex-wrap">
+                                @foreach (var size in Model.CacSizeDuyNhat)
+                                {
+                                    <div class="size-option">
+                                        @* name="selectedSize" khớp với tham số bên Controller *@
+                                        <input type="radio" id="size-@size" name="selectedSize" value="@size">
+                                        <label for="size-@size">@size</label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        @* 2. CHỌN MÀU *@
+                        <div class="mb-4">
+                            <span class="variant-label">Select Color:</span>
+                            <div class="d-flex flex-wrap">
+                                @foreach (var color in Model.CacMauDuyNhat)
+                                {
+                                    string colorHex = "#ccc";
+                                    string c = color.ToLower();
+                                    if (c == "black") { colorHex = "#000"; }
+                                    else if (c == "white") { colorHex = "#fff"; }
+                                    else if (c == "red") { colorHex = "#ff0000"; }
+                                    else if (c == "blue") { colorHex = "#0000ff"; }
+                                    else if (c == "green") { colorHex = "#008000"; }
+                                    else if (c == "yellow") { colorHex = "#ffff00"; }
+                                    else if (c == "pink") { colorHex = "#ffc0cb"; }
+                                    else if (c == "purple") { colorHex = "#800080"; }
+                                    else if (c == "grey" || c == "gray") { colorHex = "#808080"; }
+
+                                    <div class="color-option">
+                                        @* name="selectedColor" khớp với tham số bên Controller *@
+                                        <input type="radio" id="color-@color" name="selectedColor" value="@color">
+                                        <label for="color-@color" style="background-color: @colorHex; @(c == "white" ? "border: 1px solid #ccc;" : "")" title="@color"></label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        @* 3. SỐ LƯỢNG & NÚT MUA *@
+                        <div class="d-flex align-items-center mb-4 pt-2">
+                            <div class="qty-box quantity">
+                                <button type="button" class="qty-btn btn-minus"><i class="fa fa-minus"></i></button>
+                                <input type="text" name="quantity" class="qty-input" value="1" min="1">
+                                <button type="button" class="qty-btn btn-plus"><i class="fa fa-plus"></i></button>
+                            </div>
+
+                            @* type="submit" để gửi form đi *@
+                            <button type="submit" class="btn-add-cart">
+                                <i class="fa fa-shopping-bag mr-2"></i> Thêm vào giỏ
+                            </button>
+                        </div>
+                    }
+                    @* --- KẾT THÚC FORM --- *@
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="bg-white p-5 rounded shadow-sm">
+                    <h4 class="mb-4 font-weight-bold">Reviews (0)</h4>
+                    <p class="text-muted">Chức năng này đang được cập nhật...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* --- SẢN PHẨM KHÁC (NEW ARRIVALS) --- *@
+<div class="container-fluid pt-5 px-5">
+    <div class="section-title-modern">
+        <h2>Sản phẩm khác</h2>
+    </div>
+    <div class="row px-xl-5 pb-3">
+        @foreach (var item in Model.SanPhamNgauNhiens.Take(4))
+        {
+            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+                <div class="product-card-modern">
+                    <div class="product-img-wrap">
+                        <img src="@Url.Content("~/Images/Products/" + item.AnhSP)" alt="@item.TenSanPham">
+                        <div class="product-actions">
+                            <a href="@Url.Action("ProductDetails", "Home", new { id = item.MaSP })" class="btn-action" title="Xem chi tiết">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <a href="@Url.Action("ProductDetails", "Home", new { id = item.MaSP })" class="text-decoration-none">
+                            <h6 class="product-name">@item.TenSanPham</h6>
+                        </a>
+                        <div class="product-price">
+                            @String.Format("{0:N0} ₫", item.GiaBanLe)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // --- 1. DỮ LIỆU BIẾN THỂ (Để đổi Ảnh/Giá khi click) ---
+            const variants = @Html.Raw(JsonConvert.SerializeObject(
+                Model.SanPhamChinh.BienTheSanPhams.Select(b => new {
+                    b.MaSize,
+                    b.MaMau,
+                    b.GiaBan,
+                    b.AnhBienThe
+                })
+            ));
+
+            const defaultPrice = @(Model.SanPhamChinh.GiaBanLe ?? 0);
+            const defaultImage = '@Url.Content("~/Images/Products/" + (Model.SanPhamChinh.AnhSP ?? "no-image.jpg"))';
+
+            // Hàm cập nhật giao diện
+            function updateProductDetails() {
+                const sizeInput = document.querySelector('input[name="selectedSize"]:checked');
+                const colorInput = document.querySelector('input[name="selectedColor"]:checked');
+
+                const size = sizeInput ? sizeInput.value : null;
+                const color = colorInput ? colorInput.value : null;
+
+                let price = defaultPrice;
+                let image = defaultImage;
+
+                // Nếu chọn đủ Size + Màu thì tìm biến thể
+                if (size && color) {
+                    const v = variants.find(x => x.MaSize == size && x.MaMau == color);
+                    if (v) {
+                        // Cập nhật giá nếu biến thể có giá riêng
+                        price = v.GiaBan || defaultPrice;
+                        // Cập nhật ảnh nếu biến thể có ảnh riêng
+                        if (v.AnhBienThe && v.AnhBienThe.trim() !== '') {
+                            image = '@Url.Content("~/Images/Products/")' + v.AnhBienThe;
+                        }
+                    }
+                }
+
+                // Render ra HTML
+                const priceEl = document.getElementById('product-price');
+                const imgEl = document.getElementById('main-product-image');
+
+                if (priceEl) priceEl.textContent = price.toLocaleString('vi-VN') + ' ₫';
+                if (imgEl) {
+                    // Nếu ảnh lỗi thì quay về ảnh mặc định
+                    imgEl.onerror = () => imgEl.src = defaultImage;
+                    imgEl.src = image;
+                }
+            }
+
+            // Gắn sự kiện change cho các radio button
+            document.querySelectorAll('input[name="selectedSize"], input[name="selectedColor"]').forEach(el => {
+                el.addEventListener('change', updateProductDetails);
+            });
+
+            // --- 2. TĂNG GIẢM SỐ LƯỢNG ---
+            document.addEventListener('click', function (e) {
+                // Nút Cộng
+                if (e.target.closest('.btn-plus')) {
+                    e.preventDefault();
+                    const qtyInput = e.target.closest('.quantity')?.querySelector('input[name="quantity"]');
+                    if (qtyInput) {
+                        let val = parseInt(qtyInput.value) || 0;
+                        qtyInput.value = val + 1;
+                    }
+                }
+                // Nút Trừ
+                if (e.target.closest('.btn-minus')) {
+                    e.preventDefault();
+                    const qtyInput = e.target.closest('.quantity')?.querySelector('input[name="quantity"]');
+                    if (qtyInput) {
+                        let val = parseInt(qtyInput.value) || 0;
+                        if (val > 1) qtyInput.value = val - 1;
+                    }
+                }
+            });
+
+            // --- 3. KIỂM TRA VALIDATION TRƯỚC KHI SUBMIT ---
+            const form = document.getElementById('addToCartForm');
+            if(form){
+                form.addEventListener('submit', function(e) {
+                    const sizeChecked = document.querySelector('input[name="selectedSize"]:checked');
+                    const colorChecked = document.querySelector('input[name="selectedColor"]:checked');
+
+                    if (!sizeChecked || !colorChecked) {
+                        e.preventDefault(); // Chặn không cho gửi form
+                        alert('Vui lòng chọn đầy đủ Size và Màu sắc trước khi mua!');
+                    }
+                    // Nếu đã chọn đủ, form sẽ tự gửi đi -> Controller xử lý -> Load lại trang
+                });
+            }
+
+            // Chạy lần đầu để set giá trị mặc định
+            updateProductDetails();
+        });
+    </script>
+}

@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "Order Success";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid pt-5">
+    <div class="container text-center py-5">
+        <div class="mb-4">
+            <i class="fa fa-check-circle text-primary display-1"></i>
+        </div>  
+        <h2 class="font-weight-bold text-dark">Your Order Is Completed!</h2>
+        <p class="lead mb-4">Thank you for your order! Your order is being processed and will be completed within 3-6 hours.</p>
+
+        <div class="d-flex justify-content-center">
+            <a href="@Url.Action("Index", "Home")" class="btn btn-primary py-3 px-5 mr-3">Return to Home</a>
+            <a href="@Url.Action("Shop", "Home")" class="btn btn-outline-secondary py-3 px-5">Continue Shopping</a>
+        </div>
+    </div>
+</div>

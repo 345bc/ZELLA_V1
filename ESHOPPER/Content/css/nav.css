@@ -1,0 +1,67 @@
+﻿/* Hiệu ứng Hover cho Link menu */
+.navbar-nav .nav-link {
+    position: relative;
+    transition: color 0.3s ease;
+    font-size: 16px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+    /* Gạch chân dưới khi hover */
+    .navbar-nav .nav-link::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        display: block;
+        margin-top: 5px;
+        right: 0;
+        background: #D19C97; /* Màu Primary của bạn */
+        transition: width 0.3s ease;
+        -webkit-transition: width 0.3s ease;
+    }
+
+    .navbar-nav .nav-link:hover::after,
+    .navbar-nav .nav-link.active::after {
+        width: 100%;
+        left: 0;
+        background: #D19C97;
+    }
+
+.navbar-toggler:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+/* Tùy chỉnh dropdown user cho đẹp hơn */
+#userDropdown .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #333 !important;
+}
+
+#userDropdown .btn-auth {
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+#userDropdown .btn-login {
+    background-color: transparent;
+    color: #333;
+    border: 1px solid #ccc;
+    margin-right: 10px;
+}
+
+#userDropdown .btn-register {
+    background-color: #D19C97;
+    color: white;
+    border: 1px solid #D19C97;
+}
+
+    #userDropdown .btn-register:hover {
+        background-color: #c58c87;
+    }

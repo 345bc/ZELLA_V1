@@ -1,0 +1,413 @@
+﻿@model ESHOPPER.Models.ShopViewModel
+
+@{
+    ViewBag.Title = "Shop";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    /* Header Background */
+    .bg-header {
+        background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/Content/img/shop-header.jpg');
+        background-size: cover;
+        background-position: center;
+    }
+
+    /* Sidebar Widgets */
+    .sidebar-widget {
+        background: #fff;
+        border-radius: 8px;
+        padding: 25px;
+        margin-bottom: 30px;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.03);
+        border: 1px solid #f0f0f0;
+    }
+
+    .widget-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #f0f0f0;
+        position: relative;
+    }
+
+        .widget-title::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: #D19C97;
+        }
+
+    /* Category List Logic Style */
+    .category-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+        .category-list li {
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.3s;
+        }
+
+            .category-list li a {
+                color: #666;
+                text-decoration: none;
+                font-size: 0.95rem;
+                transition: 0.3s;
+                width: 100%;
+                display: block;
+            }
+
+                /* Highlight danh mục đang chọn */
+                .category-list li a.active-cat {
+                    color: #D19C97;
+                    font-weight: 700;
+                    padding-left: 5px;
+                    border-left: 3px solid #D19C97;
+                }
+
+            .category-list li:hover a {
+                color: #D19C97;
+                padding-left: 5px;
+            }
+
+    /* Custom Radio Buttons */
+    .custom-control {
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+    }
+
+    .custom-control-label {
+        cursor: pointer;
+        width: 100%;
+    }
+
+    .custom-control-input:checked ~ .custom-control-label {
+        color: #D19C97;
+        font-weight: 600;
+    }
+
+    /* Product Card Modern */
+    .product-card-modern {
+        background: #fff;
+        border: none;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        height: 100%;
+        position: relative;
+    }
+
+        .product-card-modern:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+    .product-img-wrap {
+        position: relative;
+        overflow: hidden;
+        height: 280px;
+    }
+
+        .product-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+    .product-card-modern:hover .product-img-wrap img {
+        transform: scale(1.1);
+    }
+
+    /* Action Buttons Overlay */
+    .product-action-overlay {
+        position: absolute;
+        bottom: -50px;
+        left: 0;
+        right: 0;
+        background: rgba(255,255,255,0.95);
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        transition: bottom 0.3s ease;
+    }
+
+    .product-card-modern:hover .product-action-overlay {
+        bottom: 0;
+    }
+
+    .btn-action {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fff;
+        color: #333;
+        border: 1px solid #eee;
+        transition: 0.2s;
+    }
+
+        .btn-action:hover {
+            background: #D19C97;
+            color: #fff;
+            border-color: #D19C97;
+        }
+
+    .card-body-modern {
+        padding: 1.2rem;
+        text-align: center;
+    }
+
+    .product-price {
+        color: #D19C97;
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+
+    /* Pagination */
+    .pagination .page-link {
+        border: none;
+        margin: 0 5px;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #333;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #D19C97;
+        color: #fff;
+    }
+</style>
+
+
+
+<div class="container-fluid pt-3" id="shop-content">
+    <div class="row px-xl-5">
+
+        <div class="col-lg-3 col-md-12">
+
+            <div class="sidebar-widget">
+                <h5 class="widget-title">Categories</h5>
+                <ul class="category-list">
+                    <li>
+                        <a href="@Url.Action("Shop", "Home")"
+                           class="@(string.IsNullOrEmpty(Model.CurrentCategoryId) ? "active-cat" : "")">
+                            All Categories
+                        </a>
+                    </li>
+
+                    @if (Model.Categories != null)
+                    {
+                        foreach (var cat in Model.Categories)
+                        {
+                            <li>
+                                <a href="@Url.Action("Shop", "Home", new { categoryId = cat.MaDM, searchString = Model.SearchString, sortOrder = Model.SortOrder })"
+                                   class="@(Model.CurrentCategoryId == cat.MaDM ? "active-cat" : "")">
+                                    @cat.TenDanhMuc
+                                </a>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+
+            <form id="filterForm" action="@Url.Action("Shop", "Home")" method="get">
+                <input type="hidden" name="searchString" value="@Model.SearchString" />
+                <input type="hidden" name="sortOrder" value="@Model.SortOrder" />
+                <input type="hidden" name="categoryId" value="@Model.CurrentCategoryId" />
+
+                <div class="sidebar-widget">
+                    <h5 class="widget-title">Filter by Price</h5>
+
+                    <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="price-all" name="priceRange" value=""
+                               @(string.IsNullOrEmpty(Model.PriceRange) ? "checked" : "") onchange="this.form.submit()">
+                        <label class="custom-control-label" for="price-all">All Prices</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="price-1" name="priceRange" value="0-100"
+                               @(Model.PriceRange == "0-100" ? "checked" : "") onchange="this.form.submit()">
+                        <label class="custom-control-label" for="price-1">$0 - $100</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="price-2" name="priceRange" value="100-200"
+                               @(Model.PriceRange == "100-200" ? "checked" : "") onchange="this.form.submit()">
+                        <label class="custom-control-label" for="price-2">$100 - $200</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="price-3" name="priceRange" value="200-300"
+                               @(Model.PriceRange == "200-300" ? "checked" : "") onchange="this.form.submit()">
+                        <label class="custom-control-label" for="price-3">$200 - $300</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="price-4" name="priceRange" value="300-400"
+                               @(Model.PriceRange == "300-400" ? "checked" : "") onchange="this.form.submit()">
+                        <label class="custom-control-label" for="price-4">$300 - $400</label>
+                    </div>
+
+                    <div class="mt-3 pt-3 border-top text-center">
+                        <a href="@Url.Action("Shop", "Home")" class="btn btn-sm btn-block btn-light text-danger">
+                            <i class="fa fa-times mr-1"></i> Clear Filter
+                        </a>
+                    </div>
+                </div>
+            </form>
+
+            <div class="sidebar-widget text-center" style="background: #D19C97; color: #fff;">
+                <h5 class="text-white font-weight-bold mb-1">Season Sale</h5>
+                <p class="mb-3" style="opacity: 0.9">Get 50% off on arrivals!</p>
+                <button class="btn btn-outline-light btn-sm">Shop Now</button>
+            </div>
+
+        </div>
+
+        <div class="col-lg-9 col-md-12">
+            <div class="row pb-3">
+
+                <div class="col-12 pb-4">
+                    <div class="d-flex align-items-center justify-content-between bg-white p-4 shadow-sm rounded">
+
+                        <form action="@Url.Action("Shop", "Home")" method="get" class="flex-grow-1 mr-4">
+                            <input type="hidden" name="priceRange" value="@Model.PriceRange" />
+                            <input type="hidden" name="categoryId" value="@Model.CurrentCategoryId" />
+
+                            <div class="input-group">
+                                <input type="text" class="form-control border-0 bg-light" name="searchString" value="@Model.SearchString" placeholder="Search product name..." style="padding: 20px;">
+                                <div class="input-group-append">
+                                    <button class="btn btn-light text-primary px-4" type="submit"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <div class="dropdown">
+                            <form action="@Url.Action("Shop", "Home")" method="get">
+                                <input type="hidden" name="searchString" value="@Model.SearchString" />
+                                <input type="hidden" name="priceRange" value="@Model.PriceRange" />
+                                <input type="hidden" name="categoryId" value="@Model.CurrentCategoryId" />
+
+                                <select class="form-control border-0 bg-light" name="sortOrder" onchange="this.form.submit()" style="height: 45px;">
+                                    <option value="">Sort by Default</option>
+                                    <option value="price_asc" @(Model.SortOrder == "price_asc" ? "selected" : "")>Price: Low to High</option>
+                                    <option value="price_desc" @(Model.SortOrder == "price_desc" ? "selected" : "")>Price: High to Low</option>
+                                </select>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                @if (Model.SanPhams != null && Model.SanPhams.Any())
+                {
+                    foreach (var item in Model.SanPhams)
+                    {
+                        <div class="col-lg-4 col-md-6 col-sm-12 pb-4">
+                            <div class="product-card-modern">
+                                <div class="product-img-wrap">
+                                    <img src="@(string.IsNullOrEmpty(item.AnhSP) ? "/Images/no-image.png" : Url.Content("~/Images/Products/" + item.AnhSP))"
+                                         alt="@item.TenSanPham">
+
+                                    <div class="product-action-overlay">
+                                        <a href="@Url.Action("ProductDetails", "Home", new { id = item.MaSP })" class="btn-action" title="View Detail">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="#" class="btn-action" title="Add to Cart">
+                                            <i class="fas fa-shopping-cart"></i>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="card-body-modern">
+                                    <a href="@Url.Action("ProductDetails", "Home", new { id = item.MaSP })" class="text-decoration-none">
+                                        <h6 class="text-truncate text-dark font-weight-bold mb-2">@item.TenSanPham</h6>
+                                    </a>
+                                    <div class="product-price">
+                                        @String.Format("{0:N0} ₫", item.GiaBanLe)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="col-12 text-center py-5">
+                        <img src="https://cdn-icons-png.flaticon.com/512/4076/4076432.png" width="80" class="mb-3" style="opacity: 0.4">
+                        <h5 class="text-muted">No products found!</h5>
+                        <a href="@Url.Action("Shop", "Home")" class="btn btn-primary mt-2 rounded-pill px-4">Reset All Filters</a>
+                    </div>
+                }
+
+                @if (Model.TotalPages > 1)
+                {
+                    <div class="col-12 pb-1 mt-3">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center mb-3">
+                                <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+                                    <a class="page-link" href="@Url.Action("Shop", new { page = Model.PageNumber - 1, searchString = Model.SearchString, sortOrder = Model.SortOrder, priceRange = Model.PriceRange, categoryId = Model.CurrentCategoryId })">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </a>
+                                </li>
+
+                                @for (int i = 1; i <= Model.TotalPages; i++)
+                                {
+                                    <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                                        <a class="page-link" href="@Url.Action("Shop", new { page = i, searchString = Model.SearchString, sortOrder = Model.SortOrder, priceRange = Model.PriceRange, categoryId = Model.CurrentCategoryId })">@i</a>
+                                    </li>
+                                }
+
+                                <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+                                    <a class="page-link" href="@Url.Action("Shop", new { page = Model.PageNumber + 1, searchString = Model.SearchString, sortOrder = Model.SortOrder, priceRange = Model.PriceRange, categoryId = Model.CurrentCategoryId })">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Chỉ cuộn nếu URL có tham số (tức là đang lọc/phân trang/tìm kiếm)
+            // Nếu vào trang Shop lần đầu (URL sạch) thì vẫn ở đầu trang cho đẹp
+            if (window.location.search.length > 0) {
+                var target = document.getElementById("shop-content");
+
+                if (target) {
+                    // Tính toán vị trí để cuộn (trừ đi 100px cho thanh Menu đỡ bị che)
+                    var headerOffset = 100;
+                    var elementPosition = target.getBoundingClientRect().top;
+                    var offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    // Thực hiện cuộn mượt
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth"
+                    });
+                }
+            }
+        });
+    </script>
+}
