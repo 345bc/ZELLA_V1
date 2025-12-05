@@ -1,0 +1,259 @@
+﻿@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/AuthView.cshtml";
+}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+    body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+    }
+
+    .card {
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        max-width: 850px;
+        width: 100%;
+        padding: 40px;
+        background: white;
+    }
+
+    .form-control, .form-select {
+        border-radius: 10px;
+        padding: 10px 12px;
+    }
+
+        .form-control.password-input {
+            padding-right: 45px;
+        }
+
+    .password-toggle {
+        position: absolute;
+        right: 12px;
+        top: 75%;
+        transform: translateY(-50%);
+        color: #888;
+        cursor: pointer;
+        font-size: 1.1rem;
+        z-index: 10;
+    }
+
+        .password-toggle:hover {
+            color: #2575fc;
+        }
+
+    .btn-primary {
+        background: #2575fc;
+        border: none;
+        padding: 12px;
+        font-weight: 600;
+        border-radius: 12px;
+    }
+
+        .btn-primary:hover {
+            background: #1a5bb8;
+        }
+
+    .alert {
+        border-radius: 12px;
+        font-size: 0.9rem;
+        padding: 10px 15px;
+    }
+
+    .form-check-label a {
+        color: #2575fc;
+        text-decoration: none;
+    }
+
+        .form-check-label a:hover {
+            text-decoration: underline;
+        }
+</style>
+
+<div class="container-fluid d-flex justify-content-center align-items-center min-vh-100 px-3">
+    <div class="card">
+        <h2 class="text-center fw-bold mb-4 text-primary">@ViewBag.Title</h2>
+
+        <!-- Thông báo từ TempData -->
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success text-center">@TempData["SuccessMessage"]</div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger text-center">@TempData["ErrorMessage"]</div>
+        }
+
+        <div id="alertMsg"></div>
+
+        <form id="registerForm" novalidate>
+            @Html.AntiForgeryToken()
+            <div class="row g-3">
+                <!-- Cột trái -->
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="name" class="form-label fw-semibold">Full Name <span class="text-danger">*</span></label>
+                        <input type="text" id="name" name="name" class="form-control" placeholder="Enter your name here" required autocomplete="name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="phone" class="form-label fw-semibold">Phone Number <span class="text-danger">*</span></label>
+                        <input type="tel" id="phone" name="phone" class="form-control" placeholder="" required pattern="^0[0-9]{9}$">
+                    </div>
+                    <div class="mb-3">
+                        <label for="birthDate" class="form-label fw-semibold">Birth Date</label>
+                        <input type="date" id="birthDate" name="birthDate" class="form-control" max="@DateTime.Today.ToString("yyyy-MM-dd")">
+                    </div>
+                    <div class="mb-3">
+                        <label for="gender" class="form-label fw-semibold">Gender <span class="text-danger">*</span></label>
+                        <select id="gender" name="gender" class="form-select" required>
+                            <option value="" disabled selected>Select gender</option>
+                            <option value="Nam">Male</option>
+                            <option value="Nữ">Female</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Cột phải -->
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="username" class="form-label fw-semibold">Username <span class="text-danger">*</span></label>
+                        <input type="text" id="username" name="username" class="form-control" placeholder="Enter your Username" required minlength="3" autocomplete="username">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label fw-semibold">Email <span class="text-danger">*</span></label>
+                        <input type="email" id="email" name="email" class="form-control"  required autocomplete="email">
+                    </div>
+                    <div class="mb-3 position-relative">
+                        <label for="password" class="form-label fw-semibold">Password <span class="text-danger">*</span></label>
+                        <input type="password" id="password" name="password" class="form-control password-input"  required minlength="6" autocomplete="new-password">
+                        <i class="fa fa-eye password-toggle" id="togglePass" onclick="togglePassword('password', this)"></i>
+                    </div>
+                    <div class="mb-3 position-relative">
+                        <label for="confirmPassword" class="form-label fw-semibold">Confirm Password <span class="text-danger">*</span></label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" class="form-control password-input"  required minlength="6" autocomplete="new-password">
+                        <i class="fa fa-eye password-toggle" id="toggleConfirm" onclick="togglePassword('confirmPassword', this)"></i>
+                    </div>
+                </div>
+
+                <!-- Đồng ý điều khoản + Nút -->
+                <div class="col-12">
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="agree" required>
+                        <label class="form-check-label small" for="agree">
+                            I agree to the <a href="#" target="_blank">Terms & Conditions</a> and <a href="#" target="_blank">Privacy Policy</a>
+                        </label>
+                    </div>
+                    <button type="submit" id="submitBtn" class="btn btn-primary w-100 fw-bold">
+                        <span class="spinner-border spinner-border-sm d-none" role="status"></span>
+                        Sign Up
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <div class="text-center mt-4">
+            <small class="text-muted">
+                Already have an account?
+                <a href="@Url.Action("Login", "Auth")" class="fw-semibold text-primary text-decoration-none">Sign In</a>
+            </small>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Toggle password
+    function togglePassword(id, icon) {
+        const input = document.getElementById(id);
+        const isPassword = input.type === 'password';
+        input.type = isPassword ? 'text' : 'password';
+        icon.classList.toggle('fa-eye-slash', isPassword);
+        icon.classList.toggle('fa-eye', !isPassword);
+        icon.style.color = isPassword ? '#2575fc' : '#888';
+    }
+
+    // Submit form
+    document.getElementById('registerForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const form = this;
+        const btn = document.getElementById('submitBtn');
+        const spinner = btn.querySelector('.spinner-border');
+        const btnText = btn.querySelector('span:not(.spinner-border)');
+        const alertDiv = document.getElementById('alertMsg');
+
+        // Reset
+        alertDiv.innerHTML = '';
+        form.classList.remove('was-validated');
+
+        // HTML5 validate
+        if (!form.checkValidity()) {
+            form.classList.add('was-validated');
+            return;
+        }
+
+        // Kiểm tra mật khẩu trùng
+        const pass = document.getElementById('password').value;
+        const confirm = document.getElementById('confirmPassword').value;
+        if (pass !== confirm) {
+            alertDiv.innerHTML = `<div class="alert alert-danger">Mật khẩu xác nhận không khớp!</div>`;
+            return;
+        }
+
+        // Disable button
+        btn.disabled = true;
+        spinner.classList.remove('d-none');
+        if (btnText) btnText.textContent = 'Signing up...';
+
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        data.birthDate = data.birthDate || null; // Nếu rỗng → null
+
+        try {
+            const res = await fetch('@Url.Action("Register", "Auth")', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'RequestVerificationToken': formData.get('__RequestVerificationToken')
+                },
+                body: new URLSearchParams(data)
+            });
+
+            const result = await res.json();
+
+            // Reset button
+            btn.disabled = false;
+            spinner.classList.add('d-none');
+            if (btnText) btnText.textContent = 'Sign Up';
+
+            if (result.success) {
+                alertDiv.innerHTML = `<div class="alert alert-success">${result.message}</div>`;
+                setTimeout(() => {
+                    window.location.href = '@Url.Action("Login", "Auth")';
+                }, 1500);
+            } else {
+                alertDiv.innerHTML = `<div class="alert alert-danger">${result.message}</div>`;
+            }
+        } catch (err) {
+            console.error('Register error:', err);
+            btn.disabled = false;
+            spinner.classList.add('d-none');
+            if (btnText) btnText.textContent = 'Sign Up';
+            alertDiv.innerHTML = `<div class="alert alert-danger">Lỗi kết nối. Vui lòng thử lại!</div>`;
+        }
+    });
+
+    // Tự ẩn alert
+    setTimeout(() => {
+        const alert = document.querySelector('#alertMsg .alert');
+        if (alert) {
+            alert.style.transition = 'opacity 0.5s';
+            alert.style.opacity = '0';
+            setTimeout(() => alert.remove(), 500);
+        }
+    }, 5000);
+</script>

@@ -1,0 +1,121 @@
+﻿/* --- FOOTER STYLING --- */
+.footer-modern {
+    background-color: #1a1a1a; /* Màu đen than chì sang trọng */
+    color: #adb5bd; /* Màu chữ xám nhạt dễ đọc */
+    font-size: 0.95rem;
+}
+
+/* Logo Style */
+.footer-logo {
+    letter-spacing: 2px;
+    font-weight: 800;
+    color: #fff !important;
+}
+
+    .footer-logo span {
+        color: #D19C97; /* Màu chủ đạo */
+    }
+
+/* Headings */
+.footer-heading {
+    color: #fff;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+}
+
+/* Links */
+.footer-link {
+    color: #adb5bd;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: block;
+    margin-bottom: 10px;
+    padding-left: 0;
+}
+
+    .footer-link:hover {
+        color: #D19C97;
+        padding-left: 8px; /* Hiệu ứng trượt nhẹ sang phải */
+        text-decoration: none;
+    }
+
+    .footer-link i {
+        font-size: 0.8rem;
+        margin-right: 8px;
+        color: #6c757d;
+    }
+
+/* Contact Info */
+.contact-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+    .contact-item i {
+        color: #D19C97;
+        margin-top: 5px;
+        margin-right: 12px;
+    }
+
+/* Newsletter Input */
+.newsletter-input {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #fff;
+    border-radius: 30px 0 0 30px;
+    height: 50px;
+    padding-left: 20px;
+}
+
+    .newsletter-input:focus {
+        background: rgba(255,255,255,0.2);
+        border-color: #D19C97;
+        color: #fff;
+        box-shadow: none;
+    }
+
+.newsletter-btn {
+    border-radius: 0 30px 30px 0;
+    background: #D19C97;
+    border: 1px solid #D19C97;
+    color: #fff;
+    font-weight: 600;
+}
+
+    .newsletter-btn:hover {
+        background: #c58c87;
+    }
+
+/* Social Icons */
+.social-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    margin-right: 10px;
+    transition: 0.3s;
+    text-decoration: none;
+}
+
+    .social-btn:hover {
+        background: #D19C97;
+        color: #fff;
+        transform: translateY(-3px);
+    }
+
+/* Bottom Footer */
+.footer-bottom {
+    background-color: #111;
+    border-top: 1px solid #333;
+    padding: 20px 0;
+    font-size: 0.85rem;
+}
+

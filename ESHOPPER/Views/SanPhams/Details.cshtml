@@ -1,0 +1,77 @@
+﻿@model ESHOPPER.Models.SanPham
+
+@{
+    ViewBag.Title = "Product Details";
+    Layout = "~/Views/Shared/Admin_layout.cshtml";
+}
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h4 class="m-0 font-weight-bold text-primary">@ViewBag.Title</h4>
+        <div>
+            @* Chuyển các nút hành động lên header cho dễ thao tác *@
+            @Html.ActionLink("Edit Product", "Edit", new { id = Model.MaSP }, new { @class = "btn btn-primary btn-sm me-2" })
+            @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-secondary btn-sm" })
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+
+            @* CỘT HÌNH ẢNH *@
+            <div class="col-md-5 text-center mb-3 mb-md-0">
+                @if (!string.IsNullOrEmpty(Model.AnhSP))
+                {
+                    @* Hiển thị ảnh từ thư mục.
+                        Logic này giả định bạn lưu TÊN FILE (vidu.jpg) trong DB
+                        và file nằm trong "~/Images/Products/"
+                    *@
+                    <img src="@Url.Content("~/Images/Products/" + Model.AnhSP)"
+                         alt="@Model.TenSanPham"
+                         class="img-fluid rounded shadow-sm"
+                         style="max-height: 400px; object-fit: contain;" />
+                }
+                else
+                {
+                    @* Ảnh placeholder nếu sản phẩm không có ảnh *@
+                    <div class="bg-light d-flex align-items-center justify-content-center rounded" style="height: 400px;">
+                        <span class="text-muted">No Image Available</span>
+                    </div>
+                }
+            </div>
+
+            @* CỘT THÔNG TIN CHI TIẾT *@
+            <div class="col-md-7">
+
+                @* Tên sản phẩm *@
+                <h2 class="display-6">@Html.DisplayFor(model => model.TenSanPham)</h2>
+
+                @* Giá bán *@
+                <h4 class="text-danger font-weight-bold mb-3">
+                    @(Model.GiaBanLe.HasValue ? Model.GiaBanLe.Value.ToString("N0") : "N/A") đ
+                </h4>
+
+                @* Mô tả *@
+                <p class="lead text-muted">@Html.DisplayFor(model => model.MoTa)</p>
+
+                <hr />
+
+                <h5>Additional Details</h5>
+
+                @* Dùng <dl class,"row"> của Bootstrap 5 thay cho <dl-horizontal> *@
+                <dl class="row">
+                    <dt class="col-sm-4">Status</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.TrangThai)</dd>
+
+                    <dt class="col-sm-4">Category</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.DanhMucSanPham.TenDanhMuc)</dd>
+
+                    <dt class="col-sm-4">Supplier</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.NhaCungCap.TenNCC)</dd>
+
+                   
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>

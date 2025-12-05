@@ -1,0 +1,104 @@
+﻿@model ESHOPPER.Models.SanPham
+
+@{
+    ViewBag.Title = "Create New Product";
+    Layout = "~/Views/Shared/Admin_layout.cshtml";
+}
+
+@* THAY ĐỔI CỰC KỲ QUAN TRỌNG:
+    Để xử lý TẢI FILE ẢNH (Image Upload),
+    chúng ta phải thêm "enctype = multipart/form-data" vào form.
+*@
+@using (Html.BeginForm("Create", "SanPhams", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h4 class="m-0 font-weight-bold text-primary">@ViewBag.Title</h4>
+            <div>
+                @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-secondary btn-sm" })
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        @* CỘT BÊN TRÁI (Thông tin chính) *@
+        <div class="col-lg-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h6 class="m-0 font-weight-bold">Product Details</h6>
+                </div>
+                <div class="card-body">
+                    @* GHI CHÚ: Đã XÓA trường "MaSP" (Mã Sản Phẩm).
+        Đây là Khóa chính (Primary Key) nên được Database tự động gán
+        khi tạo mới (Auto-Increment / Identity).
+                    *@
+                    <div class="mb-3">
+                        @Html.LabelFor(model => model.MaSP, htmlAttributes: new { @class = "form-label" })
+                        @* SỬ DỤNG Ô NHẬP LIỆU CHO MÃ SP *@
+                        @Html.EditorFor(model => model.MaSP, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.MaSP, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="mb-3">
+                        @Html.LabelFor(model => model.TenSanPham, htmlAttributes: new { @class = "form-label" })
+                        @Html.EditorFor(model => model.TenSanPham, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.TenSanPham, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mb-3">
+                        @Html.LabelFor(model => model.MoTa, htmlAttributes: new { @class = "form-label" })
+                        @* Dùng TextAreaFor thay vì EditorFor để nhập được nhiều dòng *@
+                        @Html.TextAreaFor(model => model.MoTa, new { @class = "form-control", rows = 5 })
+                        @Html.ValidationMessageFor(model => model.MoTa, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mb-3">
+                        @Html.LabelFor(model => model.GiaBanLe, htmlAttributes: new { @class = "form-label" })
+                        @* Thêm type="number" để trình duyệt hiểu đây là ô nhập số *@
+                        @Html.EditorFor(model => model.GiaBanLe, new { htmlAttributes = new { @class = "form-control", type = "number", min = "0" } })
+                        @Html.ValidationMessageFor(model => model.GiaBanLe, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mb-3">
+                        @* GHI CHÚ: Thay thế ô text "AnhSP" bằng một ô Tải File.
+            Bạn cần tạo một thuộc tính mới trong Controller (không cần trong Model)
+            tên là "ImageFile" (kiểu HttpPostedFileBase) để nhận file này.
+                        *@
+                        <label for="ImageFile" class="form-label">Product Image Upload</label>
+                        <input type="file" name="ImageFile" id="ImageFile" class="form-control" accept="image/*" />
+                        @Html.ValidationMessageFor(model => model.AnhSP, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @* CỘT BÊN PHẢI (Thuộc tính) *@
+        <div class="col-lg-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h6 class="m-0 font-weight-bold">Organization</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        @Html.LabelFor(model => model.MaDM, "Category", htmlAttributes: new { @class = "form-label" })
+                        @* Dùng 'form-select' cho dropdown của Bootstrap 5 *@
+                        @Html.DropDownList("MaDM", null, "Select Category", htmlAttributes: new { @class = "form-select" })
+                        @Html.ValidationMessageFor(model => model.MaDM, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mb-3">
+                        @Html.LabelFor(model => model.MaNCC, "Supplier", htmlAttributes: new { @class = "form-label" })
+                        @Html.DropDownList("MaNCC", null, "Select Supplier", htmlAttributes: new { @class = "form-select" })
+                        @Html.ValidationMessageFor(model => model.MaNCC, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mb-4">
+        <input type="submit" value="Create Product" class="btn btn-primary" />
+    </div>
+}

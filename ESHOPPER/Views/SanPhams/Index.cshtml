@@ -1,0 +1,68 @@
+﻿@model IEnumerable<ESHOPPER.Models.SanPham>
+
+@{
+    ViewBag.Title = "Product List";
+    Layout = "~/Views/Shared/Admin_layout.cshtml";
+}
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h4 class="m-0 font-weight-bold text-primary">@ViewBag.Title</h4>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover" id="dataTableProducts" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            @Html.DisplayNameFor(model => model.AnhSP)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.TenSanPham)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.GiaBanLe)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.TrangThai)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.DanhMucSanPham.TenDanhMuc)
+                        </th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="text-center align-middle">
+                                @if (!string.IsNullOrEmpty(item.AnhSP))
+                                {
+                                    <img src="@Url.Content("~/Images/Products/"+item.AnhSP)" alt="Product Image" style="width: 60px; height: 60px; object-fit: cover;" class="rounded" />
+                                }
+                            </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelItem => item.TenSanPham)
+                            </td>
+                            <td class="align-middle">
+                                @(item.GiaBanLe.HasValue ? item.GiaBanLe.Value.ToString("N0") : "N/A") đ
+                            </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelItem => item.TrangThai)
+                            </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelItem => item.DanhMucSanPham.TenDanhMuc)
+                            </td>
+                            <td class="align-middle">
+                                @Html.ActionLink("Edit", "Edit", new { id = item.MaSP }, new { @class = "btn btn-warning btn-sm m-1" })
+                                @Html.ActionLink("Details", "Details", new { id = item.MaSP }, new { @class = "btn btn-info btn-sm m-1" })
+                                @Html.ActionLink("Delete", "Delete", new { id = item.MaSP }, new { @class = "btn btn-danger btn-sm m-1" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

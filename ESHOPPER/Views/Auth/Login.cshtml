@@ -1,0 +1,389 @@
+﻿@*@{
+        ViewBag.Title = "Sign In";
+        Layout = "~/Views/Shared/AuthView.cshtml";
+    }
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: "Poppins", sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .card {
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            width: 380px;
+            padding: 35px;
+            background: white;
+        }
+
+        .social-icons a {
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #555;
+            transition: all 0.3s ease;
+        }
+
+            .social-icons a:hover {
+                background: #2575fc;
+                color: white;
+                border-color: #2575fc;
+            }
+
+        .password-toggle {
+            position: relative;
+        }
+
+            .password-toggle i {
+                position: absolute;
+                top: 75%;
+                right: 12px;
+                transform: translateY(-50%);
+                cursor: pointer;
+                color: #888;
+                font-size: 1.1rem;
+                z-index: 10;
+            }
+
+        .btn-primary {
+            background: #2575fc;
+            border: none;
+            padding: 12px;
+            font-weight: 600;
+            border-radius: 10px;
+        }
+
+            .btn-primary:hover {
+                background: #1a5bb8;
+            }
+
+        .alert {
+            border-radius: 10px;
+            font-size: 0.9rem;
+            padding: 10px 15px;
+            margin-top: 10px;
+        }
+    </style>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success text-center mb-3">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger text-center mb-3">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <div class="card">
+        <h3 class="fw-bold text-center mb-4 text-primary">Sign In</h3>
+
+        <div id="alertMsg" class="mt-3"></div>
+
+        <div class="social-icons d-flex justify-content-center gap-2 mb-3">
+            <a href="#" title="Google" class="text-decoration-none"><i class="fa-brands fa-google-plus-g"></i></a>
+            <a href="#" title="Facebook" class="text-decoration-none"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" title="GitHub" class="text-decoration-none"><i class="fa-brands fa-github"></i></a>
+            <a href="#" title="LinkedIn" class="text-decoration-none"><i class="fa-brands fa-linkedin-in"></i></a>
+        </div>
+
+        <p class="text-muted text-center mb-4 small">or use your email and password</p>
+
+        <form id="loginForm" novalidate>
+            @Html.AntiForgeryToken()
+
+            <div class="mb-3">
+                <label for="loginInput" class="form-label fw-semibold">Enter email</label>
+                <input type="text" name="loginInput" id="loginInput" class="form-control" required autocomplete="username">
+            </div>
+
+            <div class="mb-3 password-toggle">
+                <label for="password" class="form-label fw-semibold">Password</label>
+                <input type="password" name="password" id="password" class="form-control" required autocomplete="current-password">
+                <i class="fa fa-eye" id="toggleIcon" onclick="togglePassword()"></i>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="rememberMe" name="rememberMe">
+                    <label class="form-check-label small" for="rememberMe">Remember Me</label>
+                </div>
+                <a href="@Url.Action("ForgotPassword", "Auth")" class="small text-primary text-decoration-none">Forgot Password?</a>
+            </div>
+
+            <button type="submit" id="loginBtn" class="btn btn-primary w-100 fw-bold">
+                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                Sign In
+            </button>
+        </form>
+
+        <p class="mt-4 mb-0 text-center text-muted small">
+            Don’t have an account?
+            <a href="@Url.Action("Register", "Auth")" class="fw-semibold text-primary text-decoration-none">Sign Up</a>
+        </p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Toggle mật khẩu
+        function togglePassword() {
+            const input = document.getElementById('password');
+            const icon = document.getElementById('toggleIcon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+                icon.style.color = '#2575fc';
+            } else {
+                input.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+                icon.style.color = '#888';
+            }
+        }
+
+        // Xử lý form submit
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const form = this;
+            const btn = document.getElementById('loginBtn');
+            const spinner = btn.querySelector('.spinner-border');
+            const btnText = btn.querySelector('span:not(.spinner-border)');
+            const alertDiv = document.getElementById('alertMsg');
+
+            // Reset
+            alertDiv.innerHTML = '';
+            form.classList.remove('was-validated');
+
+            // Validate
+            if (!form.checkValidity()) {
+                form.classList.add('was-validated');
+                return;
+            }
+
+            // Disable button
+            btn.disabled = true;
+            spinner.classList.remove('d-none');
+            if (btnText) btnText.textContent = 'Signing in...';
+
+            const formData = new FormData(form);
+            const loginInput = form.loginInput.value.trim();
+            const password = form.password.value;
+
+            try {
+                const res = await fetch('@Url.Action("Login", "Auth")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'RequestVerificationToken': formData.get('__RequestVerificationToken')
+                    },
+                    body: new URLSearchParams({ loginInput, password })
+                });
+
+                const data = await res.json();
+
+                // Reset button
+                btn.disabled = false;
+                spinner.classList.add('d-none');
+                if (btnText) btnText.textContent = 'Sign In';
+
+                if (data.success) {
+                    // Lưu token
+                    localStorage.setItem('jwtToken', data.token);
+                    localStorage.setItem('userRole', data.role);
+                    localStorage.setItem('userName', data.userName || '');
+
+                    alertDiv.innerHTML = `<div class="alert alert-success">Đăng nhập thành công! Đang chuyển hướng...</div>`;
+
+                    setTimeout(() => {
+                        const redirectUrl = data.role === 'Admin' || data.role === 'Employee'
+                            ? '/Admin'
+                            : '/';
+                        window.location.href = redirectUrl;
+                    }, 800);
+                } else {
+                    alertDiv.innerHTML = `<div class="alert alert-danger">${data.message}</div>`;
+                }
+            } catch (err) {
+                console.error('Login error:', err);
+                btn.disabled = false;
+                spinner.classList.add('d-none');
+                if (btnText) btnText.textContent = 'Sign In';
+                alertDiv.innerHTML = `<div class="alert alert-danger">Lỗi kết nối. Vui lòng thử lại!</div>`;
+            }
+        });
+
+        // Tự động ẩn alert sau 5 giây (tùy chọn)
+        setTimeout(() => {
+            const alerts = document.querySelectorAll('#alertMsg .alert');
+            alerts.forEach(a => a.style.transition = 'opacity 0.5s');
+            alerts.forEach(a => a.style.opacity = '0');
+            setTimeout(() => alerts.forEach(a => a.remove()), 500);
+        }, 5000);
+    </script>*@
+@{
+    ViewBag.Title = "Sign In";
+    Layout = "~/Views/Shared/AuthView.cshtml";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+    /* Giữ nguyên CSS của bạn */
+    body {
+        font-family: "Poppins", sans-serif;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+
+    .card {
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        width: 380px;
+        padding: 35px;
+        background: white;
+    }
+
+    .social-icons a {
+        border: 1px solid #ddd;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #555;
+        transition: all 0.3s ease;
+    }
+
+        .social-icons a:hover {
+            background: #2575fc;
+            color: white;
+            border-color: #2575fc;
+        }
+
+    .password-toggle {
+        position: relative;
+    }
+
+        .password-toggle i {
+            position: absolute;
+            top: 75%;
+            right: 12px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #888;
+            font-size: 1.1rem;
+            z-index: 10;
+        }
+
+    .btn-primary {
+        background: #2575fc;
+        border: none;
+        padding: 12px;
+        font-weight: 600;
+        border-radius: 10px;
+    }
+
+        .btn-primary:hover {
+            background: #1a5bb8;
+        }
+
+    /* Style cho thông báo lỗi */
+    .validation-summary-errors {
+        color: #dc3545;
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        list-style: none;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+        .validation-summary-errors ul {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+</style>
+
+<div class="card">
+    <h3 class="fw-bold text-center mb-4 text-primary">Sign In</h3>
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        @Html.ValidationSummary(true, "", new { @class = "validation-summary-errors" })
+    }
+
+    @using (Html.BeginForm("Login", "Auth", new { returnUrl = Request.QueryString["returnUrl"] }, FormMethod.Post, new { id = "loginForm" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="mb-3">
+            <label for="loginInput" class="form-label fw-semibold">User Name / Email</label>
+            <input type="text" name="loginInput" id="loginInput" class="form-control" required autocomplete="username" placeholder="Nhập tài khoản..." value="@Request["loginInput"]">
+        </div>
+
+        <div class="mb-3 password-toggle">
+            <label for="password" class="form-label fw-semibold">Password</label>
+            <input type="password" name="password" id="password" class="form-control" required autocomplete="current-password" placeholder="Nhập mật khẩu...">
+            <i class="fa fa-eye" id="toggleIcon" onclick="togglePassword()"></i>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="rememberMe" name="rememberMe">
+                <label class="form-check-label small" for="rememberMe">Remember Me</label>
+            </div>
+            <a href="@Url.Action("ForgotPassword", "Auth")" class="small text-primary text-decoration-none">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 fw-bold">
+            Sign In
+        </button>
+    }
+
+    <p class="mt-4 mb-0 text-center text-muted small">
+        Don’t have an account?
+        <a href="@Url.Action("Register", "Auth")" class="fw-semibold text-primary text-decoration-none">Sign Up</a>
+    </p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Chỉ giữ lại chức năng ẩn/hiện mật khẩu
+    function togglePassword() {
+        const input = document.getElementById('password');
+        const icon = document.getElementById('toggleIcon');
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.replace('fa-eye', 'fa-eye-slash');
+            icon.style.color = '#2575fc';
+        } else {
+            input.type = 'password';
+            icon.classList.replace('fa-eye-slash', 'fa-eye');
+            icon.style.color = '#888';
+        }
+    }
+
+</script>

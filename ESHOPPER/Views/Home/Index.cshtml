@@ -1,0 +1,112 @@
+﻿@model ESHOPPER.Models.HomeViewModel
+
+@{
+    ViewBag.Title = "EShopper - Where Style Begins";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@Html.Partial("_DiscountSlide", Model.introes)
+
+<div class="container-fluid px-5 pt-5">
+    <div class="row px-xl-5 pb-3">
+        <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+            <div class="feature-box">
+                <h1 class="fa fa-check feature-icon"></h1>
+                <h5 class="font-weight-bold">Quality Product</h5>
+                <p class="text-muted mb-0">100% Genuine</p>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+            <div class="feature-box">
+                <h1 class="fa fa-shipping-fast feature-icon"></h1>
+                <h5 class="font-weight-bold">Free Shipping</h5>
+                <p class="text-muted mb-0">Orders over 500k</p>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+            <div class="feature-box">
+                <h1 class="fas fa-exchange-alt feature-icon"></h1>
+                <h5 class="font-weight-bold">14-Day Return</h5>
+                <p class="text-muted mb-0">Easy return policy</p>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+            <div class="feature-box">
+                <h1 class="fa fa-phone-volume feature-icon"></h1>
+                <h5 class="font-weight-bold">24/7 Support</h5>
+                <p class="text-muted mb-0">Dedicated support</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid px-5 pt-5">
+    <div class="section-title-modern">
+        <h2>Categories</h2>
+    </div>
+    <div class="row px-xl-5 pb-3">
+        @foreach (var item in Model.DanhMucSanPhams.Where(dm => !dm.TenDanhMuc.ToLower().Contains("dress")).Take(6))
+        {
+            <div class="col-lg-4 col-md-6 pb-1">
+                <div class="cat-card">
+                    <a href="#">
+                        <img src="@Url.Content("~/Images/Categories/" + item.HinhAnhDaiDien)" alt="@item.TenDanhMuc">
+                        <div class="cat-overlay">
+                            <h5 class="cat-title">@item.TenDanhMuc</h5>
+                            <span class="cat-count">@item.SoLuongSanPham Products</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="container-fluid pt-5 px-5">
+    <div class="section-title-modern">
+        <h2>New Arrivals</h2>
+    </div>
+    <div class="row px-xl-5 pb-3">
+        @foreach (var item in Model.SanPhams)
+        {
+            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+                <div class="product-card-modern">
+                    <div class="product-img-wrap">
+                        <img src="@Url.Content("~/Images/Products/" + item.AnhSP)" alt="@item.TenSanPham">
+
+                        <disv class="product-actions">
+                            <a href="@Url.Action("ProductDetails", "Home", new { id = item.MaSP })" class="btn-action" title="View Detail">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </disv>
+                    </div>
+                    <div class="product-info">
+                        <a href="@Url.Action("ProductDetails", "Home", new { id = item.MaSP })" class="text-decoration-none">
+                            <h6 class="product-name">@item.TenSanPham</h6>
+                        </a>
+                        <div class="product-price">
+                            @String.Format("{0:N0} ₫", item.GiaBanLe)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="container-fluid py-5 px-5">
+    <div class="row px-xl-5">
+        <div class="col">
+            <div class="owl-carousel vendor-carousel">
+                @foreach (var item in Model.nhaCungCaps)
+                {
+                    <div class="vendor-item border p-4 d-flex justify-content-center align-items-center" style="border-radius: 8px; height: 150px;">
+                        <img src="@Url.Content("~/Images/Brand/"+item.AnhNCC)" alt="@item.TenNCC" style="max-height: 80px; max-width: 100%; object-fit: contain; filter: grayscale(100%); transition: 0.3s;">
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

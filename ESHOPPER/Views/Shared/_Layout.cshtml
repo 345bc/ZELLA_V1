@@ -1,0 +1,395 @@
+﻿<!--<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>@ViewBag.Title - EShopper</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <link href="~/Scripts/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <link href="~/Content/css/style.css" rel="stylesheet">
+    <link href="~/Content/css/nav.css" rel="stylesheet" />
+    <link href="~/Content/css/footer.css" rel="stylesheet" />
+    <link href="~/Content/css/Home.css" rel="stylesheet" />
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top py-3 container-fluid px-5">
+        <div class="container-fluid px-5">
+            <a href="@Url.Action("Index", "Home")" class="navbar-brand d-flex align-items-center">
+                <span class="h1 font-weight-bold text-primary text-uppercase mb-0 mr-1">E</span>
+                <span class="h1 font-weight-bold text-dark text-uppercase mb-0" style="letter-spacing: 2px;">Shopper</span>
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <div class="navbar-nav ml-auto py-0">
+                    <a href="@Url.Action("Index", "Home")" class="nav-item nav-link px-3 @(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "active text-primary font-weight-bold" : "")">Home</a>
+                    <a href="@Url.Action("Shop", "Home")" class="nav-item nav-link px-3 @(ViewContext.RouteData.Values["Action"].ToString() == "Shop" ? "active text-primary font-weight-bold" : "")">Shop</a>
+                    <a href="#" class="nav-item nav-link px-3">Blog</a>
+                    <a href="@Url.Action("Contact", "Home")" class="nav-item nav-link px-3 @(ViewContext.RouteData.Values["Action"].ToString() == "Contact" ? "active text-primary font-weight-bold" : "")">Contact</a>
+                </div>
+
+                <div class="d-none d-lg-block mx-3" style="border-left: 1px solid #e0e0e0; height: 25px;"></div>
+
+                <div class="d-flex align-items-center">
+                    <a href="@Url.Action("Cart", "Home")" class="btn position-relative border-0 p-0 mr-3">
+                        <i class="fas fa-shopping-cart text-primary"></i>
+                        <span id="cartBadge" class="badge badge-danger rounded-circle position-absolute"
+                              style="top: -5px; right: -8px; font-size: 10px; padding: 3px 5px;">
+                            0
+                        </span>
+                    </a>
+
+                    <div id="userDropdown" class="nav-item">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    @RenderBody()
+
+    <div class="container-fluid px-5 footer-modern mt-5 pt-5">
+        <div class="container-fluid px-5 pt-5">
+            <div class="row pb-5">
+                <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
+                    <a href="@Url.Action("Index", "Home")" class="text-decoration-none d-block mb-4">
+                        <h1 class="footer-logo m-0"><span>E</span>SHOPPER</h1>
+                    </a>
+                    <p class="mb-4" style="line-height: 1.6;">
+                        We provide the best fashion trends for you. Quality products, affordable prices, and dedicated support 24/7.
+                    </p>
+                    <div class="contact-item">
+                        <i class="fa fa-map-marker-alt"></i>
+                        <span>140 Le Trong Tan, Tay Thanh,<br>Tan Phu, Ho Chi Minh City</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fa fa-envelope"></i>
+                        <span>nhom4@gmail.com</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fa fa-phone-alt"></i>
+                        <span>+84 123 456 7890</span>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-6 mb-5">
+                    <h5 class="footer-heading">Quick Links</h5>
+                    <div class="d-flex flex-column justify-content-start">
+                        <a class="footer-link" href="@Url.Action("Index", "Home")"><i class="fa fa-angle-right"></i>Home</a>
+                        <a class="footer-link" href="@Url.Action("Shop", "Home")"><i class="fa fa-angle-right"></i>Our Shop</a>
+                        <a class="footer-link" href="#"><i class="fa fa-angle-right"></i>Blog Details</a>
+                        <a class="footer-link" href="@Url.Action("Contact", "Home")"><i class="fa fa-angle-right"></i>Contact Us</a>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-6 mb-5">
+                    <h5 class="footer-heading">Shopping</h5>
+                    <div class="d-flex flex-column justify-content-start">
+                        <a class="footer-link" href="@Url.Action("Cart", "ShoppingCart")"><i class="fa fa-angle-right"></i>Shopping Cart</a>
+                        <a class="footer-link" href="#"><i class="fa fa-angle-right"></i>Checkout</a>
+                        <a class="footer-link" href="#"><i class="fa fa-angle-right"></i>Order History</a>
+                        <a class="footer-link" href="#"><i class="fa fa-angle-right"></i>Terms & Condition</a>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-12 mb-5">
+                    <h5 class="footer-heading">Newsletter</h5>
+                    <p class="mb-4">Subscribe to get the latest updates and exclusive offers.</p>
+                    <form action="">
+                        <div class="input-group mb-4">
+                            <input type="email" class="form-control newsletter-input" placeholder="Your Email Address" required>
+                            <div class="input-group-append">
+                                <button class="btn newsletter-btn px-4" type="submit">Sign Up</button>
+                            </div>
+                        </div>
+                    </form>
+                    <h6 class="text-white text-uppercase mt-4 mb-3" style="letter-spacing: 1px;">Follow Us</h6>
+                    <div class="d-flex">
+                        <a class="social-btn" href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a class="social-btn" href="#"><i class="fab fa-twitter"></i></a>
+                        <a class="social-btn" href="#"><i class="fab fa-instagram"></i></a>
+                        <a class="social-btn" href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6 text-center text-md-left mb-3 mb-md-0">
+                        <p class="m-0">
+                            &copy; <a class="text-white font-weight-bold" href="#">EShopper</a>. All Rights Reserved.
+                            Designed by <a class="text-white font-weight-bold" href="#">Nhom 4</a>
+                        </p>
+                    </div>
+                    <div class="col-md-6 text-center text-md-right">-->
+@*<img class="img-fluid" src="~/Images/payments.png" alt="Payments" style="max-height: 30px;">*@
+<!--</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Scripts/lib/easing/easing.min.js"></script>
+    <script src="~/Scripts/lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <script src="~/Scripts/mail/jqBootstrapValidation.min.js"></script>
+    <script src="~/Scripts/mail/contact.js"></script>
+
+    <script src="~/Scripts/js/main.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const token = localStorage.getItem("jwtToken");
+            const dropdown = document.getElementById("userDropdown");
+
+            if (token) {
+                // TRƯỜNG HỢP: ĐÃ ĐĂNG NHẬP
+                try {
+                    // Thêm class dropdown để menu hoạt động
+                    dropdown.classList.add('dropdown');
+
+                    const payload = JSON.parse(atob(token.split('.')[1]));
+                    const userName = payload.UserName || payload.name || payload.email || "User";
+
+                    dropdown.innerHTML = `
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                    <img src="https://ui-avatars.com/api/?name=${userName}&background=D19C97&color=fff" class="rounded-circle mr-2" style="width:30px; height:30px;">
+                                    <span class="font-weight-bold text-dark">${userName}</span>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right rounded-0 m-0 shadow">
+                                    <a href="/Customer/Profile" class="dropdown-item"><i class="fas fa-user mr-2 text-muted"></i> Profile</a>
+                                    <a href="/Customer/Orders" class="dropdown-item"><i class="fas fa-box mr-2 text-muted"></i> My Orders</a>
+                                    <div class="dropdown-divider"></div>
+                                    <button id="logoutBtn" class="dropdown-item text-danger"><i class="fas fa-sign-out-alt mr-2"></i> Logout</button>
+                                </div>
+                            `;
+                } catch (err) {
+                    console.error("JWT error:", err);
+                    localStorage.removeItem("jwtToken");
+                    // Nếu lỗi token thì reload lại trang để về trạng thái chưa đăng nhập
+                    window.location.reload();
+                }
+            } else {
+                // TRƯỜNG HỢP: CHƯA ĐĂNG NHẬP (GUEST)
+                // Quan trọng: Xóa class dropdown để nút bấm hoạt động như link thường
+                dropdown.classList.remove('dropdown');
+
+                dropdown.innerHTML = `
+                            <div class="d-flex align-items-center">
+                                <a href="/Auth/Login" class="btn-auth btn-login text-decoration-none mr-2" style="position:relative; z-index:1000;">Login</a>
+                                <a href="/Auth/Register" class="btn-auth btn-register text-decoration-none" style="position:relative; z-index:1000;">Register</a>
+                            </div>
+                        `;
+            }
+
+            // Xử lý sự kiện Logout
+            document.body.addEventListener("click", (e) => {
+                if (e.target.id === "logoutBtn" || e.target.closest('#logoutBtn')) {
+                    e.preventDefault();
+                    localStorage.removeItem("jwtToken");
+                    window.location.href = "/";
+                }
+            });
+        });
+    </script>
+    @RenderSection("Scripts", required: false)
+
+</body>
+</html>-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>@ViewBag.Title - EShopper</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <link href="~/Scripts/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <link href="~/Content/css/style.css" rel="stylesheet">
+    <link href="~/Content/css/nav.css" rel="stylesheet" />
+    <link href="~/Content/css/footer.css" rel="stylesheet" />
+    <link href="~/Content/css/Home.css" rel="stylesheet" />
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top py-3 container-fluid px-5">
+        <div class="container-fluid px-5">
+            <a href="@Url.Action("Index", "Home")" class="navbar-brand d-flex align-items-center">
+                <span class="h1 font-weight-bold text-primary text-uppercase mb-0 mr-1">E</span>
+                <span class="h1 font-weight-bold text-dark text-uppercase mb-0" style="letter-spacing: 2px;">Shopper</span>
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <div class="navbar-nav ml-auto py-0">
+                    <a href="@Url.Action("Index", "Home")" class="nav-item nav-link px-3 @(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "active text-primary font-weight-bold" : "")">Home</a>
+                    <a href="@Url.Action("Shop", "Home")" class="nav-item nav-link px-3 @(ViewContext.RouteData.Values["Action"].ToString() == "Shop" ? "active text-primary font-weight-bold" : "")">Shop</a>
+                    <a href="#" class="nav-item nav-link px-3">Blog</a>
+                    <a href="@Url.Action("Contact", "Home")" class="nav-item nav-link px-3 @(ViewContext.RouteData.Values["Action"].ToString() == "Contact" ? "active text-primary font-weight-bold" : "")">Contact</a>
+                </div>
+
+                <div class="d-none d-lg-block mx-3" style="border-left: 1px solid #e0e0e0; height: 25px;"></div>
+
+                <div class="d-flex align-items-center">
+                    <a href="@Url.Action("Cart", "Home")" class="btn position-relative border-0 p-0 mr-3">
+                        <i class="fas fa-shopping-cart text-primary"></i>
+                        <span id="cartBadge" class="badge badge-danger rounded-circle position-absolute"
+                              style="top: -5px; right: -8px; font-size: 10px; padding: 3px 5px;">
+                            @* Bạn có thể thay số 0 bằng @Session["CartCount"] nếu có xử lý *@
+                            0
+                        </span>
+                    </a>
+
+                    @if (Session["UserName"] != null)
+                    {
+                        // TRƯỜNG HỢP: ĐÃ ĐĂNG NHẬP
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle d-flex align-items-center" data-toggle="dropdown" aria-expanded="false">
+                                <img src="https://ui-avatars.com/api/?name=@Session["UserName"]&background=D19C97&color=fff" class="rounded-circle mr-2" style="width:30px; height:30px;">
+                                <span class="font-weight-bold text-dark">@Session["UserName"]</span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right rounded-0 m-0 shadow">
+                                <a href="@Url.Action("Profile", "Customer")" class="dropdown-item"><i class="fas fa-user mr-2 text-muted"></i> Profile</a>
+                                <a href="@Url.Action("Orders", "Customer")" class="dropdown-item"><i class="fas fa-box mr-2 text-muted"></i> My Orders</a>
+                                <div class="dropdown-divider"></div>
+
+                                <a href="@Url.Action("Logout", "Auth")" class="dropdown-item text-danger"><i class="fas fa-sign-out-alt mr-2"></i> Logout</a>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        // TRƯỜNG HỢP: CHƯA ĐĂNG NHẬP (GUEST)
+                        <div class="d-flex align-items-center">
+                            <a href="@Url.Action("Login", "Auth")" class="btn btn-sm btn-outline-primary mr-2 font-weight-bold">Login</a>
+                            <a href="@Url.Action("Register", "Auth")" class="btn btn-sm btn-primary font-weight-bold">Register</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </nav>
+    @RenderBody()
+
+    <div class="container-fluid px-5 footer-modern mt-5 pt-5">
+        <div class="container-fluid px-5 pt-5">
+            <div class="row pb-5">
+                <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
+                    <a href="@Url.Action("Index", "Home")" class="text-decoration-none d-block mb-4">
+                        <h1 class="footer-logo m-0"><span>E</span>SHOPPER</h1>
+                    </a>
+                    <p class="mb-4" style="line-height: 1.6;">
+                        We provide the best fashion trends for you. Quality products, affordable prices, and dedicated support 24/7.
+                    </p>
+                    <div class="contact-item">
+                        <i class="fa fa-map-marker-alt"></i>
+                        <span>140 Le Trong Tan, Tay Thanh,<br>Tan Phu, Ho Chi Minh City</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fa fa-envelope"></i>
+                        <span>nhom4@gmail.com</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fa fa-phone-alt"></i>
+                        <span>+84 123 456 7890</span>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-6 mb-5">
+                    <h5 class="footer-heading">Quick Links</h5>
+                    <div class="d-flex flex-column justify-content-start">
+                        <a class="footer-link" href="@Url.Action("Index", "Home")"><i class="fa fa-angle-right"></i>Home</a>
+                        <a class="footer-link" href="@Url.Action("Shop", "Home")"><i class="fa fa-angle-right"></i>Our Shop</a>
+                        <a class="footer-link" href="#"><i class="fa fa-angle-right"></i>Blog Details</a>
+                        <a class="footer-link" href="@Url.Action("Contact", "Home")"><i class="fa fa-angle-right"></i>Contact Us</a>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-6 mb-5">
+                    <h5 class="footer-heading">Shopping</h5>
+                    <div class="d-flex flex-column justify-content-start">
+                        <a class="footer-link" href="@Url.Action("Cart", "ShoppingCart")"><i class="fa fa-angle-right"></i>Shopping Cart</a>
+                        <a class="footer-link" href="#"><i class="fa fa-angle-right"></i>Checkout</a>
+                        <a class="footer-link" href="#"><i class="fa fa-angle-right"></i>Order History</a>
+                        <a class="footer-link" href="#"><i class="fa fa-angle-right"></i>Terms & Condition</a>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-12 mb-5">
+                    <h5 class="footer-heading">Newsletter</h5>
+                    <p class="mb-4">Subscribe to get the latest updates and exclusive offers.</p>
+                    <form action="">
+                        <div class="input-group mb-4">
+                            <input type="email" class="form-control newsletter-input" placeholder="Your Email Address" required>
+                            <div class="input-group-append">
+                                <button class="btn newsletter-btn px-4" type="submit">Sign Up</button>
+                            </div>
+                        </div>
+                    </form>
+                    <h6 class="text-white text-uppercase mt-4 mb-3" style="letter-spacing: 1px;">Follow Us</h6>
+                    <div class="d-flex">
+                        <a class="social-btn" href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a class="social-btn" href="#"><i class="fab fa-twitter"></i></a>
+                        <a class="social-btn" href="#"><i class="fab fa-instagram"></i></a>
+                        <a class="social-btn" href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6 text-center text-md-left mb-3 mb-md-0">
+                        <p class="m-0">
+                            &copy; <a class="text-white font-weight-bold" href="#">EShopper</a>. All Rights Reserved.
+                            Designed by <a class="text-white font-weight-bold" href="#">Nhom 4</a>
+                        </p>
+                    </div>
+                    <div class="col-md-6 text-center text-md-right">
+                        @*<img class="img-fluid" src="~/Images/payments.png" alt="Payments" style="max-height: 30px;">*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Scripts/lib/easing/easing.min.js"></script>
+    <script src="~/Scripts/lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <script src="~/Scripts/mail/jqBootstrapValidation.min.js"></script>
+    <script src="~/Scripts/mail/contact.js"></script>
+    <script src="~/Scripts/js/main.js"></script>
+
+    @* Đã xóa script xử lý JWT ở đây *@
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
