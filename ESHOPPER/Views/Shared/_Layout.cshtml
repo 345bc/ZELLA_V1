@@ -8,6 +8,7 @@
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
 
     <link href="~/Scripts/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
@@ -63,7 +64,11 @@
     /* Khi hover thì nút nhấc lên và bóng đậm hơn */
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(209, 156, 151, 0.7);
-}
+                }
+            } else {
+                // TRƯỜNG HỢP: CHƯA ĐĂNG NHẬP (GUEST)
+                // Quan trọng: Xóa class dropdown để nút bấm hoạt động như link thường
+                dropdown.classList.remove('dropdown');
 
 /* Responsive: Trên Mobile thì chỉnh lại margin cho đẹp */
 @@media (max-width: 991px) {
@@ -72,8 +77,15 @@
         margin-left: 0 !important;
         justify-content: center;
         width: 100%;
-    }
-}
+            }
+
+            // Xử lý sự kiện Logout
+            document.body.addEventListener("click", (e) => {
+                if (e.target.id === "logoutBtn" || e.target.closest('#logoutBtn')) {
+                    e.preventDefault();
+                    localStorage.removeItem("jwtToken");
+                    window.location.href = "/";
+                }
     </style>
 </head>
 

@@ -1,26 +1,23 @@
 ﻿@model ESHOPPER.Models.DonHang
 
 @{
-    ViewBag.Title = "Secure Checkout";
+    ViewBag.Title = "Thanh toán an toàn";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    // Lấy dữ liệu giỏ hàng
-    var gioHang = ViewBag.GioHang as ESHOPPER.Models.GioHang;
+    // 1. QUAN TRỌNG: Lấy danh sách sản phẩm ĐÃ LỌC từ Controller
+    var listThanhToan = ViewBag.ListThanhToan as List<ESHOPPER.Models.ChiTietGioHang>;
 
     // Kiểm tra trạng thái đăng nhập
     bool isLoggedIn = Session["MaKH"] != null;
 
     // Class CSS cho ô input
-    string normalClass = "form-control form-control-custom"; // Bình thường
-    string lockedClass = "form-control form-control-custom bg-secondary text-dark"; // Bị khóa (xám)
+    string normalClass = "form-control form-control-custom";
+    string lockedClass = "form-control form-control-custom bg-secondary text-dark";
 }
 
 <style>
-    .checkout-container {
-        background-color: #f8f9fa;
-        padding: 50px 0;
-    }
-
+    .checkout-container { background-color: #f8f9fa; padding: 50px 0; }
+    
     /* Card Style */
     .checkout-card {
         background: #fff;
@@ -35,11 +32,7 @@
         padding-bottom: 15px;
         margin-bottom: 25px;
     }
-
-        .card-header-custom h4 {
-            font-weight: 700;
-            color: #333;
-        }
+    .card-header-custom h4 { font-weight: 700; color: #333; }
 
     /* Form Controls */
     .form-control-custom {
@@ -50,19 +43,12 @@
         font-size: 0.95rem;
         background-color: #fbfbfb;
     }
-
-        .form-control-custom:focus {
-            border-color: #D19C97;
-            box-shadow: 0 0 0 3px rgba(209, 156, 151, 0.2);
-            background-color: #fff;
-        }
-
-    .form-label {
-        font-weight: 600;
-        color: #555;
-        margin-bottom: 8px;
-        display: block;
+    .form-control-custom:focus {
+        border-color: #D19C97;
+        box-shadow: 0 0 0 3px rgba(209, 156, 151, 0.2);
+        background-color: #fff;
     }
+    .form-label { font-weight: 600; color: #555; margin-bottom: 8px; display: block; }
 
     /* Payment Options */
     .payment-option {
@@ -75,30 +61,16 @@
         display: flex;
         align-items: center;
     }
-
-        .payment-option:hover, .payment-option.active {
-            border-color: #D19C97;
-            background-color: #fff9f9;
-        }
-
-        .payment-option input {
-            margin-right: 15px;
-            transform: scale(1.2);
-        }
-
-    .payment-logo {
-        height: 30px;
-        margin-left: auto;
+    .payment-option:hover, .payment-option.active {
+        border-color: #D19C97;
+        background-color: #fff9f9;
     }
+    .payment-option input { margin-right: 15px; transform: scale(1.2); }
+    .payment-logo { height: 30px; margin-left: auto; }
 
     /* Summary Section */
-    .summary-item {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 12px;
-        font-size: 0.95rem;
-    }
-
+    .summary-item { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.95rem; }
+    
     .summary-total {
         border-top: 2px dashed #eee;
         padding-top: 15px;
@@ -122,106 +94,93 @@
         border: none;
         transition: 0.3s;
     }
-
-        .btn-place-order:hover {
-            background: #D19C97;
-            box-shadow: 0 10px 20px rgba(209, 156, 151, 0.4);
-        }
+    .btn-place-order:hover {
+        background: #D19C97;
+        box-shadow: 0 10px 20px rgba(209, 156, 151, 0.4);
+    }
 </style>
 
 <div class="checkout-container">
     <div class="container">
 
         <div class="text-center mb-5">
-            <h2 class="font-weight-bold">Secure Checkout</h2>
-            <p class="text-muted">Please fill in your details to complete your order.</p>
+            <h2 class="font-weight-bold">Thanh toán an toàn</h2>
+            <p class="text-muted">Vui lòng điền thông tin để hoàn tất đơn hàng của bạn.</p>
         </div>
 
         @using (Html.BeginForm("Checkout", "Home", FormMethod.Post, new { id = "checkoutForm" }))
         {
             @Html.AntiForgeryToken()
+            
+            <input type="hidden" name="selectedIds" value="@ViewBag.SelectedIds" />
 
             <div class="row">
                 <div class="col-lg-7">
                     <div class="checkout-card">
                         <div class="card-header-custom">
-                            <h4><i class="fa fa-user-circle mr-2 text-primary"></i> Customer Information</h4>
+                            <h4><i class="fa fa-user-circle mr-2 text-primary"></i> Thông tin khách hàng</h4>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Full Name <span class="text-danger">*</span></label>
+                                <label class="form-label">Họ và tên <span class="text-danger">*</span></label>
                                 <div class="position-relative">
-                                    <input type="text"
-                                           name="TenNguoiNhan"
-                                           value="@Model.TenNguoiNhan"
-                                           class="@(isLoggedIn ? lockedClass : normalClass)"
-                                           placeholder="e.g. Nguyen Van A"
-                                           required
-                                           @(isLoggedIn ? "readonly" : "") />
-
-                                    @if (isLoggedIn)
-                                    {
-                                        <i class="fa fa-lock position-absolute text-muted" style="right: 15px; top: 12px;" title="Verified Account"></i>
-                                    }
+                                    @Html.EditorFor(model => model.TenNguoiNhan, new { htmlAttributes = new { 
+                                        @class = isLoggedIn ? lockedClass : normalClass,
+                                        @required = "required",
+                                        @placeholder = "Ví dụ: Nguyễn Văn A",
+                                        @readonly = isLoggedIn ? "readonly" : null
+                                    }})
+                                    @if (isLoggedIn) { <i class="fa fa-lock position-absolute text-muted" style="right: 15px; top: 12px;" title="Đã xác thực"></i> }
                                 </div>
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                <label class="form-label">Số điện thoại <span class="text-danger">*</span></label>
                                 <div class="position-relative">
-                                    <input type="text"
-                                           name="SDTNguoiNhan"
-                                           value="@Model.SDTNguoiNhan"
-                                           class="@(isLoggedIn ? lockedClass : normalClass)"
-                                           placeholder="e.g. 0912345678"
-                                           required
-                                           @(isLoggedIn ? "readonly" : "") />
-
-                                    @if (isLoggedIn)
-                                    {
-                                        <i class="fa fa-lock position-absolute text-muted" style="right: 15px; top: 12px;" title="Verified Account"></i>
-                                    }
+                                    @Html.EditorFor(model => model.SDTNguoiNhan, new { htmlAttributes = new { 
+                                        @class = isLoggedIn ? lockedClass : normalClass,
+                                        @required = "required",
+                                        @placeholder = "Ví dụ: 0912345678",
+                                        @readonly = isLoggedIn ? "readonly" : null
+                                    }})
+                                    @if (isLoggedIn) { <i class="fa fa-lock position-absolute text-muted" style="right: 15px; top: 12px;" title="Đã xác thực"></i> }
                                 </div>
                             </div>
 
                             <div class="col-md-12 mb-3">
-                                <label class="form-label">Shipping Address <span class="text-danger">*</span></label>
-                                <textarea name="DiaChiNhan"
-                                          class="@normalClass"
-                                          rows="3"
-                                          placeholder="House number, Street name, Ward, District, City..."
-                                          required>@Model.DiaChiNhan</textarea>
-
+                                <label class="form-label">Địa chỉ nhận hàng <span class="text-danger">*</span></label>
+                                <textarea name="DiaChiNhan" class="@normalClass" rows="3" 
+                                          placeholder="Số nhà, Tên đường, Phường/Xã, Quận/Huyện..." required>@Model.DiaChiNhan</textarea>
                                 @if (isLoggedIn)
                                 {
                                     <small class="text-muted mt-2 d-block">
-                                        <i class="fa fa-info-circle"></i> You can update the shipping address for this order.
+                                        <i class="fa fa-info-circle"></i> Bạn có thể cập nhật địa chỉ giao hàng cho đơn này.
                                     </small>
                                 }
                             </div>
 
                             <div class="col-md-12">
-                                <label class="form-label">Order Notes (Optional)</label>
-                                <textarea name="GhiChu" class="@normalClass" rows="2" placeholder="Notes about your order, e.g. special notes for delivery."></textarea>
+                                <label class="form-label">Ghi chú (Tùy chọn)</label>
+                                <textarea name="GhiChu" class="@normalClass" rows="2" placeholder="Lưu ý về đơn hàng, thời gian giao hàng..."></textarea>
                             </div>
                         </div>
                     </div>
 
                     <div class="checkout-card">
                         <div class="card-header-custom">
-                            <h4><i class="fa fa-credit-card mr-2 text-primary"></i> Payment Method</h4>
+                            <h4><i class="fa fa-credit-card mr-2 text-primary"></i> Phương thức thanh toán</h4>
                         </div>
 
                         <div class="payment-option active" onclick="selectPayment('cod')">
                             <input type="radio" name="paymentMethod" id="cod" value="COD" checked>
-                            <label class="mb-0 font-weight-bold" for="cod" style="cursor:pointer; flex-grow:1;">Cash on Delivery (COD)</label>
+                            <label class="mb-0 font-weight-bold" for="cod" style="cursor:pointer; flex-grow:1;">Thanh toán khi nhận hàng (COD)</label>
                             <i class="fa fa-money-bill-wave fa-lg text-success"></i>
                         </div>
 
                         <div class="payment-option" onclick="selectPayment('vnpay')">
                             <input type="radio" name="paymentMethod" id="vnpay" value="VNPay">
-                            <label class="mb-0 font-weight-bold" for="vnpay" style="cursor:pointer; flex-grow:1;">Pay with VNPay</label>
+                            <label class="mb-0 font-weight-bold" for="vnpay" style="cursor:pointer; flex-grow:1;">Thanh toán qua VNPay</label>
                             <img src="https://vnpay.vn/assets/images/logo-icon/logo-primary.svg" class="payment-logo" alt="VNPay">
                         </div>
                     </div>
@@ -230,55 +189,59 @@
                 <div class="col-lg-5">
                     <div class="checkout-card" style="position: sticky; top: 100px;">
                         <div class="card-header-custom">
-                            <h4>Order Summary</h4>
+                            <h4>Đơn hàng của bạn</h4>
                         </div>
 
                         <div class="mb-4">
-                            @if (gioHang != null && gioHang.ChiTietGioHangs != null)
+                            @if (listThanhToan != null && listThanhToan.Any())
                             {
-                                foreach (var item in gioHang.ChiTietGioHangs)
+                                foreach (var item in listThanhToan)
                                 {
                                     <div class="d-flex align-items-center mb-3 border-bottom pb-3">
                                         <div style="position: relative;">
-                                            <img src="@Url.Content("~/Images/Products/" + (item.SanPham?.AnhSP ?? "no-image.png"))"
+                                            <img src="@Url.Content("~/Images/Products/" + (item.SanPham?.AnhSP ?? "no-image.png"))" 
                                                  style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; margin-right: 15px;">
-                                            <span class="badge badge-secondary rounded-circle"
+                                            <span class="badge badge-secondary rounded-circle" 
                                                   style="position: absolute; top: -5px; right: 5px; width: 20px; height: 20px; padding: 0; line-height: 20px;">
                                                 @item.SoLuong
                                             </span>
                                         </div>
                                         <div style="flex-grow: 1;">
-                                            <h6 class="mb-0 font-weight-bold" style="font-size: 0.9rem;">@(item.SanPham?.TenSanPham ?? "Product Name")</h6>
-                                            <small class="text-muted">Size: @item.MaSize | Color: @item.MaMau</small>
+                                            <h6 class="mb-0 font-weight-bold" style="font-size: 0.9rem;">@(item.SanPham?.TenSanPham ?? "Sản phẩm")</h6>
+                                            <small class="text-muted">Size: @item.MaSize | Màu: @item.MaMau</small>
                                         </div>
                                         <div class="font-weight-bold">
-                                            @string.Format("{0:N0} ₫", item.DonGia * item.SoLuong)
+                                            @string.Format("{0:N0} ₫", (item.DonGia ?? 0) * (item.SoLuong ?? 0))
                                         </div>
                                     </div>
                                 }
                             }
+                            else
+                            {
+                                <p class="text-danger">Không có sản phẩm nào được chọn.</p>
+                            }
                         </div>
 
                         <div class="summary-item">
-                            <span class="text-muted">Subtotal</span>
-                            <span class="font-weight-bold">@string.Format("{0:N0} ₫", gioHang?.TongTienTamTinh())</span>
+                            <span class="text-muted">Tạm tính</span>
+                            <span class="font-weight-bold">@string.Format("{0:N0} ₫", Model.TongTien)</span>
                         </div>
                         <div class="summary-item">
-                            <span class="text-muted">Shipping</span>
-                            <span class="text-success font-weight-bold">Free</span>
+                            <span class="text-muted">Phí vận chuyển</span>
+                            <span class="text-success font-weight-bold">Miễn phí</span>
                         </div>
 
                         <div class="summary-total">
-                            <span>Total</span>
-                            <span>@string.Format("{0:N0} ₫", gioHang?.TongTienTamTinh())</span>
+                            <span>Tổng cộng</span>
+                            <span>@string.Format("{0:N0} ₫", Model.TongTien)</span>
                         </div>
 
                         <button type="submit" class="btn-place-order mt-4">
-                            Complete Order <i class="fa fa-arrow-right ml-2"></i>
+                            Đặt hàng ngay <i class="fa fa-arrow-right ml-2"></i>
                         </button>
 
                         <div class="text-center mt-3">
-                            <small class="text-muted"><i class="fa fa-lock mr-1"></i> Your data is protected by SSL.</small>
+                            <small class="text-muted"><i class="fa fa-lock mr-1"></i> Thông tin được bảo mật bằng SSL.</small>
                         </div>
                     </div>
                 </div>

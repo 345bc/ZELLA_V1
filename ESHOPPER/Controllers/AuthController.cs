@@ -103,6 +103,7 @@ namespace ESHOPPER.Controllers.Auth
                 // ====================================================
                 // 6. XỬ LÝ CHUYỂN HƯỚNG (REDIRECT)
                 // ====================================================
+                //string targetUrl = "";
 
                 // Ưu tiên 1: Nếu có returnUrl hợp lệ (VD: đang vào Admin bị đá ra login, giờ vào lại Admin)
                 if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
@@ -136,6 +137,129 @@ namespace ESHOPPER.Controllers.Auth
                 return View();
             }
         }
+
+        //[HttpPost]
+        //public JsonResult Login(string loginInput, string password, string returnUrl = "")
+        //{
+        //    try
+        //    {
+        //        // 1. Validate đầu vào
+        //        if (string.IsNullOrEmpty(loginInput) || string.IsNullOrEmpty(password))
+        //        {
+        //            return Json(new { success = false, message = "Vui lòng nhập đầy đủ thông tin!" });
+        //        }
+
+        //        // 2. Chuẩn bị tham số Stored Procedure
+        //        // Lưu ý: Đảm bảo biến 'db' đã được khởi tạo (Entities context)
+        //        var resultParam = new ObjectParameter("Result", typeof(int));
+        //        var userIdParam = new ObjectParameter("UserID", typeof(int));
+        //        var nameParam = new ObjectParameter("Name", typeof(string));
+        //        var roleParam = new ObjectParameter("Role", typeof(string));
+        //        var passwordHashParam = new ObjectParameter("PasswordHash", typeof(string));
+
+        //        // 3. Gọi Stored Procedure
+        //        db.sp_LoginUser(
+        //            loginInput,
+        //            resultParam,
+        //            userIdParam,
+        //            nameParam,
+        //            roleParam,
+        //            passwordHashParam
+        //        );
+
+        //        // 4. Kiểm tra kết quả từ DB
+        //        int result = resultParam.Value != null ? (int)resultParam.Value : 0;
+        //        string storedHash = passwordHashParam.Value != null ? passwordHashParam.Value.ToString() : "";
+
+        //        if (result == 1 || string.IsNullOrEmpty(storedHash))
+        //        {
+        //            return Json(new { success = false, message = "Tài khoản không tồn tại hoặc sai thông tin!" });
+        //        }
+
+        //        // 5. Verify Password
+        //        bool isPasswordValid = false;
+        //        try
+        //        {
+        //            isPasswordValid = BCrypt.Net.BCrypt.Verify(password, storedHash);
+        //        }
+        //        catch
+        //        {
+        //            isPasswordValid = false;
+        //        }
+
+        //        if (!isPasswordValid)
+        //        {
+        //            return Json(new { success = false, message = "Mật khẩu không đúng!" });
+        //        }
+
+        //        // ====================================================
+        //        // 6. ĐĂNG NHẬP THÀNH CÔNG -> LƯU SESSION
+        //        // ====================================================
+        //        int userId = (int)userIdParam.Value;
+        //        string userName = nameParam.Value.ToString();
+        //        string userRole = roleParam.Value.ToString();
+
+        //        // Lấy MaKH chuẩn từ bảng KhachHang (nếu có)
+        //        int maKH = 0; 
+        //        var userKH = db.KhachHangs.FirstOrDefault(k => k.User.Name == loginInput || k.Email == loginInput);
+        //        if (userKH != null) maKH = userKH.MaKH;
+
+        //        Session["UserID"] = userId;
+        //        Session["MaKH"] = maKH;
+        //        Session["UserName"] = userName;
+        //        Session["UserRole"] = userRole;
+
+        //        // 7. GỘP GIỎ HÀNG
+        //        if (Session["Cart"] != null && maKH > 0)
+        //        {
+        //            MergeSessionCartToDb(maKH); // Hàm riêng của bạn
+        //        }
+
+        //        // Tạo Token (Optional - nếu bạn dùng JWT)
+        //        var token = JwtHelper.GenerateToken(loginInput, userRole, userName);
+
+        //        // ====================================================
+        //        // [QUAN TRỌNG] 8. XỬ LÝ ĐÍCH ĐẾN (TARGET URL)
+        //        // ====================================================
+        //        string targetUrl = "";
+
+        //        // Ưu tiên: Nếu có returnUrl (khách đang vào link nào đó bị bắt login)
+        //        if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+        //        {
+        //            targetUrl = returnUrl;
+        //        }
+        //        else
+        //        {
+        //            // Phân quyền theo Role
+        //            // Kiểm tra chính xác chuỗi "Admin" trong database của bạn
+        //            if (userRole.Equals("Admin", StringComparison.OrdinalIgnoreCase))
+        //            {
+        //                // Chuyển sang Area Admin -> Controller Home -> Action Index
+        //                targetUrl = Url.Action("Index", "Home", new { area = "Admin" });
+        //            }
+        //            else
+        //            {
+        //                // Chuyển sang trang chủ người dùng
+        //                targetUrl = Url.Action("Index", "Home", new { area = "" });
+        //            }
+        //        }
+
+        //        // Trả về JSON chứa URL để JS chuyển hướng
+        //        return Json(new
+        //        {
+        //            success = true,
+        //            message = "Đăng nhập thành công!",
+        //            token = token,
+        //            returnUrl = targetUrl
+        //        });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Json(new { success = false, message = "Lỗi hệ thống: " + ex.Message });
+        //    }
+        //}
+
+        // Helper: Gộp giỏ hàng từ Session vào DB rồi xóa Session
         private void MergeSessionCartToDb(int maKH)
         {
             try

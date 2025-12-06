@@ -42,11 +42,11 @@
             },
         };
     </script>
-    <style>
+<style>
         * {
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-        }
+    }
 
         .input-group {
             position: relative;
@@ -66,14 +66,14 @@
             top: 0.75rem;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: none;
-            background: white;
+        background: white;
             padding: 0 0.25rem;
             font-weight: 500;
-        }
+    }
 
         .dark .input-group label {
             background: #1A1A1A;
-        }
+    }
 
         .input-field {
             transition: all 0.3s ease;
@@ -83,7 +83,7 @@
             border-color: #C5A992;
             box-shadow: 0 0 0 3px rgba(197, 169, 146, 0.1);
             transform: translateY(-2px);
-        }
+    }
 
         .validation-summary-errors {
             background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
@@ -101,11 +101,11 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .btn-primary {
+    .btn-primary {
             background: linear-gradient(135deg, #C5A992 0%, #B39575 100%);
             position: relative;
             overflow: hidden;
-        }
+    }
 
         .btn-primary::before {
             content: '';
@@ -120,11 +120,11 @@
 
         .btn-primary:hover::before {
             left: 100%;
-        }
+    }
 
         .hero-overlay {
             background: linear-gradient(135deg, rgba(0,0,0,0.6) 0%, rgba(197,169,146,0.3) 100%);
-        }
+    }
 
         .password-strength {
             height: 4px;
@@ -214,7 +214,7 @@
                 font-size: 0.875rem;
             }
         }
-    </style>
+</style>
 </head>
 <body class="font-sans antialiased text-gray-900 bg-gray-50 dark:bg-dark-bg dark:text-gray-100 transition-colors duration-300">
 
@@ -304,15 +304,15 @@
 
                 <!-- Validation Summary -->
                 @if (!ViewData.ModelState.IsValid)
-                {
+        {
                     <div class="validation-summary-errors rounded-xl p-4 backdrop-blur-sm">
                         @Html.ValidationSummary(true, "", new { @class = "text-sm font-medium" })
                     </div>
-                }
+        }
 
                 <!-- Form -->
                 @using (Html.BeginForm("Register", "Auth", FormMethod.Post, new { @id = "registerForm", @class = "space-y-0" }))
-                {
+        {
                     @Html.AntiForgeryToken()
 
                     <!-- Step 1: Account Information -->
@@ -349,8 +349,11 @@
                                 <div class="password-strength flex-1 bg-gray-200 dark:bg-gray-700"></div>
                                 <div class="password-strength flex-1 bg-gray-200 dark:bg-gray-700"></div>
                                 <div class="password-strength flex-1 bg-gray-200 dark:bg-gray-700"></div>
-                            </div>
-                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phone" class="form-label fw-semibold">Phone Number <span class="text-danger">*</span></label>
+                        <input type="tel" id="phone" name="phone" class="form-control" placeholder="" required pattern="^0[0-9]{9}$">
+                    </div>
 
                         <div class="input-group">
                             <div class="relative">
@@ -361,15 +364,22 @@
                                         class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600">
                                     <i class="fa-regular fa-eye" id="confirmPassword-icon"></i>
                                 </button>
-                            </div>
-                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="gender" class="form-label fw-semibold">Gender <span class="text-danger">*</span></label>
+                        <select id="gender" name="gender" class="form-select" required>
+                            <option value="" disabled selected>Select gender</option>
+                            <option value="Nam">Male</option>
+                            <option value="Nữ">Female</option>
+                        </select>
+                    </div>
 
                         <button type="button" onclick="nextStep()"
                                 class="w-full flex justify-center items-center gap-2 py-4 px-6 rounded-xl shadow-lg text-sm font-bold text-white bg-gray-800 hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-600 focus:outline-none transition-all transform hover:-translate-y-1 uppercase tracking-widest mt-6">
                             <span>Next Step</span>
                             <i class="fa-solid fa-arrow-right"></i>
                         </button>
-                    </div>
+                </div>
 
                     <!-- Step 2: Profile Information -->
                     <div id="step-2" class="step-content space-y-5">
@@ -378,14 +388,18 @@
                                 <input id="name" name="name" type="text" required placeholder=" "
                                        class="input-field block w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white bg-transparent focus:outline-none">
                                 <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Full Name</label>
-                            </div>
+                    </div>
 
                             <div class="input-group">
                                 <input id="phone" name="phone" type="tel" required pattern="[0-9]{10}" placeholder=" "
                                        class="input-field block w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white bg-transparent focus:outline-none">
                                 <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Phone Number</label>
-                            </div>
-                        </div>
+                    </div>
+                    <div class="mb-3 position-relative">
+                        <label for="password" class="form-label fw-semibold">Password <span class="text-danger">*</span></label>
+                        <input type="password" id="password" name="password" class="form-control password-input"  required minlength="6" autocomplete="new-password">
+                        <i class="fa fa-eye password-toggle" id="togglePass" onclick="togglePassword('password', this)"></i>
+                    </div>
 
                         <div class="input-group">
                             <select name="gender" required
@@ -396,13 +410,13 @@
                                 <option value="Khác" class="text-gray-800 dark:text-gray-200">Other</option>
                             </select>
                             <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Gender</label>
-                        </div>
+                    </div>
 
                         <div class="input-group">
                             <input name="birthDate" type="date" placeholder=" "
                                    class="input-field block w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white bg-transparent focus:outline-none">
                             <label class="text-sm font-medium text-gray-600 dark:text-gray-400">Date of Birth</label>
-                        </div>
+                </div>
 
                         <div class="flex items-start gap-3 p-4 bg-gray-50 dark:bg-dark-surface rounded-xl">
                             <input id="terms" type="checkbox" required
@@ -412,8 +426,8 @@
                                 <a href="#" class="text-primary hover:text-primary-dark font-semibold underline">Terms of Service</a>
                                 and
                                 <a href="#" class="text-primary hover:text-primary-dark font-semibold underline">Privacy Policy</a>
-                            </label>
-                        </div>
+                        </label>
+                    </div>
 
                         <div class="flex gap-3 mt-6">
                             <button type="button" onclick="prevStep()"
@@ -423,15 +437,15 @@
                             <button type="submit"
                                     class="btn-primary w-2/3 py-4 px-6 rounded-xl shadow-lg text-sm font-bold text-white focus:outline-none focus:ring-4 focus:ring-primary/30 transition-all transform hover:-translate-y-1 hover:shadow-xl uppercase tracking-widest">
                                 <span class="relative z-10">Create Account</span>
-                            </button>
-                        </div>
-                    </div>
+                    </button>
+                </div>
+            </div>
                 }
 
                 <!-- Sign In Link -->
                 <div class="text-center pt-6 border-t border-gray-200 dark:border-gray-700">
                     <p class="text-sm text-gray-600 dark:text-gray-400">
-                        Already have an account?
+                Already have an account?
                         <a href="@Url.Action("Login", "Auth")"
                            class="font-bold text-primary hover:text-primary-dark ml-1 transition-colors">
                             Sign In
@@ -453,10 +467,10 @@
             <span class="h-2 w-2 bg-primary rounded-full animate-bounce" style="animation-delay: 0s"></span>
             <span class="h-2 w-2 bg-primary rounded-full animate-bounce" style="animation-delay: 0.1s"></span>
             <span class="h-2 w-2 bg-primary rounded-full animate-bounce" style="animation-delay: 0.2s"></span>
-        </div>
     </div>
+</div>
 
-    <script>
+<script>
         // Dark Mode
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
@@ -469,7 +483,7 @@
 
         // Password Toggle
         function togglePassword(id) {
-            const input = document.getElementById(id);
+        const input = document.getElementById(id);
             const icon = document.getElementById(id + '-icon');
 
             if (input.type === 'password') {
@@ -481,7 +495,7 @@
                 icon.classList.remove('fa-eye-slash');
                 icon.classList.add('fa-eye');
             }
-        }
+    }
 
         // Password Strength
         document.getElementById('password')?.addEventListener('input', function (e) {
@@ -521,13 +535,13 @@
 
             if (password !== confirmPassword) {
                 alert('Passwords do not match!');
-                return;
-            }
+            return;
+        }
 
             if (password.length < 6) {
                 alert('Password must be at least 6 characters');
-                return;
-            }
+            return;
+        }
 
             // Hide step 1, show step 2
             document.getElementById('step-1').classList.remove('active');
@@ -592,6 +606,6 @@
             await new Promise(r => setTimeout(r, 1200));
             this.submit();
         });
-    </script>
+</script>
 </body>
 </html>

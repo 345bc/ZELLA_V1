@@ -1,10 +1,10 @@
-﻿using ESHOPPER.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.Data.Entity;
+﻿    using ESHOPPER.Models;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web;
+    using System.Web.Mvc;
+    using System.Data.Entity;
 
 namespace ESHOPPER.Controllers.WebPage
 {
@@ -197,129 +197,6 @@ namespace ESHOPPER.Controllers.WebPage
 
             return View(gioHang);
         }
-
-        // ==========================================
-        // 2. THÊM VÀO GIỎ (ADD TO CART)
-        // ==========================================
-        //[HttpPost]
-        //public JsonResult AddToCart(string productId, int quantity = 1, string selectedSize = null, string selectedColor = null)
-        //{
-        //    try
-        //    {
-        //        if (string.IsNullOrEmpty(productId))
-        //            return Json(new { success = false, message = "Sản phẩm không hợp lệ." });
-
-        //        if (quantity < 1) quantity = 1;
-
-        //        // Lấy sản phẩm + giá đúng theo biến thể (nếu có)
-        //        var sanPham = db.SanPhams.FirstOrDefault(p => p.MaSP == productId);
-        //        if (sanPham == null)
-        //            return Json(new { success = false, message = "Sản phẩm không tồn tại." });
-
-        //        var bienThe = db.BienTheSanPhams.FirstOrDefault(b =>
-        //            b.MaSP == productId &&
-        //            b.MaSize == selectedSize &&
-        //            b.MaMau == selectedColor);
-
-        //        decimal donGia = bienThe?.GiaBan ?? sanPham.GiaBanLe ?? 0;
-
-        //        // =============================================
-        //        // CASE 1: ĐÃ ĐĂNG NHẬP → LƯU VÀO DATABASE
-        //        // =============================================
-        //        if (Session["MaKH"] != null)
-        //        {
-        //            int maKH = (int)Session["MaKH"];
-
-        //            // Kiểm tra khách hàng có thật không (tránh session giả mạo)
-        //            if (db.KhachHangs.Find(maKH) == null)
-        //            {
-        //                Session.Clear();
-        //                return Json(new { success = false, message = "Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại." });
-        //            }
-
-        //            var gioHang = db.GioHangs.FirstOrDefault(g => g.MaKH == maKH);
-        //            if (gioHang == null)
-        //            {
-        //                gioHang = new GioHang { MaKH = maKH, NgayTao = DateTime.Now };
-        //                db.GioHangs.Add(gioHang);
-        //                db.SaveChanges();
-        //            }
-
-        //            var chiTiet = db.ChiTietGioHangs.FirstOrDefault(c =>
-        //                c.MaGioHang == gioHang.MaGioHang &&
-        //                c.MaSP == productId &&
-        //                c.MaSize == selectedSize &&
-        //                c.MaMau == selectedColor);
-
-        //            if (chiTiet != null)
-        //            {
-        //                chiTiet.SoLuong += quantity;
-        //            }
-        //            else
-        //            {
-        //                db.ChiTietGioHangs.Add(new ChiTietGioHang
-        //                {
-        //                    MaGioHang = gioHang.MaGioHang,
-        //                    MaSP = productId,
-        //                    SoLuong = quantity,
-        //                    DonGia = donGia,
-        //                    MaSize = selectedSize,
-        //                    MaMau = selectedColor
-        //                });
-        //            }
-        //            db.SaveChanges();
-        //        }
-        //        // =============================================
-        //        // CASE 2: CHƯA ĐĂNG NHẬP → LƯU VÀO SESSION
-        //        // =============================================
-        //        else
-        //        {
-        //            GioHang gioHang = Session["Cart"] as GioHang ?? new GioHang();
-
-        //            if (gioHang.ChiTietGioHangs == null)
-        //                gioHang.ChiTietGioHangs = new List<ChiTietGioHang>();
-
-        //            var item = gioHang.ChiTietGioHangs.FirstOrDefault(i =>
-        //                i.MaSP == productId &&
-        //                i.MaSize == selectedSize &&
-        //                i.MaMau == selectedColor);
-
-        //            if (item != null)
-        //            {
-        //                item.SoLuong += quantity;
-        //            }
-        //            else
-        //            {
-        //                gioHang.ChiTietGioHangs.Add(new ChiTietGioHang
-        //                {
-        //                    MaSP = productId,
-        //                    SanPham = sanPham, // Để hiển thị tên + ảnh trong giỏ
-        //                    SoLuong = quantity,
-        //                    DonGia = donGia,
-        //                    MaSize = selectedSize,
-        //                    MaMau = selectedColor
-        //                });
-        //            }
-
-        //            Session["Cart"] = gioHang;
-        //        }
-
-        //        // Tính tổng số lượng trong giỏ (dùng chung cho cả 2 trường hợp)
-        //        int totalItems = GetCartTotalItems();
-
-        //        return Json(new
-        //        {
-        //            success = true,
-        //            message = "Đã thêm vào giỏ hàng!",
-        //            totalItems = totalItems
-        //        });
-        //    }
-        //    catch (Exception)
-        //    {
-        //        // Log lỗi nếu cần (không để lộ cho user)
-        //        return Json(new { success = false, message = "Đã có lỗi xảy ra. Vui lòng thử lại!" });
-        //    }
-        //}
 
         [HttpPost]
         public JsonResult AddToCart(string productId, int quantity = 1, string selectedSize = null, string selectedColor = null)
@@ -609,19 +486,15 @@ namespace ESHOPPER.Controllers.WebPage
             }
         }
 
-        // ==========================================
-        // 6. TRANG THANH TOÁN (GET)
-        // ==========================================
-        // File: Controllers/WebPage/HomeController.cs
-
-        // 1. Sửa lại Action Checkout để nhận danh sách sản phẩm được chọn
         [HttpGet]
-        public ActionResult Checkout(string selectedIds) // <-- Thêm tham số này
+        public ActionResult Checkout(string selectedIds)
         {
+            // 1. Khởi tạo
             GioHang gioHang = null;
+            // Lưu ý: MaKH trong Session thường là int, nhưng nếu bạn lưu MaKH là string thì sửa thành string
             int? maKH = Session["MaKH"] as int?;
 
-            // A. Lấy giỏ hàng gốc (Từ DB hoặc Session)
+            // 2. Lấy dữ liệu giỏ hàng
             if (maKH.HasValue)
             {
                 gioHang = db.GioHangs
@@ -639,33 +512,51 @@ namespace ESHOPPER.Controllers.WebPage
                 return RedirectToAction("Shop");
             }
 
-            // B. LỌC SẢN PHẨM ĐỂ THANH TOÁN (Logic mới)
+            // ==========================================
+            // B. LỌC SẢN PHẨM (PHIÊN BẢN ALL STRING)
+            // ==========================================
+            List<ChiTietGioHang> danhSachThanhToan = new List<ChiTietGioHang>();
+
             if (!string.IsNullOrEmpty(selectedIds))
             {
-                // selectedIds dạng: "SP001,SP002,SP005"
                 var listIds = selectedIds.Split(',').ToList();
 
-                // Chỉ giữ lại những sản phẩm nằm trong listIds
-                gioHang.ChiTietGioHangs = gioHang.ChiTietGioHangs
-                                                  .Where(x => listIds.Contains(x.MaSP))
-                                                  .ToList();
+                // Bước 1: Tách chuỗi nhưng KHÔNG ép kiểu số
+                var listKeys = listIds.Select(s => {
+                    var parts = s.Split('_');
+                    return new
+                    {
+                        // Lấy trực tiếp chuỗi (String)
+                        MaSP = parts[0],
+
+                        // Nếu chuỗi rỗng (không có size/màu) thì trả về null để so sánh, ngược lại lấy giá trị
+                        MaSize = string.IsNullOrEmpty(parts[1]) ? null : parts[1],
+                        MaMau = string.IsNullOrEmpty(parts[2]) ? null : parts[2]
+                    };
+                }).ToList();
+
+                // Bước 2: So sánh String == String
+                danhSachThanhToan = gioHang.ChiTietGioHangs
+                                           .Where(item => listKeys.Any(k =>
+                                                k.MaSP == item.MaSP &&      // String vs String
+                                                k.MaSize == item.MaSize &&  // String vs String
+                                                k.MaMau == item.MaMau))     // String vs String
+                                           .ToList();
             }
             else
             {
-                // Nếu không chọn gì -> Chặn hoặc mặc định chọn hết (Tùy bạn, ở đây tôi chặn)
-                TempData["ErrorMessage"] = "Vui lòng chọn ít nhất 1 sản phẩm để thanh toán.";
+                TempData["ErrorMessage"] = "Vui lòng chọn sản phẩm.";
                 return RedirectToAction("Cart");
             }
 
-            // C. Tính lại tổng tiền dựa trên danh sách đã lọc
+            // C. Tính tổng tiền
             var donHang = new DonHang
             {
-                // Lưu ý: TongTienTamTinh() cần tính dựa trên list đã lọc
-                // Nhân trực tiếp Đơn giá với Số lượng tại đây
-                TongTien = gioHang.ChiTietGioHangs.Sum(x => (x.DonGia ?? 0) * (x.SoLuong ?? 0))
+                NgayDat = DateTime.Now,
+                TongTien = danhSachThanhToan.Sum(x => (x.DonGia ?? 0) * (x.SoLuong ?? 0))
             };
 
-            // Autofill thông tin khách hàng (Giữ nguyên code cũ)
+            // Autofill thông tin khách hàng
             if (maKH.HasValue)
             {
                 var khach = db.KhachHangs.Find(maKH.Value);
@@ -674,16 +565,17 @@ namespace ESHOPPER.Controllers.WebPage
                     donHang.MaKH = maKH.Value;
                     donHang.TenNguoiNhan = khach.TenKH;
                     donHang.SDTNguoiNhan = khach.SoDT;
+                    // donHang.DiaChiNhan = khach.DiaChi; 
                 }
             }
 
-            ViewBag.GioHang = gioHang; // Giỏ hàng này chỉ chứa các món đã chọn
+            // D. Truyền dữ liệu sang View
+            ViewBag.ListThanhToan = danhSachThanhToan;
+            ViewBag.SelectedIds = selectedIds;
+
             return View(donHang);
         }
 
-        // ==========================================
-        // 7. XỬ LÝ CHECKOUT (POST) - ĐÃ GẮN VNPAY
-        // ==========================================
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Checkout(DonHang model, string paymentMethod, string selectedIds)
@@ -700,28 +592,49 @@ namespace ESHOPPER.Controllers.WebPage
                 gioHang = Session["Cart"] as GioHang;
             }
 
-            // 2. Lọc sản phẩm theo selectedIds (Logic Partial Checkout)
+            // 2. Lọc sản phẩm theo selectedIds (Logic Partial Checkout - ĐÃ SỬA)
             List<ChiTietGioHang> itemsToBuy = new List<ChiTietGioHang>();
 
             if (gioHang != null && gioHang.ChiTietGioHangs != null)
             {
                 if (!string.IsNullOrEmpty(selectedIds))
                 {
-                    var listIds = selectedIds.Split(',').ToList();
-                    // Chỉ lấy những món được tick chọn
-                    itemsToBuy = gioHang.ChiTietGioHangs.Where(x => listIds.Contains(x.MaSP)).ToList();
+                    // === [BẮT ĐẦU SỬA] ===
+                    // Tách chuỗi selectedIds dạng: "SP01_L_Xanh,SP02_M_Do"
+                    var arrRaw = selectedIds.Split(',');
+
+                    // Tạo danh sách Key để so sánh (Toàn bộ là String)
+                    var listKeys = arrRaw.Select(s => {
+                        var parts = s.Split('_');
+                        return new
+                        {
+                            MaSP = parts[0],
+                            // Xử lý null nếu chuỗi rỗng
+                            MaSize = string.IsNullOrEmpty(parts[1]) ? null : parts[1],
+                            MaMau = string.IsNullOrEmpty(parts[2]) ? null : parts[2]
+                        };
+                    }).ToList();
+
+                    // Lọc sản phẩm khớp cả 3 điều kiện: MaSP && Size && Màu
+                    itemsToBuy = gioHang.ChiTietGioHangs
+                                        .Where(item => listKeys.Any(k =>
+                                            k.MaSP == item.MaSP &&
+                                            k.MaSize == item.MaSize &&
+                                            k.MaMau == item.MaMau))
+                                        .ToList();
+                    // === [KẾT THÚC SỬA] ===
                 }
                 else
                 {
-                    // Fallback: Nếu không có ID nào (hoặc mua tất cả), lấy hết
-                    itemsToBuy = gioHang.ChiTietGioHangs.ToList();
+                    // Fallback: Nếu không có ID nào, báo lỗi hoặc lấy hết (ở đây tôi chặn lại)
+                    itemsToBuy = new List<ChiTietGioHang>();
                 }
             }
 
             if (itemsToBuy.Count == 0)
             {
                 TempData["ErrorMessage"] = "Vui lòng chọn sản phẩm để thanh toán.";
-                return RedirectToAction("Cart"); // Quay lại giỏ hàng
+                return RedirectToAction("Cart");
             }
 
             // 3. Thiết lập thông tin đơn hàng
@@ -748,13 +661,13 @@ namespace ESHOPPER.Controllers.WebPage
                     MaSP = item.MaSP,
                     TenSP = item.SanPham?.TenSanPham ?? "Unknown",
                     AnhSP = item.SanPham?.AnhSP,
+                    // Lưu đúng Size/Màu của item đó
                     Size = item.MaSize,
                     Mau = item.MaMau,
                     SoLuong = item.SoLuong,
                     DonGia = item.DonGia
                 };
                 db.ChiTietDonHangs.Add(chiTiet);
-                // TODO: Trừ tồn kho tại đây nếu cần
             }
             db.SaveChanges();
 
@@ -766,7 +679,7 @@ namespace ESHOPPER.Controllers.WebPage
             }
             else
             {
-                // COD: Mua xong -> Xóa ngay các món đã mua
+                // COD: Mua xong -> Gọi hàm xóa các món đã mua
                 XoaSanPhamDaMuaKhoiGio(model.MaDH);
 
                 return RedirectToAction("OrderSuccess");
@@ -873,7 +786,7 @@ namespace ESHOPPER.Controllers.WebPage
                 TempData["PaymentError"] = "Sai chữ ký bảo mật.";
                 return RedirectToAction("PaymentFail");
             }
-
+        
         }
         // ==========================================
         // 8. TRANG THÔNG BÁO THÀNH CÔNG

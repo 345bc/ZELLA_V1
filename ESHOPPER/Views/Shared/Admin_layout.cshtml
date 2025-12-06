@@ -1,226 +1,221 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewBag.title - Admin Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <style>
-        /* Style cho sidebar */
-        @@media (min-width: 768px) {
-            .sidebar {
-                position: sticky;
-                top: 0;
-                height: 100vh;
-                overflow-y: auto;
-            }
-        }
-        .nav-link { color: #333; }
-        .nav-link.active, .nav-link:hover { color: #0d6efd; }
+    <title>@ViewBag.Title - Quản trị viên</title>
 
-        /* Icon collapse */
-        .sidebar .nav-link[data-bs-toggle="collapse"]::after {
-            content: "\f067"; /* Plus icon */
-            font-family: "Font Awesome 6 Free";
-            font-weight: 900;
-            float: right;
-            transition: transform 0.2s;
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f6f9;
+            overflow-x: hidden;
         }
-        .sidebar .nav-link[data-bs-toggle="collapse"][aria-expanded="true"]::after {
-            content: "\f068"; /* Minus icon */
-            transform: rotate(180deg);
+
+        /* --- SIDEBAR STYLE --- */
+        #wrapper {
+            display: flex;
+            width: 100%;
+            align-items: stretch;
+        }
+
+        #sidebar-wrapper {
+            min-width: 250px;
+            max-width: 250px;
+            background-color: #343a40; /* Màu nền tối */
+            color: #fff;
+            transition: all 0.3s;
+            min-height: 100vh;
+        }
+
+            #sidebar-wrapper.toggled {
+                margin-left: -250px;
+            }
+
+        .sidebar-heading {
+            padding: 1.5rem 1rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #D19C97; /* Màu thương hiệu */
+            text-align: center;
+            border-bottom: 1px solid #4b545c;
+            letter-spacing: 1px;
+        }
+
+        .list-group-item {
+            padding: 15px 20px;
+            background-color: transparent;
+            color: #c2c7d0;
+            border: none;
+            font-weight: 500;
+        }
+
+            .list-group-item:hover {
+                background-color: #494e53;
+                color: #fff;
+                text-decoration: none;
+            }
+
+            .list-group-item.active {
+                background-color: #D19C97; /* Highlight màu hồng */
+                color: #fff;
+                border-color: #D19C97;
+            }
+
+            .list-group-item i {
+                width: 25px;
+                text-align: center;
+                margin-right: 10px;
+            }
+
+        /* --- CONTENT STYLE --- */
+        #page-content-wrapper {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar-custom {
+            background-color: #fff;
+            box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+            padding: 10px 20px;
+        }
+
+        .container-fluid-content {
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        /* Card Dashboard Style */
+        .card-box {
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        /* Footer */
+        footer {
+            background: #fff;
+            padding: 15px;
+            text-align: center;
+            border-top: 1px solid #eee;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @@media (max-width: 768px) {
+            #sidebar-wrapper {
+                margin-left: -250px;
+            }
+
+                #sidebar-wrapper.toggled {
+                    margin-left: 0;
+                }
         }
     </style>
 </head>
-<body style="background-color: #f8f9fa">
-    <div class="container-fluid">
-        <div class="row">
-            <nav class="col-12 col-md-3 col-lg-2 bg-white p-3 min-vh-100 shadow-sm sidebar">
-                <div class="text-center mb-3">
-                    <a href="@Url.Action("Dashboard","Admin")" class="text-decoration-none text-dark">
-                        <h4 class="m-0 fw-bold">
-                            <span class="border me-2 px-2 py-1" style="color: #BC8F8F; border-radius: 4px;">E</span>ZELLA
-                        </h4>
-                    </a>
-                </div>
-                <ul class="nav nav-pills flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Dashboard" ? "active" : "")"
-                           href="@Url.Action("Dashboard", "Admin")">
-                            <i class="fa-solid fa-gauge-high me-2"></i> Dashboard
+<body>
+
+    <div id="wrapper">
+        <div id="sidebar-wrapper">
+            <div class="sidebar-heading">
+                <i class="fas fa-shopping-bag mr-2"></i> ZELLA
+            </div>
+            <div class="list-group list-group-flush mt-3">
+
+                @* Dashboard *@
+                <a href="@Url.Action("Index", "Admin")" class="list-group-item list-group-item-action @(ViewBag.Active == "Dashboard" ? "active" : "")">
+                    <i class="fas fa-tachometer-alt"></i> Tổng quan
+                </a>
+
+                @* Quản lý Sản phẩm *@
+                <a href="@Url.Action("Index", "Products")" class="list-group-item list-group-item-action @(ViewBag.Active == "Sanpham" ? "active" : "")">
+                    <i class="fas fa-box"></i> Sản phẩm
+                </a>
+
+                @* Quản lý Danh mục *@
+                <a href="@Url.Action("Index", "Categories")" class="list-group-item list-group-item-action @(ViewBag.Active == "Danhmuc" ? "active" : "")">
+                    <i class="fas fa-list"></i> Danh mục
+                </a>
+
+                @* Quản lý Đơn hàng *@
+                <a href="@Url.Action("Index", "Orders")" class="list-group-item list-group-item-action @(ViewBag.Active == "Donhang" ? "active" : "")">
+                    <i class="fas fa-shopping-cart"></i> Đơn hàng
+                    <span class="badge badge-warning float-right text-dark">3</span> @* Ví dụ số đơn mới *@
+                </a>
+
+                @* Quản lý Khách hàng *@
+                <a href="@Url.Action("Index", "Customers")" class="list-group-item list-group-item-action @(ViewBag.Active == "Khachhang" ? "active" : "")">
+                    <i class="fas fa-users"></i> Khách hàng
+                </a>
+
+                <div class="dropdown-divider border-secondary mx-3"></div>
+
+                @* Cấu hình / Logout *@
+                <a href="@Url.Action("Logout", "Admin")" class="list-group-item list-group-item-action text-danger">
+                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                </a>
+            </div>
+        </div>
+        <div id="page-content-wrapper">
+
+            <nav class="navbar navbar-expand-lg navbar-custom">
+                <button class="btn btn-outline-secondary" id="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <div class="ml-auto d-flex align-items-center">
+                    <div class="dropdown">
+                        <a class="nav-link dropdown-toggle text-dark font-weight-bold" href="#" role="button" data-toggle="dropdown">
+                            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" width="30" class="rounded-circle mr-1">
+                            Administrator
                         </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="#order-submenu" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="order-submenu">
-                            <i class="fa-solid fa-clipboard-list me-2"></i> Đơn hàng
-                        </a>
-                        <div class="collapse" id="order-submenu">
-                            <ul class="nav flex-column ms-3">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">
-                                        <i class="fa-solid fa-caret-right me-2"></i> Danh sách
-                                    </a>
-                                </li>
-                            </ul>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="#">Hồ sơ</a>
+                            <a class="dropdown-item" href="#">Cài đặt</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger" href="#">Đăng xuất</a>
                         </div>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="#product-submenu" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="product-submenu">
-                            <i class="fa-solid fa-box me-2"></i> Sản phẩm
-                        </a>
-                        <div class="collapse" id="product-submenu">
-                            <ul class="nav flex-column ms-3">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="@Url.Action("Index", "SanPhams", new { area = "" })">
-                                        <i class="fa-solid fa-caret-right me-2"></i> Danh sách
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="@Url.Action("Create", "SanPhams", new { area = "" })">
-                                        <i class="fa-solid fa-caret-right me-2"></i> Thêm sản phẩm
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="#account-submenu" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="account-submenu">
-                            <i class="fa-solid fa-users-cog me-2"></i> Quản lý tài khoản
-                        </a>
-                        <div class="collapse" id="account-submenu">
-                            <ul class="nav flex-column ms-3">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="@Url.Action("Index", "Account", new { area = "" })">
-                                        <i class="fa-solid fa-caret-right me-2"></i> Danh sách
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="@Url.Action("Create", "Account", new { area = "" })">
-                                        <i class="fa-solid fa-caret-right me-2"></i> Thêm mới
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
-            </nav>
-            <main class="col-12 col-md-9 col-lg-10 p-4">
-                <nav class="navbar navbar-expand-lg navbar-light bg-white rounded shadow-sm mb-4 p-3">
-                    <div class="container-fluid">
-                        <div class="navbar-nav d-none d-md-flex">
-                            <a class="nav-link" href="#" id="fullscreen-toggle">
-                                <i class="fa-solid fa-expand"></i>
-                            </a>
-                        </div>
-
-                        <ul class="navbar-nav ms-auto flex-row align-items-center">
-                            <li class="nav-item me-3">
-                                <a class="nav-link" href="#"><i class="fa-solid fa-bell"></i></a>
-                            </li>
-                            <li class="nav-item me-3">
-                                <a class="nav-link" href="#"><i class="fa-solid fa-message"></i></a>
-                            </li>
-
-                            @if (Session["UserName"] != null)
-                            {
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <img src="https://ui-avatars.com/api/?name=@Session["UserName"]&background=BC8F8F&color=fff" class="rounded-circle me-2" width="32" height="32">
-                                        <span class="fw-bold text-dark">@Session["UserName"]</span>
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-end shadow border-0">
-                                        <li><a class="dropdown-item" href="#"><i class="fa-solid fa-user me-2"></i> Hồ sơ</a></li>
-                                        <li><a class="dropdown-item" href="#"><i class="fa-solid fa-gear me-2"></i> Cài đặt</a></li>
-                                        <li><hr class="dropdown-divider" /></li>
-                                        <li>
-                                            <a class="dropdown-item text-danger js-loading" href="@Url.Action("Logout", "Auth")">
-                                                <i class="fa-solid fa-right-from-bracket me-2"></i> Đăng xuất
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            }
-                            else
-                            {
-                                <li class="nav-item">
-                                    <a class="btn btn-outline-primary btn-sm" href="@Url.Action("Login", "Auth")">Đăng nhập lại</a>
-                                </li>
-                            }
-                        </ul>
                     </div>
-                </nav>
+                </div>
+            </nav>
 
+            <div class="container-fluid-content">
+                @if (ViewBag.Title != null)
+                {
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb bg-transparent p-0 mb-3">
+                            <li class="breadcrumb-item"><a href="#" class="text-secondary">Admin</a></li>
+                            <li class="breadcrumb-item active text-dark" aria-current="page">@ViewBag.Title</li>
+                        </ol>
+                    </nav>
+                }
+
+                @* Nơi nội dung của các trang con sẽ hiển thị *@
                 @RenderBody()
-            </main>
+            </div>
+
+           
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // --- CHỈ GIỮ LẠI LOGIC UI (Full Screen & Chart) ---
-        // --- ĐÃ XÓA LOGIC JWT TOKEN ĐỂ TRÁNH XUNG ĐỘT ---
-
-        // 1. Logic Full Screen
-        const fullscreenButton = document.getElementById("fullscreen-toggle");
-        if (fullscreenButton) {
-            const fullscreenIcon = fullscreenButton.querySelector("i");
-            fullscreenButton.addEventListener("click", (e) => {
-                e.preventDefault();
-                if (!document.fullscreenElement) {
-                    document.documentElement.requestFullscreen().then(() => {
-                        fullscreenIcon.classList.replace("fa-expand", "fa-compress");
-                    }).catch((err) => {
-                        console.error(`Error enabling full-screen mode: ${err.message}`);
-                    });
-                } else {
-                    if (document.exitFullscreen) {
-                        document.exitFullscreen().then(() => {
-                            fullscreenIcon.classList.replace("fa-compress", "fa-expand");
-                        });
-                    }
-                }
-            });
-        }
-
-        // 2. Logic Chart.js (Giữ nguyên biểu đồ của bạn)
-        const revenueData = {
-            labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7"],
-            datasets: [{
-                label: "Doanh thu (triệu VNĐ)",
-                data: [65, 59, 80, 81, 56, 55, 90],
-                fill: false,
-                borderColor: "rgb(75, 192, 192)",
-                tension: 0.1,
-            }],
-        };
-
-        const productData = {
-            labels: ["Xe Đạp Đua", "Xe Đạp Địa Hình", "Xe Đạp Trẻ Em"],
-            datasets: [{
-                label: "Tỷ lệ sản phẩm",
-                data: [300, 150, 100],
-                backgroundColor: ["rgb(255, 99, 132)", "rgb(54, 162, 235)", "rgb(255, 205, 86)"],
-                hoverOffset: 4,
-            }],
-        };
-
-        document.addEventListener("DOMContentLoaded", () => {
-            const ctxRevenue = document.getElementById("revenueChart");
-            if (ctxRevenue) {
-                new Chart(ctxRevenue, { type: "line", data: revenueData });
-            }
-
-            const ctxProduct = document.getElementById("productPieChart");
-            if (ctxProduct) {
-                new Chart(ctxProduct, { type: "doughnut", data: productData });
-            }
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled"); // Toggle class trên wrapper chính
+            $("#sidebar-wrapper").toggleClass("toggled"); // Toggle class trên sidebar
         });
     </script>
+
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

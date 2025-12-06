@@ -1,306 +1,306 @@
 ﻿@model ESHOPPER.Models.GioHang
 
-    @{
-        ViewBag.Title = "Giỏ hàng của bạn";
-        Layout = "~/Views/Shared/_Layout.cshtml";
-        bool isLoggedIn = Session["MaKH"] != null;
+@{
+    ViewBag.Title = "Giỏ hàng của bạn";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    bool isLoggedIn = Session["MaKH"] != null;
+}
+
+<style>
+    /* Checkbox Style */
+    .custom-checkbox {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        accent-color: #222; /* Màu đen khớp theme */
     }
 
-    <style>
-        /* Checkbox Style */
-        .custom-checkbox {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-            accent-color: #222; /* Màu đen khớp theme */
-        }
+    .cart-item-row.disabled {
+        opacity: 0.5;
+        background: #f9f9f9;
+    }
 
-        .cart-item-row.disabled {
-            opacity: 0.5;
-            background: #f9f9f9;
-        }
+    /* Giữ nguyên các style cũ của bạn */
+    .cart-page {
+        padding: 40px 0;
+        background: #fff;
+    }
 
-        /* Giữ nguyên các style cũ của bạn */
-        .cart-page {
-            padding: 40px 0;
-            background: #fff;
-        }
+    .cart-header-row {
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #555;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+        font-size: 0.9rem;
+    }
 
-        .cart-header-row {
-            font-weight: 700;
-            text-transform: uppercase;
-            color: #555;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 15px;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
-        }
+    .cart-item-row {
+        display: flex;
+        align-items: center;
+        padding: 20px 0;
+        border-bottom: 1px solid #f5f5f5;
+        transition: 0.3s;
+    }
 
-        .cart-item-row {
-            display: flex;
-            align-items: center;
-            padding: 20px 0;
-            border-bottom: 1px solid #f5f5f5;
-            transition: 0.3s;
-        }
+    .p-img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-right: 20px;
+    }
 
-        .p-img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin-right: 20px;
-        }
+    .summary-card {
+        background: #f9f9f9;
+        padding: 30px;
+        border-radius: 15px;
+        position: sticky;
+        top: 100px;
+    }
 
-        .summary-card {
-            background: #f9f9f9;
-            padding: 30px;
-            border-radius: 15px;
-            position: sticky;
-            top: 100px;
-        }
+    .checkout-btn {
+        background: #222;
+        color: #fff;
+        width: 100%;
+        padding: 15px;
+        border-radius: 30px;
+        font-weight: 700;
+        text-transform: uppercase;
+        border: none;
+        transition: 0.3s;
+    }
 
-        .checkout-btn {
-            background: #222;
+        .checkout-btn:hover {
+            background: #D19C97;
             color: #fff;
-            width: 100%;
-            padding: 15px;
-            border-radius: 30px;
-            font-weight: 700;
-            text-transform: uppercase;
-            border: none;
-            transition: 0.3s;
         }
 
-            .checkout-btn:hover {
-                background: #D19C97;
-                color: #fff;
-            }
+    /* Nút xóa & Update */
+    .qty-input-custom {
+        width: 50px;
+        height: 35px;
+        text-align: center;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+    }
 
-        /* Nút xóa & Update */
-        .qty-input-custom {
-            width: 50px;
-            height: 35px;
-            text-align: center;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-        }
+    .btn-action-icon {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: 0.2s;
+        text-decoration: none;
+    }
 
-        .btn-action-icon {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: 0.2s;
-            text-decoration: none;
-        }
+    .btn-update {
+        background: #e8f5e9;
+        color: #28a745;
+    }
 
-        .btn-update {
-            background: #e8f5e9;
-            color: #28a745;
-        }
-
-        .btn-remove {
-            background: #fff5f5;
-            color: #dc3545;
-        }
-    </style>
+    .btn-remove {
+        background: #fff5f5;
+        color: #dc3545;
+    }
+</style>
 
 
 
-    <div class="container-fluid px-5 cart-page mb-5">
-        <div class="row container-fluid px-5">
-            <div class="col-lg-8 mb-5">
-                <div class="row cart-header-row d-none d-md-flex align-items-center">
-                    <div class="col-md-1">
-                        <input type="checkbox" id="checkAll" class="custom-checkbox" checked title="Chọn tất cả">
-                    </div>
-                    <div class="col-md-5">SẢN PHẨM</div>
-                    <div class="col-md-2 text-center">ĐƠN GIÁ</div>
-                    <div class="col-md-2 text-center">SỐ LƯỢNG</div>
-                    <div class="col-md-2 text-right">THÀNH TIỀN</div>
+<div class="container-fluid px-5 cart-page mb-5">
+    <div class="row container-fluid px-5">
+        <div class="col-lg-8 mb-5">
+            <div class="row cart-header-row d-none d-md-flex align-items-center">
+                <div class="col-md-1">
+                    <input type="checkbox" id="checkAll" class="custom-checkbox" checked title="Chọn tất cả">
                 </div>
-
-                @if (Model != null && Model.ChiTietGioHangs != null && Model.ChiTietGioHangs.Any())
-                {
-                    foreach (var item in Model.ChiTietGioHangs)
-                    {
-                        <div class="cart-item-row row" id="row-@item.MaSP">
-                            <div class="col-md-1 d-flex justify-content-center">
-                                <input type="checkbox"
-                                       class="custom-checkbox item-check"
-                                       value="@item.MaSP"
-                                       data-total="@(item.DonGia * item.SoLuong)"
-                                       checked>
-                            </div>
-
-                            <div class="col-md-5 d-flex align-items-center">
-                                <img src="@Url.Content("~/Images/Products/" + (item.SanPham?.AnhSP ?? "no-image.png"))" class="p-img">
-                                <div>
-                                    <h6 class="font-weight-bold mb-1">@(item.SanPham?.TenSanPham)</h6>
-                                    <small class="text-muted bg-light px-2 py-1 rounded">Size: @item.MaSize | Màu: @item.MaMau</small>
-                                </div>
-                            </div>
-
-                            <div class="col-md-2 text-center font-weight-bold text-muted">
-                                @string.Format("{0:N0} đ", item.DonGia)
-                            </div>
-
-                            <div class="col-md-2 d-flex justify-content-center">
-                                <form action="@Url.Action("UpdateCart", "Home")" method="post" class="d-flex gap-1 align-items-center">
-                                    <input type="hidden" name="id" value="@item.MaSP" />
-                                    <input type="hidden" name="size" value="@item.MaSize" />
-                                    <input type="hidden" name="color" value="@item.MaMau" />
-
-                                    <input type="number" name="quantity" class="qty-input-custom" value="@item.SoLuong" min="1">
-                                    <button type="submit" class="btn-action-icon btn-update" title="Cập nhật">
-                                        <i class="fa fa-sync-alt" style="font-size: 0.8rem"></i>
-                                    </button>
-                                </form>
-                            </div>
-
-                            <div class="col-md-2 d-flex flex-column align-items-end justify-content-center">
-                                <span class="font-weight-bold text-dark mb-2">@string.Format("{0:N0} đ", (item.DonGia * item.SoLuong))</span>
-
-                                <a href="@Url.Action("RemoveFromCart", "Home", new { id = item.MaSP, size = item.MaSize, color = item.MaMau})"
-                                   class="btn-action-icon btn-remove" title="Xóa">
-                                    <i class="fa fa-trash"></i>
-                                </a>
-                            </div>
-                        </div>
-                    }
-                }
-                else
-                {
-                    <div class="text-center py-5">
-                        <img src="https://cdn-icons-png.flaticon.com/512/2038/2038854.png" width="80" style="opacity: 0.3;" class="mb-3">
-                        <h5 class="text-muted">Giỏ hàng trống</h5>
-                        <a href="@Url.Action("Shop", "Home")" class="btn btn-dark mt-3 rounded-pill px-4">Mua sắm ngay</a>
-                    </div>
-                }
+                <div class="col-md-5">SẢN PHẨM</div>
+                <div class="col-md-2 text-center">ĐƠN GIÁ</div>
+                <div class="col-md-2 text-center">SỐ LƯỢNG</div>
+                <div class="col-md-2 text-right">THÀNH TIỀN</div>
             </div>
 
-            <div class="col-lg-4">
-                <div class="summary-card">
-                    <h5 class="font-weight-bold mb-4 border-bottom pb-2">ĐƠN HÀNG</h5>
+            @if (Model != null && Model.ChiTietGioHangs != null && Model.ChiTietGioHangs.Any())
+            {
+                foreach (var item in Model.ChiTietGioHangs)
+                {
+                    <div class="cart-item-row row" id="row-@item.MaSP">
+                        <div class="col-md-1 d-flex justify-content-center">
+                            <input type="checkbox"
+                                   class="custom-checkbox item-check"
+                                   value="@(item.MaSP)_@(item.MaSize)_@(item.MaMau)"
+                                   data-total="@(item.DonGia * item.SoLuong)"
+                                   checked>
+                        </div>
 
-                    <div class="d-flex justify-content-between mb-3">
-                        <span class="text-muted">Đã chọn:</span>
-                        <span class="font-weight-bold" id="selected-count">0 món</span>
+                        <div class="col-md-5 d-flex align-items-center">
+                            <img src="@Url.Content("~/Images/Products/" + (item.SanPham?.AnhSP ?? "no-image.png"))" class="p-img">
+                            <div>
+                                <h6 class="font-weight-bold mb-1">@(item.SanPham?.TenSanPham)</h6>
+                                <small class="text-muted bg-light px-2 py-1 rounded">Size: @item.MaSize | Màu: @item.MaMau</small>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 text-center font-weight-bold text-muted">
+                            @string.Format("{0:N0} đ", item.DonGia)
+                        </div>
+
+                        <div class="col-md-2 d-flex justify-content-center">
+                            <form action="@Url.Action("UpdateCart", "Home")" method="post" class="d-flex gap-1 align-items-center">
+                                <input type="hidden" name="id" value="@item.MaSP" />
+                                <input type="hidden" name="size" value="@item.MaSize" />
+                                <input type="hidden" name="color" value="@item.MaMau" />
+
+                                <input type="number" name="quantity" class="qty-input-custom" value="@item.SoLuong" min="1">
+                                <button type="submit" class="btn-action-icon btn-update" title="Cập nhật">
+                                    <i class="fa fa-sync-alt" style="font-size: 0.8rem"></i>
+                                </button>
+                            </form>
+                        </div>
+
+                        <div class="col-md-2 d-flex flex-column align-items-end justify-content-center">
+                            <span class="font-weight-bold text-dark mb-2">@string.Format("{0:N0} đ", (item.DonGia * item.SoLuong))</span>
+
+                            <a href="@Url.Action("RemoveFromCart", "Home", new { id = item.MaSP, size = item.MaSize, color = item.MaMau})"
+                               class="btn-action-icon btn-remove" title="Xóa">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        </div>
                     </div>
+                }
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2038/2038854.png" width="80" style="opacity: 0.3;" class="mb-3">
+                    <h5 class="text-muted">Giỏ hàng trống</h5>
+                    <a href="@Url.Action("Shop", "Home")" class="btn btn-dark mt-3 rounded-pill px-4">Mua sắm ngay</a>
+                </div>
+            }
+        </div>
 
-                    <div class="d-flex justify-content-between mb-4">
-                        <span class="text-muted">Vận chuyển:</span>
-                        <span class="text-success font-weight-bold">Miễn phí</span>
-                    </div>
+        <div class="col-lg-4">
+            <div class="summary-card">
+                <h5 class="font-weight-bold mb-4 border-bottom pb-2">ĐƠN HÀNG</h5>
 
-                    <hr>
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="text-muted">Đã chọn:</span>
+                    <span class="font-weight-bold" id="selected-count">0 món</span>
+                </div>
 
-                    <div class="d-flex justify-content-between mb-4">
-                        <h5 class="font-weight-bold">Tổng cộng:</h5>
-                        <h4 class="font-weight-bold text-primary" id="cart-total">0 đ</h4>
-                    </div>
+                <div class="d-flex justify-content-between mb-4">
+                    <span class="text-muted">Vận chuyển:</span>
+                    <span class="text-success font-weight-bold">Miễn phí</span>
+                </div>
 
-                    <button type="button" id="btnProceedCheckout" class="checkout-btn">
-                        THANH TOÁN NGAY
-                    </button>
+                <hr>
 
-                    <div class="text-center mt-3">
-                        <small class="text-muted"><i class="fa fa-shield-alt text-success"></i> Bảo mật thanh toán 100%</small>
-                    </div>
+                <div class="d-flex justify-content-between mb-4">
+                    <h5 class="font-weight-bold">Tổng cộng:</h5>
+                    <h4 class="font-weight-bold text-primary" id="cart-total">0 đ</h4>
+                </div>
+
+                <button type="button" id="btnProceedCheckout" class="checkout-btn">
+                    THANH TOÁN NGAY
+                </button>
+
+                <div class="text-center mt-3">
+                    <small class="text-muted"><i class="fa fa-shield-alt text-success"></i> Bảo mật thanh toán 100%</small>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    @section Scripts {
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const isLoggedIn = @(isLoggedIn ? "true" : "false");
-                const checkboxes = document.querySelectorAll('.item-check');
-                const checkAll = document.getElementById('checkAll');
-                const totalEl = document.getElementById('cart-total');
-                const countEl = document.getElementById('selected-count');
-                const btnCheckout = document.getElementById('btnProceedCheckout');
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const isLoggedIn = @(isLoggedIn ? "true" : "false");
+            const checkboxes = document.querySelectorAll('.item-check');
+            const checkAll = document.getElementById('checkAll');
+            const totalEl = document.getElementById('cart-total');
+            const countEl = document.getElementById('selected-count');
+            const btnCheckout = document.getElementById('btnProceedCheckout');
 
-                // 1. Hàm tính tổng tiền các món được tick
-                function calculateTotal() {
-                    let total = 0;
-                    let count = 0;
-                    checkboxes.forEach(chk => {
-                        if (chk.checked) {
-                            total += parseFloat(chk.dataset.total);
-                            count++;
+            // 1. Hàm tính tổng tiền các món được tick
+            function calculateTotal() {
+                let total = 0;
+                let count = 0;
+                checkboxes.forEach(chk => {
+                    if (chk.checked) {
+                        total += parseFloat(chk.dataset.total);
+                        count++;
+                    }
+                });
+                // Format tiền tệ VN
+                totalEl.textContent = total.toLocaleString('vi-VN') + ' đ';
+                countEl.textContent = count + ' món';
+            }
+
+            // 2. Sự kiện Check All
+            if(checkAll){
+                checkAll.addEventListener('change', function() {
+                    checkboxes.forEach(chk => chk.checked = this.checked);
+                    calculateTotal();
+                });
+            }
+
+            // 3. Sự kiện check từng món
+            checkboxes.forEach(chk => {
+                chk.addEventListener('change', function() {
+                    // Nếu bỏ tick 1 cái thì bỏ tick Check All
+                    if(!this.checked && checkAll) checkAll.checked = false;
+                    calculateTotal();
+                });
+            });
+
+            // 4. Xử lý nút THANH TOÁN
+            btnCheckout.addEventListener('click', function() {
+                // Lấy danh sách ID các món được chọn
+                const selectedIds = Array.from(document.querySelectorAll('.item-check:checked'))
+                                         .map(cb => cb.value);
+
+                if (selectedIds.length === 0) {
+                    Swal.fire('Chưa chọn sản phẩm', 'Vui lòng tích chọn ít nhất 1 sản phẩm để thanh toán.', 'warning');
+                    return;
+                }
+
+                // Logic Đăng nhập
+                if (!isLoggedIn) {
+                    Swal.fire({
+                        title: 'Yêu cầu đăng nhập',
+                        text: "Bạn cần đăng nhập để tiến hành thanh toán.",
+                        icon: 'info',
+                        showCancelButton: true,
+                        confirmButtonText: 'Đăng nhập',
+                        cancelButtonText: 'Để sau',
+                        confirmButtonColor: '#222'
+                    }).then((res) => {
+                        if (res.isConfirmed) {
+                            // Truyền cả selectedIds qua URL nếu muốn giữ trạng thái (hơi phức tạp)
+                            // Hoặc đơn giản là redirect login xong quay lại Cart
+                            const loginUrl = '@Url.Action("Login", "Auth")';
+                            const cartUrl = '@Url.Action("Cart", "Home")';
+                            window.location.href = loginUrl + '?returnUrl=' + encodeURIComponent(cartUrl);
                         }
                     });
-                    // Format tiền tệ VN
-                    totalEl.textContent = total.toLocaleString('vi-VN') + ' đ';
-                    countEl.textContent = count + ' món';
+                } else {
+                    // Đã đăng nhập -> Chuyển sang trang Checkout với danh sách ID
+                    // URL: /Home/Checkout?selectedIds=SP01,SP02
+                    const idsString = selectedIds.join(',');
+                    const checkoutUrl = '@Url.Action("Checkout", "Home")';
+                    window.location.href = checkoutUrl + '?selectedIds=' + idsString;
                 }
-
-                // 2. Sự kiện Check All
-                if(checkAll){
-                    checkAll.addEventListener('change', function() {
-                        checkboxes.forEach(chk => chk.checked = this.checked);
-                        calculateTotal();
-                    });
-                }
-
-                // 3. Sự kiện check từng món
-                checkboxes.forEach(chk => {
-                    chk.addEventListener('change', function() {
-                        // Nếu bỏ tick 1 cái thì bỏ tick Check All
-                        if(!this.checked && checkAll) checkAll.checked = false;
-                        calculateTotal();
-                    });
-                });
-
-                // 4. Xử lý nút THANH TOÁN
-                btnCheckout.addEventListener('click', function() {
-                    // Lấy danh sách ID các món được chọn
-                    const selectedIds = Array.from(document.querySelectorAll('.item-check:checked'))
-                                             .map(cb => cb.value);
-
-                    if (selectedIds.length === 0) {
-                        Swal.fire('Chưa chọn sản phẩm', 'Vui lòng tích chọn ít nhất 1 sản phẩm để thanh toán.', 'warning');
-                        return;
-                    }
-
-                    // Logic Đăng nhập
-                    if (!isLoggedIn) {
-                        Swal.fire({
-                            title: 'Yêu cầu đăng nhập',
-                            text: "Bạn cần đăng nhập để tiến hành thanh toán.",
-                            icon: 'info',
-                            showCancelButton: true,
-                            confirmButtonText: 'Đăng nhập',
-                            cancelButtonText: 'Để sau',
-                            confirmButtonColor: '#222'
-                        }).then((res) => {
-                            if (res.isConfirmed) {
-                                // Truyền cả selectedIds qua URL nếu muốn giữ trạng thái (hơi phức tạp)
-                                // Hoặc đơn giản là redirect login xong quay lại Cart
-                                const loginUrl = '@Url.Action("Login", "Auth")';
-                                const cartUrl = '@Url.Action("Cart", "Home")';
-                                window.location.href = loginUrl + '?returnUrl=' + encodeURIComponent(cartUrl);
-                            }
-                        });
-                    } else {
-                        // Đã đăng nhập -> Chuyển sang trang Checkout với danh sách ID
-                        // URL: /Home/Checkout?selectedIds=SP01,SP02
-                        const idsString = selectedIds.join(',');
-                        const checkoutUrl = '@Url.Action("Checkout", "Home")';
-                        window.location.href = checkoutUrl + '?selectedIds=' + idsString;
-                    }
-                });
-
-                // Tính tổng lần đầu khi load trang
-                calculateTotal();
             });
-        </script>
-    }
+
+            // Tính tổng lần đầu khi load trang
+            calculateTotal();
+        });
+    </script>
+}

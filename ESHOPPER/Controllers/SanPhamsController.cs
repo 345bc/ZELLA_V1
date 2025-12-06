@@ -11,7 +11,6 @@ using EntityState = System.Data.Entity.EntityState;
 
 namespace ESHOPPER.Controllers.Admin
 {
-    [RoutePrefix("Admin/SanPhams")] // URL gốc cho controller
     public class SanPhamsController : Controller
     {
         private QlyFashionShopEntities db = new QlyFashionShopEntities();
