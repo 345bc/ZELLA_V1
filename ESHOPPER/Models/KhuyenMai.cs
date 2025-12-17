@@ -14,13 +14,6 @@ namespace ESHOPPER.Models
     
     public partial class KhuyenMai
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public KhuyenMai()
-        {
-            this.ChiTietKhuyenMais = new HashSet<ChiTietKhuyenMai>();
-            this.HoaDons = new HashSet<HoaDon>();
-        }
-    
         public string MaKM { get; set; }
         public string MaSP { get; set; }
         public string TenChuongTrinh { get; set; }
@@ -30,10 +23,6 @@ namespace ESHOPPER.Models
         public System.DateTime NgayKetThuc { get; set; }
         public string TrangThaiKM { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ChiTietKhuyenMai> ChiTietKhuyenMais { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<HoaDon> HoaDons { get; set; }
         public virtual SanPham SanPham { get; set; }
     }
 }

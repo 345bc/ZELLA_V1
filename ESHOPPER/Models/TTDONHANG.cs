@@ -12,23 +12,19 @@ namespace ESHOPPER.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class NguoiDung
+    public partial class TTDONHANG
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public NguoiDung()
+        public TTDONHANG()
         {
-            this.VaiTroes = new HashSet<VaiTro>();
+            this.DonHangs = new HashSet<DonHang>();
         }
     
-        public string TenDangNhap { get; set; }
-        public Nullable<int> MaNV { get; set; }
-        public byte[] PasswordUser { get; set; }
-        public Nullable<bool> TrangThaiUser { get; set; }
-        public int MaRole { get; set; }
+        public int MATT { get; set; }
+        public string TENTT { get; set; }
+        public Nullable<int> TRANGTHAI { get; set; }
     
-        public virtual NhanVien NhanVien { get; set; }
-        public virtual VaiTro VaiTro { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<VaiTro> VaiTroes { get; set; }
+        public virtual ICollection<DonHang> DonHangs { get; set; }
     }
 }

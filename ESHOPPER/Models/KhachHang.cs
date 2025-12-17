@@ -17,11 +17,8 @@ namespace ESHOPPER.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public KhachHang()
         {
-            this.ChiTiet_DChiKhachHang = new HashSet<ChiTiet_DChiKhachHang>();
-            this.DiaChiKhachHangs = new HashSet<DiaChiKhachHang>();
-            this.HoaDons = new HashSet<HoaDon>();
-            this.GioHangs = new HashSet<GioHang>();
             this.DonHangs = new HashSet<DonHang>();
+            this.GioHangs = new HashSet<GioHang>();
         }
     
         public int MaKH { get; set; }
@@ -33,15 +30,9 @@ namespace ESHOPPER.Models
         public string GioiTinhKH { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ChiTiet_DChiKhachHang> ChiTiet_DChiKhachHang { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DiaChiKhachHang> DiaChiKhachHangs { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<HoaDon> HoaDons { get; set; }
-        public virtual User User { get; set; }
+        public virtual ICollection<DonHang> DonHangs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GioHang> GioHangs { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DonHang> DonHangs { get; set; }
+        public virtual User User { get; set; }
     }
 }

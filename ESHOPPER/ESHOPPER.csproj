@@ -4,7 +4,7 @@
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-	  <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>
     </ProductVersion>
@@ -187,7 +187,6 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
-    <Compile Include="Controllers\SanPhamsController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
@@ -197,127 +196,73 @@
     <Compile Include="Helper\JwtHelper.cs" />
     <Compile Include="Models\AdminViewModel.cs" />
     <Compile Include="Models\BienTheSanPham.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
+      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CartItem.cs" />
     <Compile Include="Models\CartViewModel.cs" />
     <Compile Include="Models\ChiTietDonHang.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
+      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ChiTietGioHang.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ChiTietHoaDon.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ChiTietKhuyenMai.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ChiTietPhieuNhap.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ChiTiet_DChiKhachHang.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ChucNang.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Ctiet_PhieuGiamGia.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
+      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DanhMucSanPham.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\DiaChiKhachHang.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
+      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DonHang.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
+      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FASHIONSHOP.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FASHIONSHOP.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FASHIONSHOP.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FASHIONSHOP.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FASHIONSHOP.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\GioHang.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
+      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GioHangPartial.cs" />
-    <Compile Include="Models\HoaDon.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\HomeViewModel.cs" />
     <Compile Include="Models\Intro.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
+      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\KhachHang.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
+      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\KhuyenMai.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
+      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\KichThuoc.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
+      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MauSac.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\NguoiDung.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
+      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\NhaCungCap.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
+      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\NhanVien.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\PhanQuyen.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\PhieuGiamGia.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\PhieuNhapKho.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\PhuongThucThanhToan.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
+      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ProductDetailsViewModel.cs" />
     <Compile Include="Models\SanPham.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Shop.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Shop.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Shop.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Shop.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Shop.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Shop.edmx</DependentUpon>
+      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ShopViewModel.cs" />
-    <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sp_helpdiagrams_Result.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sysdiagram.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\TonKho.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\TrangThaiSanPham.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
+    <Compile Include="Models\TTDONHANG.cs">
+      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\User.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\VaiTro.cs">
-      <DependentUpon>Shop.tt</DependentUpon>
+      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\VnPayLibrary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -409,15 +354,15 @@
     <Content Include="Images\vendor-6.jpg" />
     <Content Include="Images\vendor-7.jpg" />
     <Content Include="Images\vendor-8.jpg" />
-    <Content Include="Models\Shop.Context.tt">
+    <Content Include="Models\FASHIONSHOP.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Shop.edmx</DependentUpon>
-      <LastGenOutput>Shop.Context.cs</LastGenOutput>
+      <DependentUpon>FASHIONSHOP.edmx</DependentUpon>
+      <LastGenOutput>FASHIONSHOP.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\Shop.tt">
+    <Content Include="Models\FASHIONSHOP.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Shop.edmx</DependentUpon>
-      <LastGenOutput>Shop.cs</LastGenOutput>
+      <DependentUpon>FASHIONSHOP.edmx</DependentUpon>
+      <LastGenOutput>FASHIONSHOP.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
@@ -519,12 +464,12 @@
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <EntityDeploy Include="Models\Shop.edmx">
+    <EntityDeploy Include="Models\FASHIONSHOP.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Shop.Designer.cs</LastGenOutput>
+      <LastGenOutput>FASHIONSHOP.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Models\Shop.edmx.diagram">
-      <DependentUpon>Shop.edmx</DependentUpon>
+    <Content Include="Models\FASHIONSHOP.edmx.diagram">
+      <DependentUpon>FASHIONSHOP.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
@@ -574,18 +519,18 @@
     <Content Include="Views\Auth\Login.cshtml" />
     <Content Include="Views\Auth\Register.cshtml" />
     <Content Include="Views\Home\ParCategories.cshtml" />
-    <Content Include="Views\Shared\Admin_layout.cshtml" />
+    <Content Include="Views\Shared\_AdminLayout.cshtml" />
     <Content Include="Views\Admin\Dashboard.cshtml" />
     <Content Include="Views\Account\Create.cshtml" />
     <Content Include="Views\Account\Delete.cshtml" />
     <Content Include="Views\Account\Details.cshtml" />
     <Content Include="Views\Account\Edit.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
-    <Content Include="Views\SanPhams\Create.cshtml" />
-    <Content Include="Views\SanPhams\Delete.cshtml" />
-    <Content Include="Views\SanPhams\Details.cshtml" />
-    <Content Include="Views\SanPhams\Edit.cshtml" />
-    <Content Include="Views\SanPhams\Index.cshtml" />
+    <Content Include="Views\Admin\Create.cshtml" />
+    <Content Include="Views\Admin\Delete.cshtml" />
+    <Content Include="Views\Admin\Details.cshtml" />
+    <Content Include="Views\Admin\Edit.cshtml" />
+    <Content Include="Views\Admin\ProductList.cshtml" />
     <Content Include="Views\Home\Shop.cshtml" />
     <Content Include="Views\Home\ProductDetails.cshtml" />
     <Content Include="Views\Home\Cart.cshtml" />
@@ -596,6 +541,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\SanPhams\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />

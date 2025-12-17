@@ -17,7 +17,6 @@ namespace ESHOPPER.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public NhaCungCap()
         {
-            this.PhieuNhapKhoes = new HashSet<PhieuNhapKho>();
             this.SanPhams = new HashSet<SanPham>();
         }
     
@@ -29,8 +28,6 @@ namespace ESHOPPER.Models
         public string Email { get; set; }
         public string AnhNCC { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PhieuNhapKho> PhieuNhapKhoes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SanPham> SanPhams { get; set; }
     }

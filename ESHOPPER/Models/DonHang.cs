@@ -28,9 +28,11 @@ namespace ESHOPPER.Models
         public Nullable<System.DateTime> NgayDat { get; set; }
         public Nullable<decimal> TongTien { get; set; }
         public Nullable<int> TrangThai { get; set; }
+        public Nullable<int> MATT { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ChiTietDonHang> ChiTietDonHangs { get; set; }
         public virtual KhachHang KhachHang { get; set; }
+        public virtual TTDONHANG TTDONHANG { get; set; }
     }
 }

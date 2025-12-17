@@ -18,11 +18,9 @@ namespace ESHOPPER.Models
         public SanPham()
         {
             this.BienTheSanPhams = new HashSet<BienTheSanPham>();
-            this.ChiTietKhuyenMais = new HashSet<ChiTietKhuyenMai>();
-            this.Ctiet_PhieuGiamGia = new HashSet<Ctiet_PhieuGiamGia>();
-            this.KhuyenMais = new HashSet<KhuyenMai>();
-            this.ChiTietGioHangs = new HashSet<ChiTietGioHang>();
             this.ChiTietDonHangs = new HashSet<ChiTietDonHang>();
+            this.ChiTietGioHangs = new HashSet<ChiTietGioHang>();
+            this.KhuyenMais = new HashSet<KhuyenMai>();
         }
     
         public string MaSP { get; set; }
@@ -37,18 +35,14 @@ namespace ESHOPPER.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BienTheSanPham> BienTheSanPhams { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ChiTietKhuyenMai> ChiTietKhuyenMais { get; set; }
+        public virtual ICollection<ChiTietDonHang> ChiTietDonHangs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Ctiet_PhieuGiamGia> Ctiet_PhieuGiamGia { get; set; }
+        public virtual ICollection<ChiTietGioHang> ChiTietGioHangs { get; set; }
         public virtual DanhMucSanPham DanhMucSanPham { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<KhuyenMai> KhuyenMais { get; set; }
         public virtual NhaCungCap NhaCungCap { get; set; }
         public virtual SanPham SanPham1 { get; set; }
         public virtual SanPham SanPham2 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ChiTietGioHang> ChiTietGioHangs { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ChiTietDonHang> ChiTietDonHangs { get; set; }
     }
 }
