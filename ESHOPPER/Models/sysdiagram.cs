@@ -12,17 +12,12 @@ namespace ESHOPPER.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class KhuyenMai
+    public partial class sysdiagram
     {
-        public int MaKM { get; set; }
-        public int MaSP { get; set; }
-        public string TenChuongTrinh { get; set; }
-        public string MoTa { get; set; }
-        public Nullable<decimal> PhanTramGiam { get; set; }
-        public System.DateTime NgayBatDau { get; set; }
-        public System.DateTime NgayKetThuc { get; set; }
-        public string TrangThaiKM { get; set; }
-    
-        public virtual SanPham SanPham { get; set; }
+        public string name { get; set; }
+        public int principal_id { get; set; }
+        public int diagram_id { get; set; }
+        public Nullable<int> version { get; set; }
+        public byte[] definition { get; set; }
     }
 }

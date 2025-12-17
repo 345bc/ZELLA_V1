@@ -80,6 +80,9 @@
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json.Bson, Version=1.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.Bson.1.0.2\lib\net45\Newtonsoft.Json.Bson.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
@@ -95,6 +98,9 @@
     </Reference>
     <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.6.0.0\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
     <Reference Include="System.Numerics" />
     <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -123,6 +129,12 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Http, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.3.0\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.3.0\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -185,10 +197,13 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
+    <Compile Include="Controllers\CategoryAPIController.cs" />
+    <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\Product_VariantsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -196,73 +211,82 @@
     <Compile Include="Helper\JwtHelper.cs" />
     <Compile Include="Models\AdminViewModel.cs" />
     <Compile Include="Models\BienTheSanPham.cs">
-      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
+      <DependentUpon>ShopModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CartItem.cs" />
     <Compile Include="Models\CartViewModel.cs" />
     <Compile Include="Models\ChiTietDonHang.cs">
-      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
+      <DependentUpon>ShopModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ChiTietGioHang.cs">
-      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
+      <DependentUpon>ShopModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DanhMucSanPham.cs">
-      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
+      <DependentUpon>ShopModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DonHang.cs">
-      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\FASHIONSHOP.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>FASHIONSHOP.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\FASHIONSHOP.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\FASHIONSHOP.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>FASHIONSHOP.edmx</DependentUpon>
+      <DependentUpon>ShopModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GioHang.cs">
-      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
+      <DependentUpon>ShopModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GioHangPartial.cs" />
     <Compile Include="Models\HomeViewModel.cs" />
     <Compile Include="Models\Intro.cs">
-      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
+      <DependentUpon>ShopModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\KhachHang.cs">
-      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
+      <DependentUpon>ShopModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\KhuyenMai.cs">
-      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
+      <DependentUpon>ShopModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\KichThuoc.cs">
-      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
+      <DependentUpon>ShopModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MauSac.cs">
-      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
+      <DependentUpon>ShopModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\NhaCungCap.cs">
-      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
+      <DependentUpon>ShopModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\NhanVien.cs">
-      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
+      <DependentUpon>ShopModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ProductDetailsViewModel.cs" />
     <Compile Include="Models\SanPham.cs">
-      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
+      <DependentUpon>ShopModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ShopModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ShopModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ShopModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ShopModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ShopModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ShopModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\ShopViewModel.cs" />
+    <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
+      <DependentUpon>ShopModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagrams_Result.cs">
+      <DependentUpon>ShopModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sysdiagram.cs">
+      <DependentUpon>ShopModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\TTDONHANG.cs">
-      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
+      <DependentUpon>ShopModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\User.cs">
-      <DependentUpon>FASHIONSHOP.tt</DependentUpon>
+      <DependentUpon>ShopModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\VnPayLibrary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -354,15 +378,15 @@
     <Content Include="Images\vendor-6.jpg" />
     <Content Include="Images\vendor-7.jpg" />
     <Content Include="Images\vendor-8.jpg" />
-    <Content Include="Models\FASHIONSHOP.Context.tt">
+    <Content Include="Models\ShopModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>FASHIONSHOP.edmx</DependentUpon>
-      <LastGenOutput>FASHIONSHOP.Context.cs</LastGenOutput>
+      <DependentUpon>ShopModel.edmx</DependentUpon>
+      <LastGenOutput>ShopModel.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\FASHIONSHOP.tt">
+    <Content Include="Models\ShopModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>FASHIONSHOP.edmx</DependentUpon>
-      <LastGenOutput>FASHIONSHOP.cs</LastGenOutput>
+      <DependentUpon>ShopModel.edmx</DependentUpon>
+      <LastGenOutput>ShopModel.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
@@ -464,12 +488,12 @@
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <EntityDeploy Include="Models\FASHIONSHOP.edmx">
+    <EntityDeploy Include="Models\ShopModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>FASHIONSHOP.Designer.cs</LastGenOutput>
+      <LastGenOutput>ShopModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Models\FASHIONSHOP.edmx.diagram">
-      <DependentUpon>FASHIONSHOP.edmx</DependentUpon>
+    <Content Include="Models\ShopModel.edmx.diagram">
+      <DependentUpon>ShopModel.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
@@ -521,16 +545,6 @@
     <Content Include="Views\Home\ParCategories.cshtml" />
     <Content Include="Views\Shared\_AdminLayout.cshtml" />
     <Content Include="Views\Admin\Dashboard.cshtml" />
-    <Content Include="Views\Account\Create.cshtml" />
-    <Content Include="Views\Account\Delete.cshtml" />
-    <Content Include="Views\Account\Details.cshtml" />
-    <Content Include="Views\Account\Edit.cshtml" />
-    <Content Include="Views\Account\Index.cshtml" />
-    <Content Include="Views\Admin\Create.cshtml" />
-    <Content Include="Views\Admin\Delete.cshtml" />
-    <Content Include="Views\Admin\Details.cshtml" />
-    <Content Include="Views\Admin\Edit.cshtml" />
-    <Content Include="Views\Admin\ProductList.cshtml" />
     <Content Include="Views\Home\Shop.cshtml" />
     <Content Include="Views\Home\ProductDetails.cshtml" />
     <Content Include="Views\Home\Cart.cshtml" />
@@ -538,10 +552,21 @@
     <Content Include="Views\Home\OrderSuccess.cshtml" />
     <Content Include="Views\Home\PaymentFail.cshtml" />
     <Content Include="Scripts\js\js-loading.js" />
+    <Content Include="Views\Admin\ProductCreate.cshtml" />
+    <Content Include="Views\Admin\ProductDelete.cshtml" />
+    <Content Include="Views\Admin\ProductDetails.cshtml" />
+    <Content Include="Views\Admin\ProductEdit.cshtml" />
+    <Content Include="Views\Admin\ProductList.cshtml" />
+    <Content Include="Views\Product_Variants\Create.cshtml" />
+    <Content Include="Views\Product_Variants\Delete.cshtml" />
+    <Content Include="Views\Product_Variants\Details.cshtml" />
+    <Content Include="Views\Product_Variants\Edit.cshtml" />
+    <Content Include="Views\Product_Variants\Index.cshtml" />
+    <Content Include="Views\Category\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\SanPhams\" />
+    <Folder Include="Images\Product_Variants\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />

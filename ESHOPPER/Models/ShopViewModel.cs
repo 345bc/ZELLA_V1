@@ -18,7 +18,7 @@ namespace ESHOPPER.Models
         public bool HasNextPage => PageNumber < TotalPages;
 
         // 👇 KIỂM TRA KỸ: Chỉ được có 1 dòng này thôi
-        public string CurrentCategoryId { get; set; }
+        public int? CurrentCategoryId { get; set; }
 
         // 👇 KIỂM TRA KỸ: Chỉ được có 1 dòng này thôi
         public List<DanhMucSanPham> Categories { get; set; }

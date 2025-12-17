@@ -14,17 +14,28 @@ namespace ESHOPPER.Models
     
     public partial class BienTheSanPham
     {
-        public string MaBienThe { get; set; }
-        public string MaSP { get; set; }
-        public string MaMau { get; set; }
-        public string MaSize { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public BienTheSanPham()
+        {
+            this.ChiTietDonHangs = new HashSet<ChiTietDonHang>();
+            this.ChiTietGioHangs = new HashSet<ChiTietGioHang>();
+        }
+    
+        public int MaBienThe { get; set; }
+        public int MaSP { get; set; }
+        public Nullable<int> MaMau { get; set; }
+        public Nullable<int> MaSize { get; set; }
         public Nullable<decimal> GiaBan { get; set; }
         public Nullable<int> MaTrangThai { get; set; }
         public int SoLuongTon { get; set; }
         public string AnhBienThe { get; set; }
     
-        public virtual MauSac MauSac { get; set; }
         public virtual KichThuoc KichThuoc { get; set; }
+        public virtual MauSac MauSac { get; set; }
         public virtual SanPham SanPham { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ChiTietDonHang> ChiTietDonHangs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ChiTietGioHang> ChiTietGioHangs { get; set; }
     }
 }

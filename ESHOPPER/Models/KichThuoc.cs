@@ -20,7 +20,7 @@ namespace ESHOPPER.Models
             this.BienTheSanPhams = new HashSet<BienTheSanPham>();
         }
     
-        public string MaSize { get; set; }
+        public int MaSize { get; set; }
         public string TenSize { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

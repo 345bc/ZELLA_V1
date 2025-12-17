@@ -41,28 +41,6 @@
     </div>
 </div>
 
-<div class="container-fluid px-5 pt-5">
-    <div class="section-title-modern">
-        <h2>Categories</h2>
-    </div>
-    <div class="row px-xl-5 pb-3">
-        @foreach (var item in Model.DanhMucSanPhams.Where(dm => !dm.TenDanhMuc.ToLower().Contains("dress")).Take(6))
-        {
-            <div class="col-lg-4 col-md-6 pb-1">
-                <div class="cat-card">
-                    <a href="#">
-                        <img src="@Url.Content("~/Images/Categories/" + item.HinhAnhDaiDien)" alt="@item.TenDanhMuc">
-                        <div class="cat-overlay">
-                            <h5 class="cat-title">@item.TenDanhMuc</h5>
-                            <span class="cat-count">@item.SoLuongSanPham Products</span>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        }
-    </div>
-</div>
-
 <div class="container-fluid pt-5 px-5">
     <div class="section-title-modern">
         <h2>New Arrivals</h2>

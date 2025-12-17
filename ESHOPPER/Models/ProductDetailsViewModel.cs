@@ -8,9 +8,10 @@ namespace ESHOPPER.Models
     public class ProductDetailsViewModel
     {
         public SanPham SanPhamChinh { get; set; }
-        public List<string> CacSizeDuyNhat { get; set; }
-        public List<string> CacMauDuyNhat { get; set; }
+        public List<KichThuoc> CacSizeDuyNhat { get; set; }
+        public List<MauSac> CacMauDuyNhat { get; set; }
         public List<SanPham> SanPhamNgauNhiens { get; set; }
+        public List<BienTheSanPham> DanhSachBienThe { get; set; }
 
     }
 }

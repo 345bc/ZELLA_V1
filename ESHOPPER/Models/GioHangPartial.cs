@@ -5,32 +5,32 @@ using System.Web;
 
 namespace ESHOPPER.Models
 {
-    // 👇 QUAN TRỌNG: Phải là 'partial class GioHang'
-    // Để nó ghép chung với class GioHang của Database
+    // 👇 partial class GioHang giúp mở rộng logic cho class được sinh tự động bởi Entity Framework
     public partial class GioHang
     {
-        // Bây giờ code này sẽ chạy ngon lành vì GioHang có sẵn ChiTietGioHangs
+        // 1. Tính tổng tiền tạm tính dựa trên danh sách chi tiết
         public decimal TongTienTamTinh()
         {
             if (this.ChiTietGioHangs == null) return 0;
+            // Sử dụng các thuộc tính có sẵn trong Model mới
             return this.ChiTietGioHangs.Sum(x => (x.DonGia ?? 0) * (x.SoLuong ?? 0));
         }
 
+        // 2. Tính tổng số lượng sản phẩm có trong giỏ
         public int TongSoLuong()
         {
             if (this.ChiTietGioHangs == null) return 0;
             return this.ChiTietGioHangs.Sum(x => x.SoLuong ?? 0);
         }
 
+        // 3. Thêm sản phẩm vào giỏ (Dựa trên định danh MaBienThe)
         public void AddItem(ChiTietGioHang item)
         {
             if (this.ChiTietGioHangs == null)
                 this.ChiTietGioHangs = new List<ChiTietGioHang>();
 
-            var existing = this.ChiTietGioHangs.FirstOrDefault(i =>
-                i.MaSP == item.MaSP &&
-                i.MaSize == item.MaSize &&
-                i.MaMau== item.MaMau);
+            // [SỬA]: Chỉ cần so khớp MaBienThe là đủ xác định cặp Sản phẩm-Size-Màu duy nhất
+            var existing = this.ChiTietGioHangs.FirstOrDefault(i => i.MaBienThe == item.MaBienThe);
 
             if (existing != null)
             {
@@ -42,18 +42,18 @@ namespace ESHOPPER.Models
             }
         }
 
-        public void RemoveItem(string id, string size, string color)
+        // 4. Xóa sản phẩm khỏi giỏ (Chỉ cần truyền MaBienThe làm ID)
+        public void RemoveItem(int maBienThe)
         {
-            var item = this.ChiTietGioHangs.FirstOrDefault(i =>
-                i.MaSP == id &&
-                i.MaSize == size &&
-                i.MaMau == color);
+            if (this.ChiTietGioHangs == null) return;
+
+            // [SỬA]: Tìm trực tiếp theo MaBienThe
+            var item = this.ChiTietGioHangs.FirstOrDefault(i => i.MaBienThe == maBienThe);
 
             if (item != null)
             {
                 this.ChiTietGioHangs.Remove(item);
             }
         }
-
     }
 }

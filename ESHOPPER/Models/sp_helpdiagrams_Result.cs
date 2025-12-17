@@ -10,17 +10,13 @@
 namespace ESHOPPER.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class ChiTietGioHang
+    public partial class sp_helpdiagrams_Result
     {
+        public string Database { get; set; }
+        public string Name { get; set; }
         public int ID { get; set; }
-        public Nullable<int> MaGioHang { get; set; }
-        public Nullable<int> MaBienThe { get; set; }
-        public Nullable<int> SoLuong { get; set; }
-        public Nullable<decimal> DonGia { get; set; }
-    
-        public virtual BienTheSanPham BienTheSanPham { get; set; }
-        public virtual GioHang GioHang { get; set; }
+        public string Owner { get; set; }
+        public int OwnerID { get; set; }
     }
 }

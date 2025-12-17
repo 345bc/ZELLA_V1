@@ -197,6 +197,7 @@
         background-color: #D19C97;
         color: #fff;
     }
+
 </style>
 
 
@@ -210,25 +211,66 @@
                 <h5 class="widget-title">Categories</h5>
                 <ul class="category-list">
                     <li>
-                        <a href="@Url.Action("Shop", "Home")"
-                           class="@(string.IsNullOrEmpty(Model.CurrentCategoryId) ? "active-cat" : "")">
-                            All Categories
+                        <a href="@Url.Action("Shop", "Home", new { searchString = Model.SearchString, sortOrder = Model.SortOrder })"
+                           class="@(Model.CurrentCategoryId == null ? "active-cat" : "")">
+                           Tất cả sản phẩm
                         </a>
                     </li>
 
                     @if (Model.Categories != null)
                     {
-                        foreach (var cat in Model.Categories)
+                        // Lấy cấp Cha
+                        var parents = Model.Categories.Where(x => x.MaDanhMucCha == null).ToList();
+
+                        foreach (var parent in parents)
                         {
-                            <li>
-                                <a href="@Url.Action("Shop", "Home", new { categoryId = cat.MaDM, searchString = Model.SearchString, sortOrder = Model.SortOrder })"
-                                   class="@(Model.CurrentCategoryId == cat.MaDM ? "active-cat" : "")">
-                                    @cat.TenDanhMuc
-                                </a>
-                            </li>
+                            // Lấy cấp Con
+                            var children = Model.Categories.Where(x => x.MaDanhMucCha == parent.MaDM).ToList();
+
+                            // Kiểm tra Active
+                            bool isChildActive = children.Any(c => c.MaDM == Model.CurrentCategoryId);
+                            bool isParentActive = (Model.CurrentCategoryId == parent.MaDM) || isChildActive;
+                            string collapseId = "cat-" + parent.MaDM;
+
+                            if (children.Any())
+                            {
+                                <li>
+                                    <a href="#@collapseId" data-toggle="collapse" aria-expanded="@(isParentActive ? "true" : "false")"
+                                       class="d-flex justify-content-between align-items-center @(isParentActive ? "text-dark font-weight-bold" : "")">
+                                        <span>@parent.TenDanhMuc</span>
+                                        <i class="fa fa-angle-down"></i>
+                                    </a>
+                                </li>
+
+                                <div class="collapse @(isParentActive ? "show" : "")" id="@collapseId">
+                                    <ul class="category-list pl-4 border-left ml-2">
+                                        @foreach (var child in children)
+                                        {
+                                            bool active = Model.CurrentCategoryId == child.MaDM;
+                                            <li>
+                                                <a href="@Url.Action("Shop", "Home", new { categoryId = child.MaDM, searchString = Model.SearchString, sortOrder = Model.SortOrder })"
+                                                   class="@(active ? "active-cat" : "")">
+                                                    @child.TenDanhMuc
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            }
+                            else
+                            {
+                                /* TRƯỜNG HỢP KHÔNG CON */
+                                <li>
+                                    <a href="@Url.Action("Shop", "Home", new { categoryId = parent.MaDM, searchString = Model.SearchString, sortOrder = Model.SortOrder })"
+                                       class="@(Model.CurrentCategoryId == parent.MaDM ? "active-cat" : "")">
+                                        @parent.TenDanhMuc
+                                    </a>
+                                </li>
+                            }
                         }
                     }
                 </ul>
+
             </div>
 
             <form id="filterForm" action="@Url.Action("Shop", "Home")" method="get">
@@ -320,23 +362,28 @@
                     foreach (var item in Model.SanPhams)
                     {
                         <div class="col-lg-4 col-md-6 col-sm-12 pb-4">
-                            <div class="product-card-modern">
-                                <div class="product-img-wrap">
+                            <div class="product-card-modern shadow-sm h-100 border-0">
+
+                                <div class="product-img-wrap position-relative bg-light rounded-top">
                                     <img src="@(string.IsNullOrEmpty(item.AnhSP) ? "/Images/no-image.png" : Url.Content("~/Images/Products/" + item.AnhSP))"
-                                         alt="@item.TenSanPham">
+                                         alt="@item.TenSanPham"
+                                         class="w-100"
+                                         style="height: 250px; object-fit: contain; object-position: center;">
 
                                     <div class="product-action-overlay">
-                                        <a href="@Url.Action("ProductDetails", "Home", new { id = item.MaSP })" class="btn-action" title="View Detail">
+                                        <a href="@Url.Action("ProductDetails", "Home", new { id = item.MaSP })" class="btn-action" title="Xem chi tiết">
                                             <i class="fas fa-eye"></i>
                                         </a>
                                     </div>
                                 </div>
 
-                                <div class="card-body-modern">
+                                <div class="card-body-modern p-3">
                                     <a href="@Url.Action("ProductDetails", "Home", new { id = item.MaSP })" class="text-decoration-none">
-                                        <h6 class="text-truncate text-dark font-weight-bold mb-2">@item.TenSanPham</h6>
+                                        <h6 class="text-truncate text-dark font-weight-bold mb-2" title="@item.TenSanPham">
+                                            @item.TenSanPham
+                                        </h6>
                                     </a>
-                                    <div class="product-price">
+                                    <div class="product-price text-danger font-weight-bold">
                                         @String.Format("{0:N0} ₫", item.GiaBanLe)
                                     </div>
                                 </div>

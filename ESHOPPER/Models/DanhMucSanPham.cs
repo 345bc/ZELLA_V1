@@ -21,10 +21,9 @@ namespace ESHOPPER.Models
             this.SanPhams = new HashSet<SanPham>();
         }
     
-        public string MaDM { get; set; }
+        public int MaDM { get; set; }
         public string TenDanhMuc { get; set; }
-        public string HinhAnhDaiDien { get; set; }
-        public string MaDanhMucCha { get; set; }
+        public Nullable<int> MaDanhMucCha { get; set; }
         public Nullable<int> SoLuongSanPham { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

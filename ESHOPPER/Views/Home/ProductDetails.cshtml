@@ -2,318 +2,671 @@
 @using Newtonsoft.Json
 
 @{
-    ViewBag.Title = "Chi tiết sản phẩm";
+    ViewBag.Title = Model.SanPhamChinh.TenSanPham;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@* --- GIỮ NGUYÊN CSS --- *@
+
 <style>
-    /* ... (Giữ nguyên toàn bộ CSS cũ của bạn ở đây) ... */
-    .product-detail-section { padding: 60px 0; background-color: #fcfcfc; }
-    .product-gallery-wrapper { border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); background: #fff; }
-    .main-img-container { position: relative; height: 500px; background-color: #fff; display: flex; align-items: center; justify-content: center; }
-    .main-img-container img { max-width: 100%; max-height: 100%; object-fit: contain; transition: transform 0.3s ease; }
-    .main-img-container:hover img { transform: scale(1.05); }
-    .product-info-wrapper { position: sticky; top: 100px; padding-left: 30px; }
-    .product-title { font-size: 2rem; font-weight: 800; color: #333; margin-bottom: 10px; line-height: 1.2; }
-    .product-price { font-size: 1.8rem; font-weight: 700; color: #D19C97; margin-bottom: 20px; display: inline-block; }
-    .product-desc { font-size: 0.95rem; color: #666; line-height: 1.6; margin-bottom: 30px; }
-    .variant-label { font-weight: 600; color: #333; margin-bottom: 10px; display: block; }
-    .size-option { display: inline-block; margin-right: 10px; margin-bottom: 10px; }
-    .size-option input { display: none; }
-    .size-option label { display: block; min-width: 45px; height: 45px; line-height: 45px; text-align: center; border: 1px solid #ddd; background: #fff; cursor: pointer; border-radius: 8px; font-weight: 600; transition: all 0.2s; padding: 0 10px; }
-    .size-option input:checked + label { background-color: #333; color: #fff; border-color: #333; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-    .color-option { display: inline-block; margin-right: 10px; margin-bottom: 10px; }
-    .color-option input { display: none; }
-    .color-option label { display: block; width: 40px; height: 40px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px #eee; cursor: pointer; transition: all 0.2s; }
-    .color-option input:checked + label { box-shadow: 0 0 0 2px #333; transform: scale(1.1); }
-    .qty-box { display: flex; align-items: center; border: 2px solid #eee; border-radius: 30px; width: 140px; overflow: hidden; margin-right: 20px; }
-    .qty-btn { width: 40px; height: 45px; background: transparent; border: none; font-size: 1.2rem; color: #333; cursor: pointer; transition: 0.2s; }
-    .qty-btn:hover { background-color: #f8f9fa; }
-    .qty-input { width: 60px; border: none; text-align: center; font-weight: 700; font-size: 1.1rem; background: transparent; }
-    .qty-input:focus { outline: none; }
-    .btn-add-cart { background-color: #333; color: #fff; border: none; padding: 12px 40px; border-radius: 30px; font-weight: 700; font-size: 1rem; letter-spacing: 1px; transition: all 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.2); flex-grow: 1; cursor: pointer; }
-    .btn-add-cart:hover { background-color: #D19C97; transform: translateY(-3px); box-shadow: 0 8px 20px rgba(209, 156, 151, 0.4); color: #fff; }
+    /* --- CORE CSS --- */
+    :root {
+        --primary: #222;
+        --secondary: #555;
+        --accent: #d32f2f;
+        --border: #ebebeb;
+        --bg-light: #f8f9fa;
+    }
+
+
+
+    /* 1. BREADCRUMB */
+    .pd-breadcrumb {
+        padding: 20px 0;
+        font-size: 14px;
+        color: #888;
+    }
+
+        .pd-breadcrumb a {
+            color: #888;
+            text-decoration: none;
+        }
+
+        .pd-breadcrumb span {
+            margin: 0 10px;
+            color: #ddd;
+        }
+
+    /* 2. GALLERY (SỬA LẠI ĐỂ ẢNH VỪA KHUNG) */
+    .pd-gallery {
+        position: sticky;
+        top: 20px;
+        height: 550px; /* Chiều cao cố định */
+        background-color: #fff;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        padding: 20px; /* Padding để ảnh không sát viền */
+    }
+
+        .pd-gallery img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Quan trọng: Giúp ảnh nằm gọn trong khung, không bị méo */
+            transition: transform 0.5s ease;
+        }
+
+        .pd-gallery:hover img {
+            transform: scale(1.05);
+        }
+
+    /* 3. INFO */
+    .pd-info {
+        padding-left: 20px;
+    }
+
+    .pd-brand {
+        font-size: 12px;
+        font-weight: 700;
+        color: #999;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 10px;
+    }
+
+    .pd-title {
+        font-size: 32px;
+        font-weight: 600;
+        line-height: 1.2;
+        margin-bottom: 15px;
+        color: var(--primary);
+    }
+
+    .pd-price-row {
+        display: flex;
+        align-items: flex-end;
+        gap: 15px;
+        padding-bottom: 25px;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 30px;
+    }
+
+    .pd-price {
+        font-size: 30px;
+        font-weight: 700;
+        color: var(--accent);
+    }
+
+    .pd-old-price {
+        font-size: 18px;
+        color: #aaa;
+        text-decoration: line-through;
+    }
+
+    /* 4. SELECTORS */
+    .option-wrapper {
+        margin-bottom: 25px;
+    }
+
+    .option-title {
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+        display: block;
+    }
+
+    .visually-hidden-input {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    /* Size Chips */
+    .size-chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 55px;
+        height: 45px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin: 0 10px 10px 0;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--primary);
+        transition: all 0.2s ease;
+        background: #fff;
+    }
+
+    .visually-hidden-input:checked + .size-chip {
+        background: var(--primary);
+        color: #fff;
+        border-color: var(--primary);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    .size-chip.disabled-option {
+        background: #f9f9f9;
+        color: #ccc;
+        border-color: #eee;
+        cursor: not-allowed;
+    }
+
+    /* Color Swatch */
+    .color-swatch {
+        display: inline-block;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        margin: 0 12px 10px 0;
+        cursor: pointer;
+        border: 1px solid rgba(0,0,0,0.1);
+        position: relative;
+    }
+
+    .visually-hidden-input:checked + .color-swatch {
+        box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--primary);
+    }
+
+    /* 5. ACTIONS */
+    .action-row {
+        display: flex;
+        gap: 15px;
+        margin-top: 40px;
+        margin-bottom: 40px;
+        height: 55px;
+    }
+
+    /* Style cho ô số lượng */
+    .qty-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        width: 120px; /* Điều chỉnh chiều rộng vừa phải */
+        height: 57px;
+        overflow: hidden;
+        background-color: #fff;
+    }
+
+    /* Nút bấm +/- */
+    .qty-btn {
+        width: 35px;
+        height: 100%;
+        border: none;
+        background-color: #f9f9f9;
+        color: #333;
+        font-size: 20px; /* Tăng cỡ chữ để dấu +/- to rõ */
+        font-weight: 400; /* Độ đậm vừa phải */
+        cursor: pointer;
+        transition: 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-bottom: 3px; /* Căn chỉnh lại một chút cho cân */
+    }
+
+        .qty-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+    /* Ô nhập số */
+    .qty-input {
+        flex-grow: 1;
+        width: 100%;
+        height: 100%;
+        border: none;
+        text-align: center;
+        font-weight: 600;
+        font-size: 16px;
+        color: #222;
+        outline: none;
+        background: transparent;
+    }
+
+    .btn-buy {
+        flex-grow: 1;
+        height: 100%;
+        background: var(--primary);
+        color: #fff;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+        .btn-buy:hover {
+            background: #000;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+    /* 6. POLICY & ACCORDION */
+    .policy-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        background: #fff;
+        padding: 25px;
+        border: 1px dashed #ddd;
+        border-radius: 8px;
+        margin-bottom: 30px;
+    }
+
+    .policy-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+        .policy-item i {
+            font-size: 20px;
+            color: var(--primary);
+        }
+
+    .policy-text h4 {
+        font-size: 13px;
+        font-weight: 700;
+        margin: 0;
+        text-transform: uppercase;
+    }
+
+    .policy-text p {
+        font-size: 13px;
+        color: var(--secondary);
+        margin: 0;
+    }
+
+    .product-details-accordion {
+        border-top: 1px solid var(--border);
+    }
+
+    .accordion-item {
+        border-bottom: 1px solid var(--border);
+    }
+
+    .accordion-header {
+        width: 100%;
+        padding: 20px 0;
+        background: none;
+        border: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+        font-weight: 700;
+        text-transform: uppercase;
+        cursor: pointer;
+    }
+
+    .accordion-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+        color: var(--secondary);
+        line-height: 1.6;
+        font-size: 14px;
+    }
+
+    .accordion-item.active .accordion-content {
+        max-height: 500px;
+        padding-bottom: 20px;
+    }
+
+    .accordion-item.active .accordion-header i {
+        transform: rotate(180deg);
+    }
+
+    /* RELATED */
+    .related-sec {
+        background: #f8f9fa;
+        padding: 60px 0;
+        margin-top: 60px;
+    }
+
+    .sec-title {
+        text-align: center;
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 40px;
+        text-transform: uppercase;
+    }
+
+    .card-modern {
+        background: #fff;
+        border: none;
+        border-radius: 8px;
+        overflow: hidden;
+        height: 100%;
+        transition: 0.3s;
+    }
+
+        .card-modern:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+    .card-img-wrap {
+        height: 250px;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 </style>
 
-<div class="product-detail-section container-fluid px-5">
-    <div class="container-fluid px-5">
-        <div class="row">
-            @* --- CỘT TRÁI: ẢNH --- *@
-            <div class="col-lg-6 pb-5">
-                <div class="product-gallery-wrapper">
-                    <div class="main-img-container">
-                        <img id="main-product-image"
-                             src="@Url.Content("~/Images/Products/"+ Model.SanPhamChinh.AnhSP)"
-                             alt="@Model.SanPhamChinh.TenSanPham">
-                    </div>
+<div class="container-fluid px-5">
+    <div class="px-xl-5 pb-3">
+        <div style="position: fixed; top: 80px; right: 100px; z-index: 9999; min-width: 320px;">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show shadow-lg border-0">
+                    <i class="fa fa-check-circle me-2"></i> @TempData["SuccessMessage"]
+                </div>
+            }
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show shadow-lg border-0">
+                    <i class="fa fa-exclamation-triangle me-2"></i> @TempData["ErrorMessage"]
+                </div>
+            }
+        </div>
+
+        <div class="pd-breadcrumb">
+            <a href="@Url.Action("Index", "Home")">Trang chủ</a> <span>/</span>
+            <span style="color: #333; font-weight: 600;">@Model.SanPhamChinh.TenSanPham</span>
+        </div>
+
+        <div class="row g-5">
+            <div class="col-lg-7">
+                <div class="pd-gallery">
+                    <img id="main-product-image"
+                         src="@Url.Content("~/Images/Products/" + (Model.SanPhamChinh.AnhSP ?? "no-image.png"))"
+                         alt="@Model.SanPhamChinh.TenSanPham">
                 </div>
             </div>
 
-            @* --- CỘT PHẢI: THÔNG TIN --- *@
-            <div class="col-lg-6 pb-5">
-                <div class="product-info-wrapper">
-                    <h2 class="product-title">@Model.SanPhamChinh.TenSanPham</h2>
+            <div class="col-lg-5">
+                <div class="pd-info">
+                    <div class="pd-brand">ESHOPPER ORIGINAL</div>
 
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="text-primary mr-2">
-                            <small class="fas fa-star"></small><small class="fas fa-star"></small><small class="fas fa-star"></small><small class="fas fa-star"></small><small class="fas fa-star"></small>
-                        </div>
-                        <small class="pt-1 text-muted">(50 Đánh giá)</small>
+                    <h1 class="pd-title">@Model.SanPhamChinh.TenSanPham</h1>
+
+                    <div class="pd-price-row">
+                        <span class="pd-price" id="product-price">@string.Format("{0:N0} ₫", Model.SanPhamChinh.GiaBanLe)</span>
                     </div>
 
-                    <h3 class="product-price" id="product-price">
-                        @string.Format("{0:N0} ₫", Model.SanPhamChinh.GiaBanLe)
-                    </h3>
-
-                    <p class="product-desc">@Model.SanPhamChinh.MoTa</p>
-
-                    @* QUAN TRỌNG: Thay đổi Html.BeginForm thành thẻ div wrapper hoặc form thường.
-                       Chúng ta sẽ xử lý submit bằng JavaScript (AJAX) hoàn toàn.
-                    *@
-                    <form id="addToCartForm">
+                    @using (Html.BeginForm("AddToCart", "Home", FormMethod.Post, new { id = "productForm", onsubmit = "return validateForm()" }))
+                    {
                         @Html.AntiForgeryToken()
-                        <input type="hidden" id="productId" value="@Model.SanPhamChinh.MaSP" />
+                        <input type="hidden" name="productId" value="@Model.SanPhamChinh.MaSP" />
 
-                        @* 1. CHỌN SIZE *@
-                        <div class="mb-4">
-                            <span class="variant-label">Chọn Size:</span>
-                            <div class="d-flex flex-wrap">
-                                @foreach (var size in Model.CacSizeDuyNhat)
-                                {
-                                    <div class="size-option">
-                                        <input type="radio" id="size-@size" name="selectedSize" value="@size">
-                                        <label for="size-@size">@size</label>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-
-                        @* 2. CHỌN MÀU *@
-                        <div class="mb-4">
-                            <span class="variant-label">Chọn Màu:</span>
+                        <div class="option-wrapper">
+                            <span class="option-title">Màu sắc: <span id="color-name-display" style="font-weight: 400; color: #666;">Chọn màu</span></span>
                             <div class="d-flex flex-wrap">
                                 @foreach (var color in Model.CacMauDuyNhat)
                                 {
-                                    string colorHex = "#ccc";
-                                    string c = color.ToLower();
-                                    if (c == "black") { colorHex = "#000"; }
-                                    else if (c == "white") { colorHex = "#fff"; }
-                                    else if (c == "red") { colorHex = "#ff0000"; }
-                                    else if (c == "blue") { colorHex = "#0000ff"; }
-                                    else if (c == "green") { colorHex = "#008000"; }
-                                    else if (c == "yellow") { colorHex = "#ffff00"; }
-                                    else if (c == "pink") { colorHex = "#ffc0cb"; }
-                                    else if (c == "purple") { colorHex = "#800080"; }
-                                    else if (c == "grey" || c == "gray") { colorHex = "#808080"; }
+                                    string colorHex = "#eee";
+                                    string c = (color.TenMau ?? "").ToLower(System.Globalization.CultureInfo.CurrentCulture).Trim();
+                                    if (c.Contains("black") || c.Contains("đen")) { colorHex = "#212121"; }
+                                    else if (c.Contains("white") || c.Contains("trắng")) { colorHex = "#ffffff"; }
+                                    else if (c.Contains("red") || c.Contains("đỏ")) { colorHex = "#D32F2F"; }
+                                    else if (c.Contains("blue") || c.Contains("xanh dương")) { colorHex = "#1976D2"; }
+                                    else if (c.Contains("green") || c.Contains("xanh lá")) { colorHex = "#388E3C"; }
+                                    else if (c.Contains("yellow") || c.Contains("vàng")) { colorHex = "#FBC02D"; }
+                                    else if (c.Contains("gray") || c.Contains("xám")) { colorHex = "#808080"; }
+                                    else if (c.Contains("beige") || c.Contains("kem")) { colorHex = "#F5F5DC"; }
+                                    else { colorHex = "#9E9E9E"; }
 
-                                    <div class="color-option">
-                                        <input type="radio" id="color-@color" name="selectedColor" value="@color">
-                                        <label for="color-@color" style="background-color: @colorHex; @(c == "white" ? "border: 1px solid #ccc;" : "")" title="@color"></label>
-                                    </div>
+                                    <input type="radio" id="color-@color.MaMau" name="selectedColor" value="@color.MaMau" class="visually-hidden-input color-input" data-name="@color.TenMau" required>
+                                    <label for="color-@color.MaMau" class="color-swatch" style="background-color: @colorHex;" title="@color.TenMau" data-bs-toggle="tooltip"></label>
                                 }
                             </div>
                         </div>
 
-                        @* 3. SỐ LƯỢNG & NÚT MUA *@
-                        <div class="d-flex align-items-center mb-4 pt-2">
-                            <div class="qty-box quantity">
-                                <button type="button" class="qty-btn btn-minus"><i class="fa fa-minus"></i></button>
-                                <input type="text" id="quantity" class="qty-input" value="1" min="1">
-                                <button type="button" class="qty-btn btn-plus"><i class="fa fa-plus"></i></button>
+                        <div class="option-wrapper">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="option-title mb-0">Kích thước</span>
+                                <a href="#" style="font-size: 13px; text-decoration: underline; color: #666;">Bảng size</a>
                             </div>
+                            <div class="d-flex flex-wrap">
+                                @foreach (var size in Model.CacSizeDuyNhat)
+                                {
+                                    <input type="radio" id="size-@size.MaSize" name="selectedSize" value="@size.MaSize" class="visually-hidden-input size-input" required>
+                                    <label for="size-@size.MaSize" class="size-chip" id="label-size-@size.MaSize">@size.TenSize</label>
+                                }
+                            </div>
+                        </div>
 
-                            @* type="button" để tránh submit form mặc định *@
-                            <button type="button" id="btnAddToCart" class="btn-add-cart">
-                                <i class="fa fa-shopping-bag mr-2"></i> Thêm vào giỏ
+                        <div class="action-row">
+                            <div class="qty-box">
+                                <button type="button" class="qty-btn btn-minus">-</button>
+                                <input type="text" name="quantity" id="quantity" class="qty-input" value="1" readonly>
+                                <button type="button" class="qty-btn btn-plus">+</button>
+                            </div>
+                            <button type="submit" class="btn-buy shadow-sm">
+                                <i class="fa fa-shopping-bag"></i> &nbsp; Thêm vào giỏ hàng
                             </button>
                         </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+                    }
 
-        @* --- Phần Reviews (Giữ nguyên) --- *@
-        <div class="row mt-5">
-            <div class="col-12">
-                <div class="bg-white p-5 rounded shadow-sm">
-                    <h4 class="mb-4 font-weight-bold">Đánh giá (0)</h4>
-                    <p class="text-muted">Chức năng này đang được cập nhật...</p>
+                    <div class="policy-grid">
+                        <div class="policy-item">
+                            <i class="fa fa-truck"></i>
+                            <div class="policy-text"><h4>Freeship</h4><p>Đơn > 500K</p></div>
+                        </div>
+                        <div class="policy-item">
+                            <i class="fa fa-rotate-left"></i>
+                            <div class="policy-text"><h4>Đổi trả</h4><p>30 ngày</p></div>
+                        </div>
+                        <div class="policy-item">
+                            <i class="fa fa-shield-alt"></i>
+                            <div class="policy-text"><h4>Chính hãng</h4><p>100% auth</p></div>
+                        </div>
+                        <div class="policy-item">
+                            <i class="fa fa-headset"></i>
+                            <div class="policy-text"><h4>Hỗ trợ</h4><p>24/7 online</p></div>
+                        </div>
+                    </div>
+
+                    <div class="product-details-accordion">
+                        <div class="accordion-item active">
+                            <button class="accordion-header">
+                                Mô tả chi tiết <i class="fa fa-chevron-down"></i>
+                            </button>
+                            <div class="accordion-content">
+                                @Model.SanPhamChinh.MoTa <br /><br />
+                                <strong>Chất liệu:</strong> Cotton Premium.<br />
+                                <strong>Form dáng:</strong> Regular Fit.
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <button class="accordion-header">
+                                Bảo quản <i class="fa fa-chevron-down"></i>
+                            </button>
+                            <div class="accordion-content">
+                                - Giặt ở nhiệt độ thường.<br />
+                                - Không dùng thuốc tẩy.
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-@* --- SẢN PHẨM KHÁC (Giữ nguyên) --- *@
-<div class="container-fluid pt-5 px-5">
-    <div class="section-title-modern"><h2>Sản phẩm khác</h2></div>
-    <div class="row px-xl-5 pb-3">
-        @foreach (var item in Model.SanPhamNgauNhiens.Take(4))
-        {
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="product-card-modern">
-                    <div class="product-img-wrap">
-                        <img src="@Url.Content("~/Images/Products/" + item.AnhSP)" alt="@item.TenSanPham">
-                        <div class="product-actions">
-                             <a href="@Url.Action("ProductDetails", "Home", new { id = item.MaSP })" class="btn-action"><i class="fas fa-eye"></i></a>
+<div class="related-sec">
+    <div class="container-fluid px-5">
+        <h3 class="sec-title">Sản phẩm tương tự</h3>
+        <div class="row px-xl-5 pb-3">
+            @foreach (var item in Model.SanPhamNgauNhiens)
+            {
+                <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+                    <div class="product-card-modern">
+                        <div class="product-img-wrap">
+                            <img src="@Url.Content("~/Images/Products/" + item.AnhSP)" alt="@item.TenSanPham">
+
+                            <disv class="product-actions">
+                                <a href="@Url.Action("ProductDetails", "Home", new { id = item.MaSP })" class="btn-action" title="View Detail">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </disv>
+                        </div>
+                        <div class="product-info">
+                            <a href="@Url.Action("ProductDetails", "Home", new { id = item.MaSP })" class="text-decoration-none">
+                                <h6 class="product-name">@item.TenSanPham</h6>
+                            </a>
+                            <div class="product-price">
+                                @String.Format("{0:N0} ₫", item.GiaBanLe)
+                            </div>
                         </div>
                     </div>
-                    <div class="product-info">
-                        <a href="@Url.Action("ProductDetails", "Home", new { id = item.MaSP })" class="text-decoration-none">
-                            <h6 class="product-name">@item.TenSanPham</h6>
-                        </a>
-                        <div class="product-price">@String.Format("{0:N0} ₫", item.GiaBanLe)</div>
-                    </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
     </div>
 </div>
 
 @section Scripts {
-    @* Thư viện SweetAlert2 *@
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+    <script>
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) { return new bootstrap.Tooltip(tooltipTriggerEl) })
+    </script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            
-            // --- 1. XỬ LÝ BIẾN THỂ (ẢNH & GIÁ) ---
+            // DATA
             const variants = @Html.Raw(JsonConvert.SerializeObject(
                 Model.SanPhamChinh.BienTheSanPhams.Select(b => new {
                     b.MaSize, b.MaMau, b.GiaBan, b.AnhBienThe
                 })
             ));
             const defaultPrice = @(Model.SanPhamChinh.GiaBanLe ?? 0);
-            const defaultImage = '@Url.Content("~/Images/Products/" + (Model.SanPhamChinh.AnhSP ?? "no-image.jpg"))';
+            const defaultImage = '@Url.Content("~/Images/Products/" + (Model.SanPhamChinh.AnhSP ?? "no-image.png"))';
+            const imageBasePath = '@Url.Content("~/Images/Products/")';
 
-            function updateProductDetails() {
-                const sizeInput = document.querySelector('input[name="selectedSize"]:checked');
-                const colorInput = document.querySelector('input[name="selectedColor"]:checked');
-                const size = sizeInput ? sizeInput.value : null;
-                const color = colorInput ? colorInput.value : null;
+            const imgEl = document.getElementById('main-product-image');
+            const priceEl = document.getElementById('product-price');
+            const colorNameDisplay = document.getElementById('color-name-display');
+            const sizeInputs = document.querySelectorAll('.size-input');
 
-                let price = defaultPrice;
-                let image = defaultImage;
+            // 1. LOGIC MÀU SẮC
+            function handleColorChange() {
+                const selectedColorInput = document.querySelector('.color-input:checked');
+                if (!selectedColorInput) return;
 
-                if (size && color) {
-                    const v = variants.find(x => x.MaSize == size && x.MaMau == color);
-                    if (v) {
-                        price = v.GiaBan || defaultPrice;
-                        if (v.AnhBienThe && v.AnhBienThe.trim() !== '') {
-                            image = '@Url.Content("~/Images/Products/")' + v.AnhBienThe;
-                        }
+                const colorId = parseInt(selectedColorInput.value);
+                colorNameDisplay.textContent = selectedColorInput.getAttribute('data-name');
+
+                // Đổi ảnh
+                let repVariant = variants.find(v => v.MaMau === colorId && v.AnhBienThe);
+                if (!repVariant) repVariant = variants.find(v => v.MaMau === colorId);
+
+                if (repVariant && repVariant.AnhBienThe) {
+                    imgEl.src = imageBasePath + repVariant.AnhBienThe;
+                } else {
+                    imgEl.src = defaultImage;
+                }
+
+                // Disable Size
+                const availableSizes = variants.filter(v => v.MaMau === colorId).map(v => v.MaSize);
+
+                sizeInputs.forEach(input => {
+                    const sizeId = parseInt(input.value);
+                    const label = document.getElementById(`label-size-${sizeId}`);
+
+                    if (availableSizes.includes(sizeId)) {
+                        input.disabled = false;
+                        label.classList.remove('disabled-option');
+                    } else {
+                        input.disabled = true;
+                        label.classList.add('disabled-option');
+                        if (input.checked) input.checked = false;
                     }
-                }
-                
-                const priceEl = document.getElementById('product-price');
-                const imgEl = document.getElementById('main-product-image');
-                if (priceEl) priceEl.textContent = price.toLocaleString('vi-VN') + ' ₫';
-                if (imgEl) {
-                    imgEl.onerror = () => imgEl.src = defaultImage;
-                    imgEl.src = image;
-                }
+                });
+                updateFinalDetails();
             }
 
-            document.querySelectorAll('input[name="selectedSize"], input[name="selectedColor"]').forEach(el => {
-                el.addEventListener('change', updateProductDetails);
-            });
+            // 2. LOGIC GIÁ
+            function updateFinalDetails() {
+                const sizeInput = document.querySelector('.size-input:checked');
+                const colorInput = document.querySelector('.color-input:checked');
+                let finalPrice = defaultPrice;
 
-            // --- 2. XỬ LÝ TĂNG GIẢM SỐ LƯỢNG ---
-            document.addEventListener('click', function (e) {
-                if (e.target.closest('.btn-plus')) {
-                    const input = document.getElementById('quantity');
-                    input.value = parseInt(input.value || 0) + 1;
+                if (sizeInput && colorInput) {
+                    const v = variants.find(x => x.MaSize === parseInt(sizeInput.value) && x.MaMau === parseInt(colorInput.value));
+                    if (v) finalPrice = v.GiaBan || defaultPrice;
                 }
-                if (e.target.closest('.btn-minus')) {
-                    const input = document.getElementById('quantity');
-                    const val = parseInt(input.value || 0);
-                    if (val > 1) input.value = val - 1;
-                }
-            });
+                priceEl.innerText = finalPrice.toLocaleString('vi-VN') + ' ₫';
+            }
 
-            // --- 3. XỬ LÝ AJAX THÊM VÀO GIỎ HÀNG (QUAN TRỌNG NHẤT) ---
-            const btnAddToCart = document.getElementById('btnAddToCart');
-            
-            btnAddToCart.addEventListener('click', function(e) {
-                e.preventDefault(); // Ngăn hành vi mặc định (dù đã set type=button cho chắc)
+            // 3. LISTENERS
+            document.querySelectorAll('.color-input').forEach(el => el.addEventListener('change', handleColorChange));
+            document.querySelectorAll('.size-input').forEach(el => el.addEventListener('change', updateFinalDetails));
 
-                // 1. Lấy dữ liệu từ Form
-                const pid = document.getElementById('productId').value;
-                const qty = document.getElementById('quantity').value;
-                const sizeInput = document.querySelector('input[name="selectedSize"]:checked');
-                const colorInput = document.querySelector('input[name="selectedColor"]:checked');
-
-                // 2. Validate phía Client
-                if (!sizeInput || !colorInput) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Chưa chọn phân loại',
-                        text: 'Vui lòng chọn Size và Màu sắc trước khi thêm vào giỏ!',
-                        confirmButtonColor: '#333'
-                    });
-                    return;
-                }
-
-                const size = sizeInput.value;
-                const color = colorInput.value;
-
-                // 3. Gửi AJAX (Sử dụng Fetch API chuẩn)
-                // Lưu ý URL: Kiểm tra Controller là "Home" hay "GioHang" nhé
-                const url = '@Url.Action("AddToCart", "Home")'; 
-
-                // Hiển thị loading
-                btnAddToCart.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
-                btnAddToCart.disabled = true;
-
-                $.ajax({
-                    url: url,
-                    type: 'POST',
-                    data: {
-                        productId: pid,
-                        quantity: qty,
-                        selectedSize: size,
-                        selectedColor: color,
-                        // Nếu cần AntiForgeryToken
-                        __RequestVerificationToken: document.querySelector('input[name="__RequestVerificationToken"]')?.value
-                    },
-                    success: function(res) {
-                        // Khôi phục nút bấm
-                        btnAddToCart.innerHTML = '<i class="fa fa-shopping-bag mr-2"></i> Thêm vào giỏ';
-                        btnAddToCart.disabled = false;
-
-                        if (res.success) {
-                            // Thành công: Hiện thông báo đẹp
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Thành công!',
-                                text: res.message,
-                                showConfirmButton: false,
-                                timer: 1500
-                            });
-
-                            // Cập nhật số lượng trên icon giỏ hàng (nếu bạn có ID này trên Layout)
-                            // Ví dụ: <span id="cart-count">0</span>
-                            const cartCountEl = document.getElementById('cart-count'); // Hoặc #cartBadge
-                            if (cartCountEl && res.totalItems !== undefined) {
-                                cartCountEl.innerText = res.totalItems;
-                            }
-                        } else {
-                            // Thất bại (Logic server trả về false)
-                            Swal.fire('Lỗi', res.message, 'error');
-                        }
-                    },
-                    error: function(err) {
-                        btnAddToCart.innerHTML = '<i class="fa fa-shopping-bag mr-2"></i> Thêm vào giỏ';
-                        btnAddToCart.disabled = false;
-                        console.error(err);
-                        Swal.fire('Lỗi hệ thống', 'Không thể kết nối đến server.', 'error');
+            // ACCORDION
+            document.querySelectorAll('.accordion-header').forEach(acc => {
+                acc.addEventListener('click', function() {
+                    this.parentElement.classList.toggle('active');
+                    const icon = this.querySelector('i');
+                    if(this.parentElement.classList.contains('active')){
+                        icon.classList.remove('fa-chevron-down'); icon.classList.add('fa-chevron-up');
+                    } else {
+                        icon.classList.add('fa-chevron-down'); icon.classList.remove('fa-chevron-up');
                     }
                 });
             });
 
-            // Khởi tạo lần đầu
-            updateProductDetails();
+            // SỬA LỖI NÚT TĂNG GIẢM
+            // Dùng e.preventDefault() để chặn submit form
+            const qtyInput = document.getElementById('quantity');
+
+            document.querySelector('.btn-plus').addEventListener('click', function(e) {
+                e.preventDefault();
+                let val = parseInt(qtyInput.value) || 0;
+                qtyInput.value = val + 1;
+            });
+
+            document.querySelector('.btn-minus').addEventListener('click', function(e) {
+                e.preventDefault();
+                let val = parseInt(qtyInput.value) || 1;
+                if (val > 1) qtyInput.value = val - 1;
+            });
+        });
+
+        function validateForm() {
+            const sizeInput = document.querySelector('.size-input:checked');
+            const colorInput = document.querySelector('.color-input:checked');
+            if (!sizeInput || !colorInput) {
+                alert("Vui lòng chọn đầy đủ Kích thước và Màu sắc!");
+                return false;
+            }
+            return true;
+        }
+        $(document).ready(function () {
+            // Tìm tất cả các element có class ".alert"
+            // Đợi 2 giây (2000ms)
+            // Sau đó trượt lên (slideUp) để ẩn đi
+            window.setTimeout(function() {
+                $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                    $(this).remove();
+                });
+            }, 2000);
         });
     </script>
 }

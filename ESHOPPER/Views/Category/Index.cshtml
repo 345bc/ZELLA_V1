@@ -1,0 +1,354 @@
+﻿@{
+    ViewBag.Title = "Quản lý danh mục";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .rotate-90 {
+        transform: rotate(90deg);
+    }
+
+    .transition-transform {
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+</style>
+
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+    <div>
+        <h2 class="text-2xl font-bold text-slate-800">Quản lý danh mục</h2>
+    </div>
+
+    <div class="flex items-center gap-3">
+        <div class="relative group">
+            <input type="text" id="searchInput" placeholder="Tìm kiếm danh mục..."
+                   class="pl-10 pr-4 py-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-200 w-64 transition-all shadow-sm" />
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-400 absolute left-3 top-2.5 group-focus-within:text-blue-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+        </div>
+
+        <button onclick="openModal()" class="inline-flex items-center px-4 py-2.5 bg-brand-blue hover:bg-brand-dark text-white text-sm font-bold rounded-lg transition-all shadow-md hover:shadow-lg gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+            Tạo mới
+        </button>
+    </div>
+</div>
+
+<div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+    <div class="p-4 border-b border-slate-100 bg-slate-50/30 flex justify-between items-center">
+        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Cấu trúc danh mục</span>
+        <div id="loading" style="display:none;" class="flex items-center gap-2 text-xs font-medium text-blue-600">
+            <svg class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Đang đồng bộ dữ liệu...
+        </div>
+    </div>
+
+    <div class="overflow-x-auto min-h-[400px]">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-slate-50 border-b border-slate-200">
+                    <th class="w-14 px-4 py-3"></th>
+                    <th class="px-6 py-3 text-[11px] font-bold uppercase text-slate-400 tracking-wider w-24">Mã ID</th>
+                    <th class="px-6 py-3 text-[11px] font-bold uppercase text-slate-400 tracking-wider">Tên Danh Mục</th>
+                    <th class="px-6 py-3 text-[11px] font-bold uppercase text-slate-400 tracking-wider text-right">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody" class="divide-y divide-slate-100">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="categoryModal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
+
+    <div class="fixed inset-0 z-10 overflow-y-auto">
+        <div class="flex min-h-full items-center justify-center p-4 text-center">
+            <div class="relative transform overflow-hidden rounded-xl bg-white text-left shadow-2xl transition-all sm:w-full sm:max-w-lg border border-slate-100">
+
+                <div class="bg-white px-6 py-5 border-b border-slate-100 flex items-center gap-4">
+                    <div class="h-10 w-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-800" id="modalTitle">Thêm danh mục</h3>
+                        <p class="text-xs text-slate-500">Nhập thông tin chi tiết bên dưới.</p>
+                    </div>
+                </div>
+
+                <div class="px-6 py-6 space-y-5">
+                    <form id="categoryForm">
+                        <input type="hidden" id="MaDM" value="0">
+
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-1.5">Tên danh mục <span class="text-red-500">*</span></label>
+                            <input type="text" id="TenDanhMuc" class="w-full rounded-lg border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-50 text-sm py-2.5 transition-all shadow-sm" placeholder="Ví dụ: Thời trang nam..." required>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-1.5">Danh mục cha</label>
+                            <div class="relative">
+                                <select id="MaDanhMucCha" class="w-full rounded-lg border-slate-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-50 text-sm py-2.5 bg-white shadow-sm appearance-none">
+                                    <option value="">-- Là danh mục gốc (Cấp 1) --</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500">
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-400 mt-2 flex items-center gap-1">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                Để trống trường này nếu bạn muốn tạo danh mục cấp cao nhất.
+                            </p>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="bg-slate-50 px-6 py-4 flex flex-row-reverse gap-3 border-t border-slate-100">
+                    <button type="button" onclick="saveCategory()" class="inline-flex w-full justify-center rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-blue-700 transition-colors sm:w-auto">
+                        Lưu thay đổi
+                    </button>
+                    <button type="button" onclick="closeModal()" class="inline-flex w-full justify-center rounded-lg bg-white border border-slate-300 px-5 py-2.5 text-sm font-bold text-slate-700 shadow-sm hover:bg-slate-50 transition-colors sm:w-auto">
+                        Hủy bỏ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const API_URL = '/api/CategoryAPI';
+        let _categories = [];
+
+        $(document).ready(function () {
+            loadData();
+
+            $("#searchInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#tableBody > tr.parent-row").filter(function () {
+                    $(this).toggle($(this).attr('data-name').toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+
+        function loadData() {
+            $('#loading').css('display', 'flex');
+
+            $.ajax({
+                url: API_URL, type: 'GET',
+                success: function (res) {
+                    $('#loading').hide();
+
+                    // 1. CHUẨN HÓA DỮ LIỆU
+                    _categories = res.map(item => {
+                        let apiId = item.MaDM !== undefined ? item.MaDM : item.maDM;
+                        let apiParentId = item.MaDanhMucCha !== undefined ? item.MaDanhMucCha : item.maDanhMucCha;
+                        let apiName = item.TenDanhMuc || item.tenDanhMuc;
+
+                        return {
+                            id: parseInt(apiId),
+                            name: apiName,
+                            parentId: (apiParentId == null || apiParentId == 0) ? null : parseInt(apiParentId)
+                        };
+                    });
+                    renderTable();
+                    renderParentSelect();
+                },
+                error: function (err) {
+                    $('#loading').hide();
+                    Swal.fire({ icon: 'error', title: 'Lỗi hệ thống', text: 'Không thể tải dữ liệu từ máy chủ.', confirmButtonColor: '#2563EB' });
+                }
+            });
+        }
+
+        function renderTable() {
+            const parents = _categories.filter(x => x.parentId == null);
+
+            if (parents.length === 0) {
+                $('#tableBody').html('<tr><td colspan="4" class="py-12 text-center text-slate-400 italic">Chưa có danh mục nào trong hệ thống.</td></tr>');
+                return;
+            }
+
+            let html = '';
+            parents.forEach(p => {
+                const children = _categories.filter(c => c.parentId === p.id);
+                const hasChild = children.length > 0;
+
+                const arrowHtml = hasChild
+                    ? `<button onclick="toggleChildren(event, ${p.id})" class="p-1.5 rounded-md hover:bg-slate-200 text-slate-400 hover:text-blue-600 transition-colors focus:outline-none group-hover:bg-white">
+                             <svg id="arrow-${p.id}" class="w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
+                           </button>`
+                    : `<span class="w-7 block"></span>`;
+
+                // --- 1. RENDER DÒNG CHA ---
+                html += `
+                        <tr class="group border-b border-slate-100 hover:bg-blue-50/40 transition-colors parent-row" data-name="${p.name}">
+                            <td class="px-4 py-4 text-center align-middle">${arrowHtml}</td>
+                            <td class="px-6 py-4 align-middle">
+                                <span class="inline-block bg-slate-100 text-slate-600 text-[11px] font-mono font-bold px-2.5 py-1 rounded border border-slate-200">#${p.id}</span>
+                            </td>
+                            <td class="px-6 py-4 align-middle cursor-pointer" onclick="if(${hasChild}) toggleChildren(event, ${p.id})">
+                                <div class="font-bold text-slate-800 text-sm group-hover:text-blue-700 transition-colors flex items-center gap-2">
+                                    ${p.name}
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 align-middle text-right">
+                                 <div class="flex items-center justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <button onclick="editCategory(${p.id})" class="text-xs font-bold text-slate-500 hover:text-blue-600 transition-colors uppercase tracking-wide">Sửa</button>
+                                    <span class="text-slate-300">|</span>
+                                    <button onclick="deleteCategory(${p.id})" class="text-xs font-bold text-slate-500 hover:text-red-600 transition-colors uppercase tracking-wide">Xóa</button>
+                                 </div>
+                            </td>
+                        </tr>
+                    `;
+
+                // --- 2. RENDER DÒNG CON (Nested Table) ---
+                if (hasChild) {
+                    html += `
+                        <tr id="child-row-${p.id}" class="hidden bg-slate-50/50 shadow-inner">
+                            <td colspan="4" class="p-0 border-b border-slate-200">
+                                <div class="pl-14 pr-6 py-4">
+                                    <div class="bg-white rounded-lg border border-slate-200 overflow-hidden shadow-sm">
+                                        <table class="w-full text-sm">
+                                            <thead class="bg-slate-50 text-slate-500 text-[10px] uppercase font-bold tracking-wider border-b border-slate-100">
+                                                <tr>
+                                                    <th class="py-2.5 px-4 w-20 text-left">ID</th>
+                                                    <th class="py-2.5 px-4 text-left">Tên danh mục con</th>
+                                                    <th class="py-2.5 px-4 text-right">Thao tác</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-slate-50">
+                        `;
+
+                    children.forEach(c => {
+                        html += `
+                                                <tr class="hover:bg-blue-50/20 transition-colors group/child">
+                                                    <td class="py-3 px-4 text-slate-400 font-mono text-xs">#${c.id}</td>
+                                                    <td class="py-3 px-4">
+                                                        <div class="font-medium text-slate-700 flex items-center gap-2">
+                                                            <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span> ${c.name}
+                                                        </div>
+                                                    </td>
+                                                    <td class="py-3 px-4 text-right">
+                                                        <div class="flex items-center justify-end gap-3 opacity-0 group-hover/child:opacity-100 transition-opacity">
+                                                            <button onclick="editCategory(${c.id})" class="text-xs font-bold text-blue-600 hover:underline">Sửa</button>
+                                                            <button onclick="deleteCategory(${c.id})" class="text-xs font-bold text-red-600 hover:underline">Xóa</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                            `;
+                    });
+
+                    html += `       </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>`;
+                }
+            });
+            $('#tableBody').html(html);
+        }
+
+        function toggleChildren(e, parentId) {
+            e.stopPropagation();
+            const row = $(`#child-row-${parentId}`);
+            const arrow = $(`#arrow-${parentId}`);
+
+            if (row.length === 0) return;
+
+            if (row.hasClass('hidden')) {
+                row.removeClass('hidden');
+                arrow.addClass('rotate-90 text-blue-600');
+            } else {
+                row.addClass('hidden');
+                arrow.removeClass('rotate-90 text-blue-600');
+            }
+        }
+
+        function renderParentSelect() {
+            const parents = _categories.filter(x => x.parentId == null);
+            let options = '<option value="">-- Là danh mục gốc (Cấp 1) --</option>';
+            parents.forEach(p => { options += `<option value="${p.id}">${p.name}</option>`; });
+            $('#MaDanhMucCha').html(options);
+        }
+
+        function openModal() {
+            $('#modalTitle').text('Thêm mới danh mục');
+            $('#MaDM').val(0); $('#TenDanhMuc').val(''); $('#MaDanhMucCha').val('');
+            $('#categoryModal').removeClass('hidden');
+            setTimeout(() => $('#TenDanhMuc').focus(), 100);
+        }
+        function closeModal() { $('#categoryModal').addClass('hidden'); }
+
+        function saveCategory() {
+            const id = parseInt($('#MaDM').val()) || 0;
+            const name = $('#TenDanhMuc').val();
+            const parentIdVal = $('#MaDanhMucCha').val();
+
+            if (!name.trim()) { Swal.fire({ icon: 'warning', title: 'Thiếu thông tin', text: 'Vui lòng nhập tên danh mục!', confirmButtonColor: '#2563EB' }); return; }
+
+            const obj = {
+                MaDM: id, TenDanhMuc: name,
+                MaDanhMucCha: parentIdVal ? parseInt(parentIdVal) : null
+            };
+            const method = id !== 0 ? 'PUT' : 'POST';
+            const url = id !== 0 ? `${API_URL}/${id}` : API_URL;
+
+            $.ajax({
+                url: url, type: method, contentType: 'application/json', data: JSON.stringify(obj),
+                success: function () {
+                    closeModal(); Swal.fire({ icon: 'success', title: 'Thành công', text: 'Dữ liệu đã được lưu.', timer: 1000, showConfirmButton: false }); loadData();
+                },
+                error: function () { Swal.fire({ icon: 'error', title: 'Lỗi', text: 'Không thể lưu dữ liệu.', confirmButtonColor: '#2563EB' }); }
+            });
+        }
+
+        function editCategory(id) {
+            const cat = _categories.find(x => x.id === id);
+            if (cat) {
+                $('#modalTitle').text('Cập nhật danh mục'); $('#MaDM').val(cat.id); $('#TenDanhMuc').val(cat.name); $('#MaDanhMucCha').val(cat.parentId || '');
+                $('#categoryModal').removeClass('hidden');
+            }
+        }
+
+        function deleteCategory(id) {
+            Swal.fire({
+                title: 'Xóa danh mục?',
+                text: "Hành động này không thể hoàn tác!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#DC2626',
+                cancelButtonColor: '#6B7280',
+                confirmButtonText: 'Xóa ngay',
+                cancelButtonText: 'Hủy'
+            }).then((r) => {
+                if (r.isConfirmed) {
+                    $.ajax({
+                        url: `${API_URL}/${id}`, type: 'DELETE',
+                        success: function () { Swal.fire({ icon: 'success', title: 'Đã xóa', timer: 1000, showConfirmButton: false }); loadData(); },
+                        error: function () { Swal.fire({ icon: 'error', title: 'Lỗi', text: 'Không thể xóa (có thể do ràng buộc dữ liệu).', confirmButtonColor: '#2563EB' }); }
+                    });
+                }
+            });
+        }
+    </script>
+}

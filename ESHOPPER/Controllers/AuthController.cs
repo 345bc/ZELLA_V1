@@ -90,11 +90,11 @@ namespace ESHOPPER.Controllers.Auth
                 Session["UserName"] = user.Name;
                 Session["UserRole"] = user.Role;
 
-                // C. Gộp giỏ hàng từ Guest sang User (nếu có)
-                if (Session["Cart"] != null && maKH > 0)
-                {
-                    MergeSessionCartToDb(maKH); // Hàm riêng của bạn
-                }
+                //// C. Gộp giỏ hàng từ Guest sang User (nếu có)
+                //if (Session["Cart"] != null && maKH > 0)
+                //{
+                //    MergeSessionCartToDb(maKH); // Hàm riêng của bạn
+                //}
 
                 // D. [QUAN TRỌNG NHẤT] Ghi nhận đăng nhập với hệ thống (Cookie)
                 // Dòng này giúp server nhớ bạn là ai kể cả khi Session bị timeout
@@ -260,57 +260,57 @@ namespace ESHOPPER.Controllers.Auth
         //}
 
         // Helper: Gộp giỏ hàng từ Session vào DB rồi xóa Session
-        private void MergeSessionCartToDb(int maKH)
-        {
-            try
-            {
-                var sessionCart = (GioHang)Session["Cart"];
-                if (sessionCart != null && sessionCart.ChiTietGioHangs != null && sessionCart.ChiTietGioHangs.Count > 0)
-                {
-                    // 1. Tìm hoặc tạo giỏ hàng DB
-                    var dbCart = db.GioHangs.FirstOrDefault(g => g.MaKH == maKH);
-                    if (dbCart == null)
-                    {
-                        dbCart = new GioHang { MaKH = maKH, NgayTao = DateTime.Now };
-                        db.GioHangs.Add(dbCart);
-                        db.SaveChanges();
-                    }
+        //private void MergeSessionCartToDb(int maKH)
+        //{
+        //    try
+        //    {
+        //        var sessionCart = (GioHang)Session["Cart"];
+        //        if (sessionCart != null && sessionCart.ChiTietGioHangs != null && sessionCart.ChiTietGioHangs.Count > 0)
+        //        {
+        //            // 1. Tìm hoặc tạo giỏ hàng DB
+        //            var dbCart = db.GioHangs.FirstOrDefault(g => g.MaKH == maKH);
+        //            if (dbCart == null)
+        //            {
+        //                dbCart = new GioHang { MaKH = maKH, NgayTao = DateTime.Now };
+        //                db.GioHangs.Add(dbCart);
+        //                db.SaveChanges();
+        //            }
 
-                    // 2. Duyệt từng món session -> chèn vào DB
-                    foreach (var itemSess in sessionCart.ChiTietGioHangs)
-                    {
-                        var dbItem = db.ChiTietGioHangs.FirstOrDefault(c =>
-                            c.MaGioHang == dbCart.MaGioHang &&
-                            c.MaSP == itemSess.MaSP &&
-                            c.MaSize == itemSess.MaSize &&
-                            c.MaMau == itemSess.MaMau);
+        //            // 2. Duyệt từng món session -> chèn vào DB
+        //            foreach (var itemSess in sessionCart.ChiTietGioHangs)
+        //            {
+        //                var dbItem = db.ChiTietGioHangs.FirstOrDefault(c =>
+        //                    c.MaGioHang == dbCart.MaGioHang &&
+        //                    c.MaSP == itemSess.MaSP &&
+        //                    c.MaSize == itemSess.MaSize &&
+        //                    c.MaMau == itemSess.MaMau);
 
-                        if (dbItem != null)
-                        {
-                            dbItem.SoLuong += itemSess.SoLuong; // Cộng dồn
-                        }
-                        else
-                        {
-                            var newItem = new ChiTietGioHang
-                            {
-                                MaGioHang = dbCart.MaGioHang,
-                                MaSP = itemSess.MaSP,
-                                SoLuong = itemSess.SoLuong,
-                                DonGia = itemSess.DonGia,
-                                MaSize = itemSess.MaSize,
-                                MaMau = itemSess.MaMau
-                            };
-                            db.ChiTietGioHangs.Add(newItem); // Thêm mới
-                        }
-                    }
-                    db.SaveChanges();
+        //                if (dbItem != null)
+        //                {
+        //                    dbItem.SoLuong += itemSess.SoLuong; // Cộng dồn
+        //                }
+        //                else
+        //                {
+        //                    var newItem = new ChiTietGioHang
+        //                    {
+        //                        MaGioHang = dbCart.MaGioHang,
+        //                        MaSP = itemSess.MaSP,
+        //                        SoLuong = itemSess.SoLuong,
+        //                        DonGia = itemSess.DonGia,
+        //                        MaSize = itemSess.MaSize,
+        //                        MaMau = itemSess.MaMau
+        //                    };
+        //                    db.ChiTietGioHangs.Add(newItem); // Thêm mới
+        //                }
+        //            }
+        //            db.SaveChanges();
 
-                    // 3. QUAN TRỌNG: Xóa sạch Session Cart sau khi gộp xong
-                    Session["Cart"] = null;
-                }
-            }
-            catch (Exception) { /* Log error if needed */ }
-        }
+        //            // 3. QUAN TRỌNG: Xóa sạch Session Cart sau khi gộp xong
+        //            Session["Cart"] = null;
+        //        }
+        //    }
+        //    catch (Exception) { /* Log error if needed */ }
+        //}
 
         // ====================================================
         // 2. ĐĂNG KÝ

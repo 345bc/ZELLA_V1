@@ -18,31 +18,23 @@ namespace ESHOPPER.Models
         public SanPham()
         {
             this.BienTheSanPhams = new HashSet<BienTheSanPham>();
-            this.ChiTietDonHangs = new HashSet<ChiTietDonHang>();
-            this.ChiTietGioHangs = new HashSet<ChiTietGioHang>();
             this.KhuyenMais = new HashSet<KhuyenMai>();
         }
     
-        public string MaSP { get; set; }
-        public string MaDM { get; set; }
+        public int MaSP { get; set; }
+        public int MaDM { get; set; }
         public string TenSanPham { get; set; }
         public string MoTa { get; set; }
         public Nullable<decimal> GiaBanLe { get; set; }
         public string TrangThai { get; set; }
         public string AnhSP { get; set; }
-        public string MaNCC { get; set; }
+        public Nullable<int> MaNCC { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BienTheSanPham> BienTheSanPhams { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ChiTietDonHang> ChiTietDonHangs { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ChiTietGioHang> ChiTietGioHangs { get; set; }
         public virtual DanhMucSanPham DanhMucSanPham { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<KhuyenMai> KhuyenMais { get; set; }
         public virtual NhaCungCap NhaCungCap { get; set; }
-        public virtual SanPham SanPham1 { get; set; }
-        public virtual SanPham SanPham2 { get; set; }
     }
 }

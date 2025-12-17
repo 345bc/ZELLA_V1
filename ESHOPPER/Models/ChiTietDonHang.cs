@@ -16,15 +16,11 @@ namespace ESHOPPER.Models
     {
         public int MaCTDH { get; set; }
         public Nullable<int> MaDH { get; set; }
-        public string MaSP { get; set; }
-        public string TenSP { get; set; }
-        public string AnhSP { get; set; }
-        public string Size { get; set; }
-        public string Mau { get; set; }
+        public Nullable<int> MaBienThe { get; set; }
         public Nullable<int> SoLuong { get; set; }
         public Nullable<decimal> DonGia { get; set; }
     
+        public virtual BienTheSanPham BienTheSanPham { get; set; }
         public virtual DonHang DonHang { get; set; }
-        public virtual SanPham SanPham { get; set; }
     }
 }

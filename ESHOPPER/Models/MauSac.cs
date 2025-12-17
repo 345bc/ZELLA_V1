@@ -20,7 +20,7 @@ namespace ESHOPPER.Models
             this.BienTheSanPhams = new HashSet<BienTheSanPham>();
         }
     
-        public string MaMau { get; set; }
+        public int MaMau { get; set; }
         public string TenMau { get; set; }
         public string MaHex { get; set; }
     

@@ -3,10 +3,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewBag.Title - Quản trị</title>
+    <title>@ViewBag.Title - Quản trị hệ thống</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
 
     <script>
@@ -17,211 +16,151 @@
                         sans: ['Inter', 'sans-serif'],
                     },
                     colors: {
-                        // Palette: Đen than chì (Charcoal) & Xanh công nghệ (Tech Blue)
+                        sidebar: {
+                            bg: '#eff6ff',      // blue-50
+                            surface: '#ffffff',
+                            border: '#dbeafe',  // blue-100
+                        },
                         brand: {
-                            black: '#111827',
-                            gray: '#374151',
-                            accent: '#2563eb', // Blue-600
-                            light: '#f3f4f6'
+                            blue: '#1d4ed8',    // blue-700
+                            dark: '#1e3a8a',    // blue-900
+                            light: '#3b82f6',   // blue-500
                         }
                     },
-                    letterSpacing: {
-                        tighter: '-0.05em',
-                        tight: '-0.025em',
-                        widest: '0.15em', // Dùng cho tiêu đề nhỏ
+                    boxShadow: {
+                        'header': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
                     }
                 }
             }
         }
     </script>
-
-    <style>
-        /* Tùy chỉnh thanh cuộn siêu mảnh */
-        ::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f3f4f6;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #d1d5db;
-        }
-
-            ::-webkit-scrollbar-thumb:hover {
-                background: #9ca3af;
-            }
-
-        .nav-item-active {
-            background-color: #111827; /* Nền đen */
-            color: #ffffff; /* Chữ trắng */
-            font-weight: 600;
-        }
-
-        /* Hiệu ứng gạch chân text link */
-        .hover-underline-animation {
-            display: inline-block;
-            position: relative;
-        }
-
-            .hover-underline-animation::after {
-                content: '';
-                position: absolute;
-                width: 100%;
-                transform: scaleX(0);
-                height: 1px;
-                bottom: 0;
-                left: 0;
-                background-color: currentColor;
-                transform-origin: bottom right;
-                transition: transform 0.25s ease-out;
-            }
-
-            .hover-underline-animation:hover::after {
-                transform: scaleX(1);
-                transform-origin: bottom left;
-            }
-    </style>
 </head>
-<body class="bg-gray-50 text-brand-black font-sans antialiased selection:bg-brand-accent selection:text-white">
+<body class="bg-white text-slate-800 font-sans antialiased h-screen flex overflow-hidden">
 
-    <div class="flex h-screen w-full overflow-hidden">
+    <aside class="w-72 bg-sidebar-bg flex-shrink-0 flex flex-col border-r border-blue-200/60 z-20">
 
-        <aside id="sidebar" class="w-72 bg-white border-r border-gray-200 flex flex-col justify-between hidden md:flex transition-all duration-300">
+        <div class="h-16 flex items-center px-6 border-b border-blue-200/60 bg-sidebar-bg">
+            <a href="@Url.Action("Dashboard")" class="flex flex-col">
+                <span class="text-xl font-extrabold tracking-tight text-brand-dark">
+                    ZELLA<span class="text-brand-light">ADMIN</span>
+                </span>
+            </a>
+        </div>
 
-            <div class="h-20 flex items-center px-8 border-b border-gray-100">
-                <a href="/" class="text-2xl font-extrabold tracking-tighter text-brand-black">
-                    ZELLA<span class="text-brand-accent">.</span>
+        <nav class="flex-1 overflow-y-auto py-6">
+
+            <div class="px-6 mb-3">
+                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Tổng quan</p>
+            </div>
+
+            <div class="px-3 mb-1">
+                <a href="@Url.Action("DashBoard", "Admin")"
+                   class="flex items-center px-4 py-3.5 text-sm font-semibold rounded-r-lg border-l-[5px] transition-all duration-200
+                   @(ViewBag.Active == "Dashboard"
+                       ? "bg-white border-brand-blue text-brand-blue shadow-sm"
+                       : "border-transparent text-slate-600 hover:bg-blue-100 hover:text-brand-blue")">
+                    DashBoard
                 </a>
             </div>
 
-            <nav class="flex-1 overflow-y-auto py-8 px-6 space-y-8">
+            <div class="my-6 border-t border-blue-200/50 mx-6"></div>
 
-                <div>
-                    <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Tổng quan</h3>
-                    <ul class="space-y-1">
-                        <li>
-                            <a href="@Url.Action("Index", "Admin")"
-                               class="block px-4 py-3 text-sm transition-all duration-200 rounded-lg flex justify-between items-center group @(ViewBag.Active == "Dashboard" ? "nav-item-active" : "text-gray-600 hover:bg-gray-50 hover:text-black")">
-                                <span>Dashboard</span>
-                                <span class="text-[10px] font-mono opacity-50">01</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Quản lý</h3>
-                    <ul class="space-y-1">
-                        <li>
-                            <a href="@Url.Action("Index", "Products")"
-                               class="block px-4 py-3 text-sm transition-all duration-200 rounded-lg flex justify-between items-center @(ViewBag.Active == "Sanpham" ? "nav-item-active" : "text-gray-600 hover:bg-gray-50 hover:text-black")">
-                                <span>Sản phẩm</span>
-                                <span class="text-[10px] font-mono opacity-50">02</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="@Url.Action("Index", "Categories")"
-                               class="block px-4 py-3 text-sm transition-all duration-200 rounded-lg flex justify-between items-center @(ViewBag.Active == "Danhmuc" ? "nav-item-active" : "text-gray-600 hover:bg-gray-50 hover:text-black")">
-                                <span>Danh mục</span>
-                                <span class="text-[10px] font-mono opacity-50">03</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="@Url.Action("Index", "Orders")"
-                               class="block px-4 py-3 text-sm transition-all duration-200 rounded-lg flex justify-between items-center @(ViewBag.Active == "Donhang" ? "nav-item-active" : "text-gray-600 hover:bg-gray-50 hover:text-black")">
-                                <span>Đơn hàng</span>
-                                <div class="flex items-center gap-2">
-                                    @* Badge kiểu text nhỏ *@
-                                    <span class="text-[10px] bg-brand-accent text-white px-1.5 py-0.5 rounded">NEW</span>
-                                    <span class="text-[10px] font-mono opacity-50">04</span>
-                                </div>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="@Url.Action("Index", "Customers")"
-                               class="block px-4 py-3 text-sm transition-all duration-200 rounded-lg flex justify-between items-center @(ViewBag.Active == "Khachhang" ? "nav-item-active" : "text-gray-600 hover:bg-gray-50 hover:text-black")">
-                                <span>Khách hàng</span>
-                                <span class="text-[10px] font-mono opacity-50">05</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-
-            <div class="p-6 border-t border-gray-100">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-bold text-brand-black">Administrator</p>
-                        <a href="#" class="text-xs text-gray-500 hover:text-brand-accent hover-underline-animation">Cài đặt tài khoản</a>
-                    </div>
-                    <div class="w-10 h-10 bg-brand-black text-white flex items-center justify-center font-bold text-sm rounded-full">
-                        AD
-                    </div>
-                </div>
+            <div class="px-6 mb-3">
+                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Quản lý dữ liệu</p>
             </div>
-        </aside>
 
-        <main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+            <div class="space-y-1 px-3">
+                <a href="@Url.Action("ProductList", "Admin")"
+                   class="flex items-center px-4 py-3.5 text-sm font-semibold rounded-r-lg border-l-[5px] transition-all duration-200
+                   @(ViewBag.Active == "Sanpham"
+                       ? "bg-white border-brand-blue text-brand-blue shadow-sm"
+                       : "border-transparent text-slate-600 hover:bg-blue-100 hover:text-brand-blue")">
+                    Danh sách sản phẩm
+                </a>
 
-            <header class="h-20 bg-gray-50/80 backdrop-blur-md flex items-center justify-between px-8 md:px-12 z-20 sticky top-0">
+                <a href="@Url.Action("Index", "Category")"
+                   class="flex items-center px-4 py-3.5 text-sm font-semibold rounded-r-lg border-l-[5px] transition-all duration-200
+                   @(ViewBag.Active == "category"
+                       ? "bg-white border-brand-blue text-brand-blue shadow-sm"
+                       : "border-transparent text-slate-600 hover:bg-blue-100 hover:text-brand-blue")">
+                    Danh mục sản phẩm
+                </a>
 
-                <div class="flex items-center gap-3 text-sm">
-                    <button id="mobile-menu-btn" class="md:hidden text-brand-black font-bold mr-2">[ MENU ]</button>
-                    <span class="text-gray-400 font-medium">Admin</span>
-                    <span class="text-gray-300">/</span>
-                    <span class="text-brand-black font-bold">@ViewBag.Title</span>
+                <a href="@Url.Action("Order", "Admin")"
+                   class="flex items-center justify-between px-4 py-3.5 text-sm font-semibold rounded-r-lg border-l-[5px] transition-all duration-200
+                   @(ViewBag.Active == "Donhang"
+                       ? "bg-white border-brand-blue text-brand-blue shadow-sm"
+                       : "border-transparent text-slate-600 hover:bg-blue-100 hover:text-brand-blue")">
+                    <span>Đơn hàng</span>
+                </a>
+            </div>
+
+            <div class="my-6 border-t border-blue-200/50 mx-6"></div>
+
+            <div class="px-6 mb-3">
+                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Tài khoản</p>
+            </div>
+
+            <div class="px-3">
+                <a href="@Url.Action("#", "Customers")"
+                   class="flex items-center px-4 py-3.5 text-sm font-semibold rounded-r-lg border-l-[5px] transition-all duration-200
+                   @(ViewBag.Active == "Khachhang"
+                       ? "bg-white border-brand-blue text-brand-blue shadow-sm"
+                       : "border-transparent text-slate-600 hover:bg-blue-100 hover:text-brand-blue")">
+                    Hồ sơ khách hàng
+                </a>
+                <a href="@Url.Action("Index", "Customers")"
+                   class="flex items-center px-4 py-3.5 text-sm font-semibold rounded-r-lg border-l-[5px] transition-all duration-200
+                     @(ViewBag.Active == "Users"
+                         ? "bg-white border-brand-blue text-brand-blue shadow-sm"
+                         : "border-transparent text-slate-600 hover:bg-blue-100 hover:text-brand-blue")">
+                    Quản lý tài khoản
+                </a>
+            </div>
+        </nav>
+
+    </aside>
+
+    <div class="flex-1 flex flex-col h-screen w-full relative bg-white">
+
+        <header class="h-16 flex items-center justify-between px-8 border-b border-slate-100 bg-white sticky top-0 z-30 shadow-header">
+            <div>
+                <h1 class="text-xl font-bold text-slate-800">@ViewBag.Title</h1>
+            </div>
+
+            <div class="flex items-center gap-4">
+
+                <div class="text-right leading-tight hidden md:block">
+                    <p class="text-sm font-bold text-slate-700">Administrator</p>
+                    <a href="@Url.Action("Logout", "Auth")" class="text-[11px] font-medium text-slate-400 hover:text-red-500 transition-colors">
+                        Đăng xuất
+                    </a>
                 </div>
 
-                <div class="flex items-center gap-6 text-sm font-medium">
-                    <a href="/" target="_blank" class="text-gray-500 hover:text-black hover-underline-animation">Xem trang web</a>
-                    <a href="@Url.Action("Logout", "Admin")" class="text-red-600 hover:text-red-700 hover-underline-animation">Đăng xuất</a>
-                </div>
-            </header>
+                <div class="relative group cursor-pointer">
+                    <div class="h-10 w-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 text-white flex items-center justify-center font-bold text-lg shadow-lg ring-2 ring-white border border-blue-100">
+                        A
+                    </div>
 
-            <div class="flex-1 overflow-x-hidden overflow-y-auto p-8 md:p-12">
-                <div class="max-w-6xl mx-auto">
-                    @RenderBody()
+                    <span class="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full bg-green-500 ring-2 ring-white"></span>
                 </div>
 
-                <footer class="mt-20 py-6 border-t border-gray-200 text-center">
-                    <p class="text-xs text-gray-400 uppercase tracking-widest">
-                        Zella System &copy; @DateTime.Now.Year
-                    </p>
-                </footer>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-x-hidden overflow-y-auto p-8 bg-white">
+            <div class="w-full">
+                @RenderBody()
+            </div>
+
+            <div class="mt-12 pt-6 border-t border-gray-50 text-center">
+                <p class="text-[11px] text-gray-300 uppercase tracking-widest">&copy; @DateTime.Now.Year Zella Corp</p>
             </div>
         </main>
 
-        <div id="mobile-overlay" class="fixed inset-0 bg-black/50 z-30 hidden backdrop-blur-sm"></div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            // Logic cho Mobile Menu
-            const $sidebar = $('#sidebar');
-            const $overlay = $('#mobile-overlay');
-            const $btn = $('#mobile-menu-btn');
-
-            function toggleMenu() {
-                // Trên mobile, sidebar mặc định hidden, ta toggle class 'hidden' và thêm class absolute
-                if ($sidebar.hasClass('hidden')) {
-                    $sidebar.removeClass('hidden md:flex').addClass('absolute inset-y-0 left-0 z-40 shadow-2xl flex');
-                    $overlay.removeClass('hidden');
-                } else {
-                    $sidebar.addClass('hidden md:flex').removeClass('absolute inset-y-0 left-0 z-40 shadow-2xl flex');
-                    $overlay.addClass('hidden');
-                }
-            }
-
-            $btn.click(toggleMenu);
-            $overlay.click(toggleMenu);
-        });
-    </script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

@@ -4,15 +4,15 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="QlyFashionShopModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="QlyFashionShopModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="BienTheSanPham">
           <Key>
             <PropertyRef Name="MaBienThe" />
           </Key>
-          <Property Name="MaBienThe" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="MaSP" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="MaMau" Type="nvarchar" MaxLength="50" />
-          <Property Name="MaSize" Type="nvarchar" MaxLength="50" />
+          <Property Name="MaBienThe" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MaSP" Type="int" Nullable="false" />
+          <Property Name="MaMau" Type="int" />
+          <Property Name="MaSize" Type="int" />
           <Property Name="GiaBan" Type="decimal" Precision="18" Scale="2" />
           <Property Name="MaTrangThai" Type="int" />
           <Property Name="SoLuongTon" Type="int" Nullable="false" />
@@ -24,11 +24,7 @@
           </Key>
           <Property Name="MaCTDH" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="MaDH" Type="int" />
-          <Property Name="MaSP" Type="nvarchar" MaxLength="50" />
-          <Property Name="TenSP" Type="nvarchar" MaxLength="150" />
-          <Property Name="AnhSP" Type="varchar" MaxLength="200" />
-          <Property Name="Size" Type="nvarchar" MaxLength="50" />
-          <Property Name="Mau" Type="nvarchar" MaxLength="50" />
+          <Property Name="MaBienThe" Type="int" />
           <Property Name="SoLuong" Type="int" />
           <Property Name="DonGia" Type="decimal" Precision="18" Scale="2" />
         </EntityType>
@@ -38,9 +34,7 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="MaGioHang" Type="int" />
-          <Property Name="MaSP" Type="nvarchar" MaxLength="50" />
-          <Property Name="MaSize" Type="nvarchar" MaxLength="50" />
-          <Property Name="MaMau" Type="nvarchar" MaxLength="50" />
+          <Property Name="MaBienThe" Type="int" />
           <Property Name="SoLuong" Type="int" />
           <Property Name="DonGia" Type="decimal" Precision="18" Scale="2" />
         </EntityType>
@@ -48,10 +42,9 @@
           <Key>
             <PropertyRef Name="MaDM" />
           </Key>
-          <Property Name="MaDM" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MaDM" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TenDanhMuc" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="HinhAnhDaiDien" Type="char" MaxLength="100" />
-          <Property Name="MaDanhMucCha" Type="nvarchar" MaxLength="50" />
+          <Property Name="MaDanhMucCha" Type="int" />
           <Property Name="SoLuongSanPham" Type="int" />
         </EntityType>
         <EntityType Name="DonHang">
@@ -102,8 +95,8 @@
           <Key>
             <PropertyRef Name="MaKM" />
           </Key>
-          <Property Name="MaKM" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="MaSP" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MaKM" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MaSP" Type="int" Nullable="false" />
           <Property Name="TenChuongTrinh" Type="nvarchar" MaxLength="150" Nullable="false" />
           <Property Name="MoTa" Type="nvarchar" MaxLength="300" />
           <Property Name="PhanTramGiam" Type="decimal" Precision="5" Scale="2" />
@@ -115,14 +108,14 @@
           <Key>
             <PropertyRef Name="MaSize" />
           </Key>
-          <Property Name="MaSize" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MaSize" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TenSize" Type="nvarchar" MaxLength="20" Nullable="false" />
         </EntityType>
         <EntityType Name="MauSac">
           <Key>
             <PropertyRef Name="MaMau" />
           </Key>
-          <Property Name="MaMau" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MaMau" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TenMau" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="MaHex" Type="char" MaxLength="7" />
         </EntityType>
@@ -130,7 +123,7 @@
           <Key>
             <PropertyRef Name="MaNCC" />
           </Key>
-          <Property Name="MaNCC" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MaNCC" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TenNCC" Type="nvarchar" MaxLength="150" Nullable="false" />
           <Property Name="SDT" Type="nvarchar" MaxLength="15" />
           <Property Name="DiaChi" Type="nvarchar" MaxLength="200" />
@@ -154,14 +147,24 @@
           <Key>
             <PropertyRef Name="MaSP" />
           </Key>
-          <Property Name="MaSP" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="MaDM" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MaSP" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MaDM" Type="int" Nullable="false" />
           <Property Name="TenSanPham" Type="nvarchar" MaxLength="150" Nullable="false" />
           <Property Name="MoTa" Type="nvarchar(max)" />
           <Property Name="GiaBanLe" Type="decimal" Precision="18" Scale="2" />
           <Property Name="TrangThai" Type="nvarchar" MaxLength="50" />
           <Property Name="AnhSP" Type="char" MaxLength="50" />
-          <Property Name="MaNCC" Type="nvarchar" MaxLength="50" />
+          <Property Name="MaNCC" Type="int" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
         <EntityType Name="TTDONHANG">
           <Key>
@@ -182,19 +185,7 @@
           <Property Name="PasswordHash" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="CreatedAt" Type="datetime" />
         </EntityType>
-        <Association Name="FK_BienThe_Mau">
-          <End Role="MauSac" Type="Self.MauSac" Multiplicity="0..1" />
-          <End Role="BienTheSanPham" Type="Self.BienTheSanPham" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="MauSac">
-              <PropertyRef Name="MaMau" />
-            </Principal>
-            <Dependent Role="BienTheSanPham">
-              <PropertyRef Name="MaMau" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_BienThe_Size">
+        <Association Name="FK_BienTheSanPham_KichThuoc">
           <End Role="KichThuoc" Type="Self.KichThuoc" Multiplicity="0..1" />
           <End Role="BienTheSanPham" Type="Self.BienTheSanPham" Multiplicity="*" />
           <ReferentialConstraint>
@@ -206,7 +197,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_BienThe_SP">
+        <Association Name="FK_BienTheSanPham_MauSac">
+          <End Role="MauSac" Type="Self.MauSac" Multiplicity="0..1" />
+          <End Role="BienTheSanPham" Type="Self.BienTheSanPham" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MauSac">
+              <PropertyRef Name="MaMau" />
+            </Principal>
+            <Dependent Role="BienTheSanPham">
+              <PropertyRef Name="MaMau" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BienTheSanPham_SanPham">
           <End Role="SanPham" Type="Self.SanPham" Multiplicity="1" />
           <End Role="BienTheSanPham" Type="Self.BienTheSanPham" Multiplicity="*" />
           <ReferentialConstraint>
@@ -244,27 +247,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ChiTiet_SanPham">
-          <End Role="SanPham" Type="Self.SanPham" Multiplicity="0..1" />
-          <End Role="ChiTietGioHang" Type="Self.ChiTietGioHang" Multiplicity="*" />
+        <Association Name="FK_ChiTietDonHang_BienTheSanPham">
+          <End Role="BienTheSanPham" Type="Self.BienTheSanPham" Multiplicity="0..1" />
+          <End Role="ChiTietDonHang" Type="Self.ChiTietDonHang" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="SanPham">
-              <PropertyRef Name="MaSP" />
+            <Principal Role="BienTheSanPham">
+              <PropertyRef Name="MaBienThe" />
             </Principal>
-            <Dependent Role="ChiTietGioHang">
-              <PropertyRef Name="MaSP" />
+            <Dependent Role="ChiTietDonHang">
+              <PropertyRef Name="MaBienThe" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ChiTiet_SanPham_DH">
-          <End Role="SanPham" Type="Self.SanPham" Multiplicity="0..1" />
-          <End Role="ChiTietDonHang" Type="Self.ChiTietDonHang" Multiplicity="*" />
+        <Association Name="FK_ChiTietGioHang_BienTheSanPham">
+          <End Role="BienTheSanPham" Type="Self.BienTheSanPham" Multiplicity="0..1" />
+          <End Role="ChiTietGioHang" Type="Self.ChiTietGioHang" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="SanPham">
-              <PropertyRef Name="MaSP" />
+            <Principal Role="BienTheSanPham">
+              <PropertyRef Name="MaBienThe" />
             </Principal>
-            <Dependent Role="ChiTietDonHang">
-              <PropertyRef Name="MaSP" />
+            <Dependent Role="ChiTietGioHang">
+              <PropertyRef Name="MaBienThe" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -354,18 +357,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_SanPham_SanPham">
-          <End Role="SanPham" Type="Self.SanPham" Multiplicity="1" />
-          <End Role="SanPham1" Type="Self.SanPham" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="SanPham">
-              <PropertyRef Name="MaSP" />
-            </Principal>
-            <Dependent Role="SanPham1">
-              <PropertyRef Name="MaSP" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="fk_sp_ncc">
           <End Role="NhaCungCap" Type="Self.NhaCungCap" Multiplicity="0..1" />
           <End Role="SanPham" Type="Self.SanPham" Multiplicity="*" />
@@ -378,8 +369,33 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
         <Function Name="fn_GetActiveProductCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
         <Function Name="fn_GetTotalCustomerCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
         <Function Name="sp_LoginUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Email" Type="nvarchar" Mode="In" />
           <Parameter Name="Result" Type="int" Mode="InOut" />
@@ -401,6 +417,12 @@
           <Parameter Name="UserID" Type="int" Mode="InOut" />
           <Parameter Name="MaKH" Type="int" Mode="InOut" />
         </Function>
+        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="QlyFashionShopModelStoreContainer">
           <EntitySet Name="BienTheSanPham" EntityType="Self.BienTheSanPham" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ChiTietDonHang" EntityType="Self.ChiTietDonHang" Schema="dbo" store:Type="Tables" />
@@ -416,17 +438,18 @@
           <EntitySet Name="NhaCungCap" EntityType="Self.NhaCungCap" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NhanVien" EntityType="Self.NhanVien" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SanPham" EntityType="Self.SanPham" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TTDONHANG" EntityType="Self.TTDONHANG" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_BienThe_Mau" Association="Self.FK_BienThe_Mau">
-            <End Role="MauSac" EntitySet="MauSac" />
-            <End Role="BienTheSanPham" EntitySet="BienTheSanPham" />
-          </AssociationSet>
-          <AssociationSet Name="FK_BienThe_Size" Association="Self.FK_BienThe_Size">
+          <AssociationSet Name="FK_BienTheSanPham_KichThuoc" Association="Self.FK_BienTheSanPham_KichThuoc">
             <End Role="KichThuoc" EntitySet="KichThuoc" />
             <End Role="BienTheSanPham" EntitySet="BienTheSanPham" />
           </AssociationSet>
-          <AssociationSet Name="FK_BienThe_SP" Association="Self.FK_BienThe_SP">
+          <AssociationSet Name="FK_BienTheSanPham_MauSac" Association="Self.FK_BienTheSanPham_MauSac">
+            <End Role="MauSac" EntitySet="MauSac" />
+            <End Role="BienTheSanPham" EntitySet="BienTheSanPham" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BienTheSanPham_SanPham" Association="Self.FK_BienTheSanPham_SanPham">
             <End Role="SanPham" EntitySet="SanPham" />
             <End Role="BienTheSanPham" EntitySet="BienTheSanPham" />
           </AssociationSet>
@@ -438,13 +461,13 @@
             <End Role="GioHang" EntitySet="GioHang" />
             <End Role="ChiTietGioHang" EntitySet="ChiTietGioHang" />
           </AssociationSet>
-          <AssociationSet Name="FK_ChiTiet_SanPham" Association="Self.FK_ChiTiet_SanPham">
-            <End Role="SanPham" EntitySet="SanPham" />
-            <End Role="ChiTietGioHang" EntitySet="ChiTietGioHang" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ChiTiet_SanPham_DH" Association="Self.FK_ChiTiet_SanPham_DH">
-            <End Role="SanPham" EntitySet="SanPham" />
+          <AssociationSet Name="FK_ChiTietDonHang_BienTheSanPham" Association="Self.FK_ChiTietDonHang_BienTheSanPham">
+            <End Role="BienTheSanPham" EntitySet="BienTheSanPham" />
             <End Role="ChiTietDonHang" EntitySet="ChiTietDonHang" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ChiTietGioHang_BienTheSanPham" Association="Self.FK_ChiTietGioHang_BienTheSanPham">
+            <End Role="BienTheSanPham" EntitySet="BienTheSanPham" />
+            <End Role="ChiTietGioHang" EntitySet="ChiTietGioHang" />
           </AssociationSet>
           <AssociationSet Name="FK_DanhMuc_DanhMucCha" Association="Self.FK_DanhMuc_DanhMucCha">
             <End Role="DanhMucSanPham" EntitySet="DanhMucSanPham" />
@@ -474,16 +497,13 @@
             <End Role="DanhMucSanPham" EntitySet="DanhMucSanPham" />
             <End Role="SanPham" EntitySet="SanPham" />
           </AssociationSet>
-          <AssociationSet Name="FK_SanPham_SanPham" Association="Self.FK_SanPham_SanPham">
-            <End Role="SanPham" EntitySet="SanPham" />
-            <End Role="SanPham1" EntitySet="SanPham" />
-          </AssociationSet>
           <AssociationSet Name="fk_sp_ncc" Association="Self.fk_sp_ncc">
             <End Role="NhaCungCap" EntitySet="NhaCungCap" />
             <End Role="SanPham" EntitySet="SanPham" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="QlyFashionShopModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -491,17 +511,19 @@
           <Key>
             <PropertyRef Name="MaBienThe" />
           </Key>
-          <Property Name="MaBienThe" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="MaSP" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="MaMau" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="MaSize" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MaBienThe" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MaSP" Type="Int32" Nullable="false" />
+          <Property Name="MaMau" Type="Int32" />
+          <Property Name="MaSize" Type="Int32" />
           <Property Name="GiaBan" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="MaTrangThai" Type="Int32" />
           <Property Name="SoLuongTon" Type="Int32" Nullable="false" />
           <Property Name="AnhBienThe" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
-          <NavigationProperty Name="MauSac" Relationship="Self.FK_BienThe_Mau" FromRole="BienTheSanPham" ToRole="MauSac" />
-          <NavigationProperty Name="KichThuoc" Relationship="Self.FK_BienThe_Size" FromRole="BienTheSanPham" ToRole="KichThuoc" />
-          <NavigationProperty Name="SanPham" Relationship="Self.FK_BienThe_SP" FromRole="BienTheSanPham" ToRole="SanPham" />
+          <NavigationProperty Name="KichThuoc" Relationship="Self.FK_BienTheSanPham_KichThuoc" FromRole="BienTheSanPham" ToRole="KichThuoc" />
+          <NavigationProperty Name="MauSac" Relationship="Self.FK_BienTheSanPham_MauSac" FromRole="BienTheSanPham" ToRole="MauSac" />
+          <NavigationProperty Name="SanPham" Relationship="Self.FK_BienTheSanPham_SanPham" FromRole="BienTheSanPham" ToRole="SanPham" />
+          <NavigationProperty Name="ChiTietDonHangs" Relationship="Self.FK_ChiTietDonHang_BienTheSanPham" FromRole="BienTheSanPham" ToRole="ChiTietDonHang" />
+          <NavigationProperty Name="ChiTietGioHangs" Relationship="Self.FK_ChiTietGioHang_BienTheSanPham" FromRole="BienTheSanPham" ToRole="ChiTietGioHang" />
         </EntityType>
         <EntityType Name="ChiTietDonHang">
           <Key>
@@ -509,15 +531,11 @@
           </Key>
           <Property Name="MaCTDH" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="MaDH" Type="Int32" />
-          <Property Name="MaSP" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TenSP" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="AnhSP" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="Size" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Mau" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MaBienThe" Type="Int32" />
           <Property Name="SoLuong" Type="Int32" />
           <Property Name="DonGia" Type="Decimal" Precision="18" Scale="2" />
+          <NavigationProperty Name="BienTheSanPham" Relationship="Self.FK_ChiTietDonHang_BienTheSanPham" FromRole="ChiTietDonHang" ToRole="BienTheSanPham" />
           <NavigationProperty Name="DonHang" Relationship="Self.FK_ChiTiet_DonHang" FromRole="ChiTietDonHang" ToRole="DonHang" />
-          <NavigationProperty Name="SanPham" Relationship="Self.FK_ChiTiet_SanPham_DH" FromRole="ChiTietDonHang" ToRole="SanPham" />
         </EntityType>
         <EntityType Name="ChiTietGioHang">
           <Key>
@@ -525,22 +543,19 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="MaGioHang" Type="Int32" />
-          <Property Name="MaSP" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="MaSize" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="MaMau" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MaBienThe" Type="Int32" />
           <Property Name="SoLuong" Type="Int32" />
           <Property Name="DonGia" Type="Decimal" Precision="18" Scale="2" />
+          <NavigationProperty Name="BienTheSanPham" Relationship="Self.FK_ChiTietGioHang_BienTheSanPham" FromRole="ChiTietGioHang" ToRole="BienTheSanPham" />
           <NavigationProperty Name="GioHang" Relationship="Self.FK_ChiTiet_GioHang" FromRole="ChiTietGioHang" ToRole="GioHang" />
-          <NavigationProperty Name="SanPham" Relationship="Self.FK_ChiTiet_SanPham" FromRole="ChiTietGioHang" ToRole="SanPham" />
         </EntityType>
         <EntityType Name="DanhMucSanPham">
           <Key>
             <PropertyRef Name="MaDM" />
           </Key>
-          <Property Name="MaDM" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MaDM" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TenDanhMuc" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="HinhAnhDaiDien" Type="String" MaxLength="100" FixedLength="true" Unicode="false" />
-          <Property Name="MaDanhMucCha" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MaDanhMucCha" Type="Int32" />
           <Property Name="SoLuongSanPham" Type="Int32" />
           <NavigationProperty Name="DanhMucSanPham1" Relationship="Self.FK_DanhMuc_DanhMucCha" FromRole="DanhMucSanPham" ToRole="DanhMucSanPham1" />
           <NavigationProperty Name="DanhMucSanPham2" Relationship="Self.FK_DanhMuc_DanhMucCha" FromRole="DanhMucSanPham1" ToRole="DanhMucSanPham" />
@@ -602,8 +617,8 @@
           <Key>
             <PropertyRef Name="MaKM" />
           </Key>
-          <Property Name="MaKM" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="MaSP" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MaKM" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MaSP" Type="Int32" Nullable="false" />
           <Property Name="TenChuongTrinh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="MoTa" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
           <Property Name="PhanTramGiam" Type="Decimal" Precision="5" Scale="2" />
@@ -616,24 +631,24 @@
           <Key>
             <PropertyRef Name="MaSize" />
           </Key>
-          <Property Name="MaSize" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MaSize" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TenSize" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="BienTheSanPhams" Relationship="Self.FK_BienThe_Size" FromRole="KichThuoc" ToRole="BienTheSanPham" />
+          <NavigationProperty Name="BienTheSanPhams" Relationship="Self.FK_BienTheSanPham_KichThuoc" FromRole="KichThuoc" ToRole="BienTheSanPham" />
         </EntityType>
         <EntityType Name="MauSac">
           <Key>
             <PropertyRef Name="MaMau" />
           </Key>
-          <Property Name="MaMau" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MaMau" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TenMau" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="MaHex" Type="String" MaxLength="7" FixedLength="true" Unicode="false" />
-          <NavigationProperty Name="BienTheSanPhams" Relationship="Self.FK_BienThe_Mau" FromRole="MauSac" ToRole="BienTheSanPham" />
+          <NavigationProperty Name="BienTheSanPhams" Relationship="Self.FK_BienTheSanPham_MauSac" FromRole="MauSac" ToRole="BienTheSanPham" />
         </EntityType>
         <EntityType Name="NhaCungCap">
           <Key>
             <PropertyRef Name="MaNCC" />
           </Key>
-          <Property Name="MaNCC" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MaNCC" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TenNCC" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="SDT" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
           <Property Name="DiaChi" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
@@ -658,22 +673,28 @@
           <Key>
             <PropertyRef Name="MaSP" />
           </Key>
-          <Property Name="MaSP" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="MaDM" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MaSP" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MaDM" Type="Int32" Nullable="false" />
           <Property Name="TenSanPham" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="MoTa" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="GiaBanLe" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="TrangThai" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="AnhSP" Type="String" MaxLength="50" FixedLength="true" Unicode="false" />
-          <Property Name="MaNCC" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="BienTheSanPhams" Relationship="Self.FK_BienThe_SP" FromRole="SanPham" ToRole="BienTheSanPham" />
-          <NavigationProperty Name="ChiTietDonHangs" Relationship="Self.FK_ChiTiet_SanPham_DH" FromRole="SanPham" ToRole="ChiTietDonHang" />
-          <NavigationProperty Name="ChiTietGioHangs" Relationship="Self.FK_ChiTiet_SanPham" FromRole="SanPham" ToRole="ChiTietGioHang" />
+          <Property Name="MaNCC" Type="Int32" />
+          <NavigationProperty Name="BienTheSanPhams" Relationship="Self.FK_BienTheSanPham_SanPham" FromRole="SanPham" ToRole="BienTheSanPham" />
           <NavigationProperty Name="DanhMucSanPham" Relationship="Self.FK_SanPham_DanhMuc" FromRole="SanPham" ToRole="DanhMucSanPham" />
           <NavigationProperty Name="KhuyenMais" Relationship="Self.FK_KM_SP" FromRole="SanPham" ToRole="KhuyenMai" />
           <NavigationProperty Name="NhaCungCap" Relationship="Self.fk_sp_ncc" FromRole="SanPham" ToRole="NhaCungCap" />
-          <NavigationProperty Name="SanPham1" Relationship="Self.FK_SanPham_SanPham" FromRole="SanPham" ToRole="SanPham1" />
-          <NavigationProperty Name="SanPham2" Relationship="Self.FK_SanPham_SanPham" FromRole="SanPham1" ToRole="SanPham" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <EntityType Name="TTDONHANG">
           <Key>
@@ -696,19 +717,7 @@
           <Property Name="CreatedAt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="KhachHangs" Relationship="Self.FK_KhachHang_User" FromRole="Users" ToRole="KhachHang" />
         </EntityType>
-        <Association Name="FK_BienThe_Mau">
-          <End Role="MauSac" Type="Self.MauSac" Multiplicity="0..1" />
-          <End Role="BienTheSanPham" Type="Self.BienTheSanPham" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="MauSac">
-              <PropertyRef Name="MaMau" />
-            </Principal>
-            <Dependent Role="BienTheSanPham">
-              <PropertyRef Name="MaMau" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_BienThe_Size">
+        <Association Name="FK_BienTheSanPham_KichThuoc">
           <End Role="KichThuoc" Type="Self.KichThuoc" Multiplicity="0..1" />
           <End Role="BienTheSanPham" Type="Self.BienTheSanPham" Multiplicity="*" />
           <ReferentialConstraint>
@@ -720,7 +729,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_BienThe_SP">
+        <Association Name="FK_BienTheSanPham_MauSac">
+          <End Role="MauSac" Type="Self.MauSac" Multiplicity="0..1" />
+          <End Role="BienTheSanPham" Type="Self.BienTheSanPham" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MauSac">
+              <PropertyRef Name="MaMau" />
+            </Principal>
+            <Dependent Role="BienTheSanPham">
+              <PropertyRef Name="MaMau" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BienTheSanPham_SanPham">
           <End Role="SanPham" Type="Self.SanPham" Multiplicity="1" />
           <End Role="BienTheSanPham" Type="Self.BienTheSanPham" Multiplicity="*" />
           <ReferentialConstraint>
@@ -729,6 +750,30 @@
             </Principal>
             <Dependent Role="BienTheSanPham">
               <PropertyRef Name="MaSP" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ChiTietDonHang_BienTheSanPham">
+          <End Role="BienTheSanPham" Type="Self.BienTheSanPham" Multiplicity="0..1" />
+          <End Role="ChiTietDonHang" Type="Self.ChiTietDonHang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BienTheSanPham">
+              <PropertyRef Name="MaBienThe" />
+            </Principal>
+            <Dependent Role="ChiTietDonHang">
+              <PropertyRef Name="MaBienThe" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ChiTietGioHang_BienTheSanPham">
+          <End Role="BienTheSanPham" Type="Self.BienTheSanPham" Multiplicity="0..1" />
+          <End Role="ChiTietGioHang" Type="Self.ChiTietGioHang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BienTheSanPham">
+              <PropertyRef Name="MaBienThe" />
+            </Principal>
+            <Dependent Role="ChiTietGioHang">
+              <PropertyRef Name="MaBienThe" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -746,18 +791,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ChiTiet_SanPham_DH">
-          <End Role="SanPham" Type="Self.SanPham" Multiplicity="0..1" />
-          <End Role="ChiTietDonHang" Type="Self.ChiTietDonHang" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SanPham">
-              <PropertyRef Name="MaSP" />
-            </Principal>
-            <Dependent Role="ChiTietDonHang">
-              <PropertyRef Name="MaSP" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_ChiTiet_GioHang">
           <End Role="GioHang" Type="Self.GioHang" Multiplicity="0..1" />
           <End Role="ChiTietGioHang" Type="Self.ChiTietGioHang" Multiplicity="*" />
@@ -767,18 +800,6 @@
             </Principal>
             <Dependent Role="ChiTietGioHang">
               <PropertyRef Name="MaGioHang" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ChiTiet_SanPham">
-          <End Role="SanPham" Type="Self.SanPham" Multiplicity="0..1" />
-          <End Role="ChiTietGioHang" Type="Self.ChiTietGioHang" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SanPham">
-              <PropertyRef Name="MaSP" />
-            </Principal>
-            <Dependent Role="ChiTietGioHang">
-              <PropertyRef Name="MaSP" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -880,19 +901,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_SanPham_SanPham">
-          <End Role="SanPham" Type="Self.SanPham" Multiplicity="1" />
-          <End Role="SanPham1" Type="Self.SanPham" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="SanPham">
-              <PropertyRef Name="MaSP" />
-            </Principal>
-            <Dependent Role="SanPham1">
-              <PropertyRef Name="MaSP" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="QlyFashionShopEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="BienTheSanPhams" EntityType="Self.BienTheSanPham" />
           <EntitySet Name="ChiTietDonHangs" EntityType="Self.ChiTietDonHang" />
           <EntitySet Name="ChiTietGioHangs" EntityType="Self.ChiTietGioHang" />
@@ -907,34 +916,35 @@
           <EntitySet Name="NhaCungCaps" EntityType="Self.NhaCungCap" />
           <EntitySet Name="NhanViens" EntityType="Self.NhanVien" />
           <EntitySet Name="SanPhams" EntityType="Self.SanPham" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
           <EntitySet Name="TTDONHANGs" EntityType="Self.TTDONHANG" />
           <EntitySet Name="Users" EntityType="Self.User" />
-          <AssociationSet Name="FK_BienThe_Mau" Association="Self.FK_BienThe_Mau">
-            <End Role="MauSac" EntitySet="MauSacs" />
-            <End Role="BienTheSanPham" EntitySet="BienTheSanPhams" />
-          </AssociationSet>
-          <AssociationSet Name="FK_BienThe_Size" Association="Self.FK_BienThe_Size">
+          <AssociationSet Name="FK_BienTheSanPham_KichThuoc" Association="Self.FK_BienTheSanPham_KichThuoc">
             <End Role="KichThuoc" EntitySet="KichThuocs" />
             <End Role="BienTheSanPham" EntitySet="BienTheSanPhams" />
           </AssociationSet>
-          <AssociationSet Name="FK_BienThe_SP" Association="Self.FK_BienThe_SP">
+          <AssociationSet Name="FK_BienTheSanPham_MauSac" Association="Self.FK_BienTheSanPham_MauSac">
+            <End Role="MauSac" EntitySet="MauSacs" />
+            <End Role="BienTheSanPham" EntitySet="BienTheSanPhams" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BienTheSanPham_SanPham" Association="Self.FK_BienTheSanPham_SanPham">
             <End Role="SanPham" EntitySet="SanPhams" />
             <End Role="BienTheSanPham" EntitySet="BienTheSanPhams" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ChiTietDonHang_BienTheSanPham" Association="Self.FK_ChiTietDonHang_BienTheSanPham">
+            <End Role="BienTheSanPham" EntitySet="BienTheSanPhams" />
+            <End Role="ChiTietDonHang" EntitySet="ChiTietDonHangs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ChiTietGioHang_BienTheSanPham" Association="Self.FK_ChiTietGioHang_BienTheSanPham">
+            <End Role="BienTheSanPham" EntitySet="BienTheSanPhams" />
+            <End Role="ChiTietGioHang" EntitySet="ChiTietGioHangs" />
           </AssociationSet>
           <AssociationSet Name="FK_ChiTiet_DonHang" Association="Self.FK_ChiTiet_DonHang">
             <End Role="DonHang" EntitySet="DonHangs" />
             <End Role="ChiTietDonHang" EntitySet="ChiTietDonHangs" />
           </AssociationSet>
-          <AssociationSet Name="FK_ChiTiet_SanPham_DH" Association="Self.FK_ChiTiet_SanPham_DH">
-            <End Role="SanPham" EntitySet="SanPhams" />
-            <End Role="ChiTietDonHang" EntitySet="ChiTietDonHangs" />
-          </AssociationSet>
           <AssociationSet Name="FK_ChiTiet_GioHang" Association="Self.FK_ChiTiet_GioHang">
             <End Role="GioHang" EntitySet="GioHangs" />
-            <End Role="ChiTietGioHang" EntitySet="ChiTietGioHangs" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ChiTiet_SanPham" Association="Self.FK_ChiTiet_SanPham">
-            <End Role="SanPham" EntitySet="SanPhams" />
             <End Role="ChiTietGioHang" EntitySet="ChiTietGioHangs" />
           </AssociationSet>
           <AssociationSet Name="FK_DanhMuc_DanhMucCha" Association="Self.FK_DanhMuc_DanhMucCha">
@@ -969,10 +979,30 @@
             <End Role="NhaCungCap" EntitySet="NhaCungCaps" />
             <End Role="SanPham" EntitySet="SanPhams" />
           </AssociationSet>
-          <AssociationSet Name="FK_SanPham_SanPham" Association="Self.FK_SanPham_SanPham">
-            <End Role="SanPham" EntitySet="SanPhams" />
-            <End Role="SanPham1" EntitySet="SanPhams" />
-          </AssociationSet>
+          <FunctionImport Name="sp_alterdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(QlyFashionShopModel.sp_helpdiagramdefinition_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(QlyFashionShopModel.sp_helpdiagrams_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
           <FunctionImport Name="sp_LoginUser">
             <Parameter Name="Email" Mode="In" Type="String" />
             <Parameter Name="Result" Mode="InOut" Type="Int32" />
@@ -994,13 +1024,30 @@
             <Parameter Name="UserID" Mode="InOut" Type="Int32" />
             <Parameter Name="MaKH" Mode="InOut" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="sp_renamediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_upgraddiagrams" />
         </EntityContainer>
+        <ComplexType Name="sp_helpdiagramdefinition_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="QlyFashionShopModelStoreContainer" CdmEntityContainer="Entities">
+        <EntityContainerMapping StorageEntityContainer="QlyFashionShopModelStoreContainer" CdmEntityContainer="QlyFashionShopEntities">
           <EntitySetMapping Name="BienTheSanPhams">
             <EntityTypeMapping TypeName="QlyFashionShopModel.BienTheSanPham">
               <MappingFragment StoreEntitySet="BienTheSanPham">
@@ -1020,11 +1067,7 @@
               <MappingFragment StoreEntitySet="ChiTietDonHang">
                 <ScalarProperty Name="MaCTDH" ColumnName="MaCTDH" />
                 <ScalarProperty Name="MaDH" ColumnName="MaDH" />
-                <ScalarProperty Name="MaSP" ColumnName="MaSP" />
-                <ScalarProperty Name="TenSP" ColumnName="TenSP" />
-                <ScalarProperty Name="AnhSP" ColumnName="AnhSP" />
-                <ScalarProperty Name="Size" ColumnName="Size" />
-                <ScalarProperty Name="Mau" ColumnName="Mau" />
+                <ScalarProperty Name="MaBienThe" ColumnName="MaBienThe" />
                 <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
                 <ScalarProperty Name="DonGia" ColumnName="DonGia" />
               </MappingFragment>
@@ -1035,9 +1078,7 @@
               <MappingFragment StoreEntitySet="ChiTietGioHang">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="MaGioHang" ColumnName="MaGioHang" />
-                <ScalarProperty Name="MaSP" ColumnName="MaSP" />
-                <ScalarProperty Name="MaSize" ColumnName="MaSize" />
-                <ScalarProperty Name="MaMau" ColumnName="MaMau" />
+                <ScalarProperty Name="MaBienThe" ColumnName="MaBienThe" />
                 <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
                 <ScalarProperty Name="DonGia" ColumnName="DonGia" />
               </MappingFragment>
@@ -1048,7 +1089,6 @@
               <MappingFragment StoreEntitySet="DanhMucSanPham">
                 <ScalarProperty Name="MaDM" ColumnName="MaDM" />
                 <ScalarProperty Name="TenDanhMuc" ColumnName="TenDanhMuc" />
-                <ScalarProperty Name="HinhAnhDaiDien" ColumnName="HinhAnhDaiDien" />
                 <ScalarProperty Name="MaDanhMucCha" ColumnName="MaDanhMucCha" />
                 <ScalarProperty Name="SoLuongSanPham" ColumnName="SoLuongSanPham" />
               </MappingFragment>
@@ -1173,6 +1213,17 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="QlyFashionShopModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="TTDONHANGs">
             <EntityTypeMapping TypeName="QlyFashionShopModel.TTDONHANG">
               <MappingFragment StoreEntitySet="TTDONHANG">
@@ -1194,8 +1245,32 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="QlyFashionShopModel.Store.sp_alterdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="QlyFashionShopModel.Store.sp_creatediagram" />
+          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="QlyFashionShopModel.Store.sp_dropdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="QlyFashionShopModel.Store.sp_helpdiagramdefinition">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="QlyFashionShopModel.sp_helpdiagramdefinition_Result">
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="QlyFashionShopModel.Store.sp_helpdiagrams">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="QlyFashionShopModel.sp_helpdiagrams_Result">
+                <ScalarProperty Name="Database" ColumnName="Database" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_LoginUser" FunctionName="QlyFashionShopModel.Store.sp_LoginUser" />
           <FunctionImportMapping FunctionImportName="sp_RegisterUserWithSeparateName" FunctionName="QlyFashionShopModel.Store.sp_RegisterUserWithSeparateName" />
+          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="QlyFashionShopModel.Store.sp_renamediagram" />
+          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="QlyFashionShopModel.Store.sp_upgraddiagrams" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

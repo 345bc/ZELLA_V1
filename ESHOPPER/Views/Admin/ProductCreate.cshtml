@@ -1,0 +1,155 @@
+﻿@model ESHOPPER.Models.SanPham
+
+@{
+    ViewBag.Title = "Thêm mới sản phẩm";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Active = "Sanpham";
+}
+
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+    <div>
+        <nav class="flex mb-2 text-sm text-slate-500">
+            <a href="@Url.Action("Index")" class="hover:text-brand-blue">Sản phẩm</a>
+            <span class="mx-2">/</span>
+            <span class="text-slate-800 font-medium">Thêm mới</span>
+        </nav>
+        <h2 class="text-2xl font-bold text-slate-800">Tạo sản phẩm mới</h2>
+        <p class="text-sm text-slate-500 mt-1">Điền thông tin chi tiết để thêm sản phẩm vào hệ thống.</p>
+    </div>
+    <div class="flex items-center gap-3">
+        <a href="@Url.Action("ProductList")" class="px-4 py-2 bg-white border border-slate-300 text-slate-700 font-medium rounded-lg hover:bg-slate-50 transition-colors">
+            Hủy bỏ
+        </a>
+        <button form="createProductForm" type="submit" class="px-4 py-2 bg-brand-blue hover:bg-brand-dark text-white font-bold rounded-lg shadow-md transition-colors flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            Tạo sản phẩm
+        </button>
+    </div>
+</div>
+
+@using (Html.BeginForm("    ", "Admin", FormMethod.Post, new { id = "createProductForm", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+        <div class="lg:col-span-2 space-y-6">
+
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+                <h3 class="text-lg font-semibold text-slate-800 mb-4 border-b pb-2">Thông tin cơ bản</h3>
+
+                <div class="space-y-5">
+                    <div>
+                        @Html.LabelFor(model => model.TenSanPham, "Tên sản phẩm", new { @class = "block text-sm font-medium text-slate-700 mb-1" })
+                        @Html.EditorFor(model => model.TenSanPham, new { htmlAttributes = new { @class = "w-full rounded-lg border-slate-300 focus:border-brand-blue focus:ring focus:ring-blue-200 transition duration-200 placeholder-slate-400", placeholder = "Ví dụ: Áo thun nam Polo..." } })
+                        @Html.ValidationMessageFor(model => model.TenSanPham, "", new { @class = "text-red-500 text-xs mt-1" })
+                    </div>
+
+                    <div>
+                        @Html.LabelFor(model => model.MoTa, "Mô tả chi tiết", new { @class = "block text-sm font-medium text-slate-700 mb-1" })
+                        @Html.TextAreaFor(model => model.MoTa, new { @class = "w-full rounded-lg border-slate-300 focus:border-brand-blue focus:ring focus:ring-blue-200 transition duration-200 placeholder-slate-400 min-h-[160px]", placeholder = "Nhập đặc điểm, chất liệu, thông số kỹ thuật..." })
+                        @Html.ValidationMessageFor(model => model.MoTa, "", new { @class = "text-red-500 text-xs mt-1" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+                <h3 class="text-lg font-semibold text-slate-800 mb-4 border-b pb-2">Hình ảnh sản phẩm</h3>
+
+                <div class="flex flex-col items-center justify-center w-full">
+                    <label for="ImageUpload" class="flex flex-col items-center justify-center w-full h-52 border-2 border-slate-300 border-dashed rounded-xl cursor-pointer bg-slate-50 hover:bg-blue-50 hover:border-brand-blue transition-all group overflow-hidden relative">
+
+                        <div id="uploadPlaceholder" class="flex flex-col items-center justify-center pt-5 pb-6">
+                            <div class="p-3 bg-white rounded-full shadow-sm mb-3 group-hover:scale-110 transition-transform">
+                                <svg class="w-8 h-8 text-slate-400 group-hover:text-brand-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                            </div>
+                            <p class="mb-2 text-sm text-slate-500"><span class="font-semibold text-brand-blue">Nhấn để tải lên</span> hoặc kéo thả</p>
+                            <p class="text-xs text-slate-400">PNG, JPG hoặc GIF (Tối đa 5MB)</p>
+                        </div>
+
+                        <img id="previewImage" src="#" class="hidden absolute inset-0 w-full h-full object-contain p-2 bg-white" />
+
+                        <input id="ImageUpload" name="ImageUpload" type="file" class="hidden" accept="image/*" />
+                    </label>
+                    @Html.ValidationMessageFor(model => model.AnhSP, "", new { @class = "text-red-500 text-xs mt-2 self-start" })
+                </div>
+            </div>
+        </div>
+
+        <div class="lg:col-span-1 space-y-6">
+
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+                <h3 class="text-sm font-bold uppercase text-slate-400 tracking-wider mb-4">Thiết lập bán hàng</h3>
+
+                <div class="space-y-4">
+                    <div>
+                        @Html.LabelFor(model => model.MaDM, "Danh mục", new { @class = "block text-sm font-medium text-slate-700 mb-1" })
+                        @Html.DropDownList("MaDM", null, "--- Chọn danh mục ---", htmlAttributes: new { @class = "w-full rounded-lg border-slate-300 focus:border-brand-blue focus:ring focus:ring-blue-200 bg-slate-50" })
+                        @Html.ValidationMessageFor(model => model.MaDM, "", new { @class = "text-red-500 text-xs mt-1" })
+                    </div>
+
+                    <div>
+                        @Html.LabelFor(model => model.MaNCC, "Nhà cung cấp", new { @class = "block text-sm font-medium text-slate-700 mb-1" })
+                        @Html.DropDownList("MaNCC", null, "--- Chọn nhà cung cấp ---", htmlAttributes: new { @class = "w-full rounded-lg border-slate-300 focus:border-brand-blue focus:ring focus:ring-blue-200 bg-slate-50" })
+                        @Html.ValidationMessageFor(model => model.MaNCC, "", new { @class = "text-red-500 text-xs mt-1" })
+                    </div>
+
+                    <div>
+                        @Html.LabelFor(model => model.GiaBanLe, "Giá bán lẻ", new { @class = "block text-sm font-medium text-slate-700 mb-1" })
+                        <div class="relative">
+                            @Html.EditorFor(model => model.GiaBanLe, new { htmlAttributes = new { @class = "w-full rounded-lg border-slate-300 focus:border-brand-blue focus:ring focus:ring-blue-200 pl-4 pr-12 font-bold text-slate-700", type = "number", placeholder = "0" } })
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                <span class="text-slate-500 text-sm font-medium">VNĐ</span>
+                            </div>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.GiaBanLe, "", new { @class = "text-red-500 text-xs mt-1" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+                <h3 class="text-sm font-bold uppercase text-slate-400 tracking-wider mb-4">Trạng thái hiển thị</h3>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Chế độ</label>
+                    <div class="flex items-center gap-3">
+                        <div class="relative flex items-center w-full">
+                            <select name="TrangThai" class="w-full rounded-lg border-slate-300 focus:border-brand-blue focus:ring focus:ring-blue-200">
+                                <option value="Hoạt động">Hoạt động</option>
+                            </select>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-2">Sản phẩm "Công khai" sẽ xuất hiện trên trang chủ và kết quả tìm kiếm.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        // Script xem trước ảnh khi upload
+        document.getElementById('ImageUpload').onchange = function (evt) {
+            var tgt = evt.target || window.event.srcElement,
+                files = tgt.files;
+
+            if (FileReader && files && files.length) {
+                var fr = new FileReader();
+                fr.onload = function () {
+                    var img = document.getElementById('previewImage');
+                    var placeholder = document.getElementById('uploadPlaceholder');
+
+                    img.src = fr.result;
+                    img.classList.remove('hidden');
+                    placeholder.classList.add('opacity-0'); // Ẩn placeholder nhưng giữ layout
+                }
+                fr.readAsDataURL(files[0]);
+            }
+        }
+    </script>
+}
