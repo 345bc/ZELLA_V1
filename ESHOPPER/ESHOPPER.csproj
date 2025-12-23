@@ -211,12 +211,84 @@
     <Compile Include="Helper\JwtConfig.cs" />
     <Compile Include="Helper\JwtHelper.cs" />
     <Compile Include="Models\AdminViewModel.cs" />
+    <Compile Include="Models\BienTheSanPham.cs">
+      <DependentUpon>SModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CartItem.cs" />
     <Compile Include="Models\CartViewModel.cs" />
+    <Compile Include="Models\ChiTietDonHang.cs">
+      <DependentUpon>SModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ChiTietGioHang.cs">
+      <DependentUpon>SModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DanhMucSanPham.cs">
+      <DependentUpon>SModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DonHang.cs">
+      <DependentUpon>SModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GioHang.cs">
+      <DependentUpon>SModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GioHangPartial.cs" />
     <Compile Include="Models\HomeViewModel.cs" />
+    <Compile Include="Models\Intro.cs">
+      <DependentUpon>SModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\KhachHang.cs">
+      <DependentUpon>SModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\KhuyenMai.cs">
+      <DependentUpon>SModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\KichThuoc.cs">
+      <DependentUpon>SModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MauSac.cs">
+      <DependentUpon>SModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\NhaCungCap.cs">
+      <DependentUpon>SModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\NhanVien.cs">
+      <DependentUpon>SModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ProductDetailsViewModel.cs" />
+    <Compile Include="Models\SanPham.cs">
+      <DependentUpon>SModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ShopViewModel.cs" />
+    <Compile Include="Models\SModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
+      <DependentUpon>SModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagrams_Result.cs">
+      <DependentUpon>SModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sysdiagram.cs">
+      <DependentUpon>SModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TTDONHANG.cs">
+      <DependentUpon>SModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\User.cs">
+      <DependentUpon>SModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\VnPayLibrary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -307,6 +379,16 @@
     <Content Include="Images\vendor-6.jpg" />
     <Content Include="Images\vendor-7.jpg" />
     <Content Include="Images\vendor-8.jpg" />
+    <Content Include="Models\SModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>SModel.edmx</DependentUpon>
+      <LastGenOutput>SModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\SModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>SModel.edmx</DependentUpon>
+      <LastGenOutput>SModel.cs</LastGenOutput>
+    </Content>
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
@@ -406,6 +488,13 @@
     <Content Include="Content\scss\style.scss" />
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <EntityDeploy Include="Models\SModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>SModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\SModel.edmx.diagram">
+      <DependentUpon>SModel.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
