@@ -35,7 +35,7 @@ namespace ESHOPPER.Controllers.WebPage
 
         public ActionResult Shop(string searchString, string sortOrder, string priceRange, int? categoryId, int page = 1)
         {
-            int pageSize = 9;
+            int pageSize = 8;
             var products = db.SanPhams.AsQueryable();
 
             var categories = db.DanhMucSanPhams.ToList();
