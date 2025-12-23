@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using System.Web.Security;
 namespace ESHOPPER
 {
     public class MvcApplication : System.Web.HttpApplication
@@ -18,5 +20,20 @@ namespace ESHOPPER
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
+        protected void Application_AuthenticateRequest(object sender, EventArgs e)
+        {
+            if (HttpContext.Current.User == null) return;
+
+            if (HttpContext.Current.User.Identity is FormsIdentity identity)
+            {
+                var ticket = identity.Ticket;
+
+                var roles = ticket.UserData.Split(',');
+
+                var principal = new GenericPrincipal(identity, roles);
+                HttpContext.Current.User = principal;
+            }
+        }
+
     }
 }

@@ -5,20 +5,20 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     ViewBag.Active = "Sanpham";
 
-<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-    <div>
-        <h2 class="text-2xl font-bold text-slate-800">@ViewBag.Title</h2>
-        <p class="text-sm text-slate-500">Quản lý kho hàng, giá bán và thông tin sản phẩm trên hệ thống.</p>
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div>
+            <h2 class="text-2xl font-bold text-slate-800">@ViewBag.Title</h2>
+            <p class="text-sm text-slate-500">Quản lý kho hàng, giá bán và thông tin sản phẩm trên hệ thống.</p>
+        </div>
+            <div class="flex items-center gap-3">
+                <a href="@Url.Action("ProductCreate")" class="inline-flex items-center px-4 py-2.5 bg-brand-blue hover:bg-brand-dark text-white text-sm font-semibold rounded-lg transition-all shadow-sm gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                    Thêm sản phẩm mới
+                </a>
+            </div>
     </div>
-    <div class="flex items-center gap-3">
-        <a href="@Url.Action("ProductCreate")" class="inline-flex items-center px-4 py-2.5 bg-brand-blue hover:bg-brand-dark text-white text-sm font-semibold rounded-lg transition-all shadow-sm gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-            </svg>
-            Thêm sản phẩm mới
-        </a>
-    </div>
-</div>
 
 <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
     <div class="p-4 border-b border-slate-100 bg-slate-50/30 flex justify-between items-center">
@@ -45,7 +45,7 @@
                                 @if (!string.IsNullOrEmpty(item.AnhSP))
                                 {
                                     <a href="@Url.Action("Index", "Product_Variants",new { id = item.MaSP })">
-                                        <img src="@Url.Content("~/Images/Products/" + item.AnhSP)" class="h-12 w-12 rounded-lg object-cover border border-slate-100 shadow-sm" alt="@item.TenSanPham" style="object-fit:contain"/>
+                                        <img src="@Url.Content("~/Images/Products/" + item.AnhSP)" class="h-12 w-12 rounded-lg object-cover border border-slate-100 shadow-sm" alt="@item.TenSanPham" style="object-fit:contain" />
                                     </a>
                                 }
                                 else

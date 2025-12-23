@@ -208,8 +208,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helper\JwtConfig.cs" />
-    <Compile Include="Helper\JwtHelper.cs" />
     <Compile Include="Models\AdminViewModel.cs" />
     <Compile Include="Models\BienTheSanPham.cs">
       <DependentUpon>SModell.tt</DependentUpon>

@@ -117,7 +117,7 @@
     .product-img-wrap {
         position: relative;
         overflow: hidden;
-        height: 280px;
+        height: 300px;
     }
 
         .product-img-wrap img {
@@ -219,15 +219,12 @@
 
                     @if (Model.Categories != null)
                     {
-                        // Lấy cấp Cha
                         var parents = Model.Categories.Where(x => x.MaDanhMucCha == null).ToList();
 
                         foreach (var parent in parents)
                         {
-                            // Lấy cấp Con
                             var children = Model.Categories.Where(x => x.MaDanhMucCha == parent.MaDM).ToList();
 
-                            // Kiểm tra Active
                             bool isChildActive = children.Any(c => c.MaDM == Model.CurrentCategoryId);
                             bool isParentActive = (Model.CurrentCategoryId == parent.MaDM) || isChildActive;
                             string collapseId = "cat-" + parent.MaDM;
@@ -354,14 +351,13 @@
                 {
                     foreach (var item in Model.SanPhams)
                     {
-                        <div class="col-lg-4 col-md-6 col-sm-12 pb-4">
+                        <div class="col-lg-3 col-md-6 col-sm-12 pb-4">
                             <div class="product-card-modern shadow-sm h-100 border-0">
 
                                 <div class="product-img-wrap position-relative bg-light rounded-top">
                                     <img src="@(string.IsNullOrEmpty(item.AnhSP) ? "/Images/no-image.png" : Url.Content("~/Images/Products/" + item.AnhSP))"
                                          alt="@item.TenSanPham"
-                                         class="w-100"
-                                         style="height: 250px; object-fit: contain; object-position: center;">
+                                         >
 
                                     <div class="product-action-overlay">
                                         <a href="@Url.Action("ProductDetails", "Home", new { id = item.MaSP })" class="btn-action" title="Xem chi tiết">

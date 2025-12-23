@@ -1,5 +1,5 @@
 ﻿using BCrypt.Net;
-using ESHOPPER.Helpers;
+//using ESHOPPER.Helpers;
 using ESHOPPER.Models;
 using System;
 using System.Collections.Generic;
@@ -75,7 +75,24 @@ namespace ESHOPPER.Controllers.Auth
                 Session["UserRole"] = user.Role;
                 Session["MaKH"] = maKH;
 
-                FormsAuthentication.SetAuthCookie(user.Name, false);
+                var ticket = new FormsAuthenticationTicket(
+                    1,
+                    user.Name,                 // username
+                    DateTime.Now,
+                    DateTime.Now.AddHours(3),  // thời hạn login
+                    false,
+                    user.Role                  // 👈 ROLE ĐƯA VÀO USERDATA
+                );
+
+                string encryptedTicket = FormsAuthentication.Encrypt(ticket);
+
+                var cookie = new HttpCookie(
+                    FormsAuthentication.FormsCookieName,
+                    encryptedTicket
+                );
+
+                Response.Cookies.Add(cookie);
+
 
                 // ====================================================
                 // D. [QUAN TRỌNG] ĐỒNG BỘ GIỎ HÀNG (SESSION -> DB)
@@ -167,7 +184,6 @@ namespace ESHOPPER.Controllers.Auth
                 return Redirect(returnUrl);
             }
 
-            // 4. TRƯỜNG HỢP B: URL Tuyệt đối (Ví dụ: https://localhost:44339/Home/Cart)
             // Ta phải tự kiểm tra xem nó có cùng Domain với web mình không
             Uri uriResult;
             // Thử tạo đối tượng Uri từ chuỗi returnUrl

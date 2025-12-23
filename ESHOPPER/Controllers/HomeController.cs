@@ -1,10 +1,11 @@
 ﻿using ESHOPPER.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using System.Data.Entity;
 
 namespace ESHOPPER.Controllers.WebPage
 {
@@ -420,36 +421,8 @@ namespace ESHOPPER.Controllers.WebPage
             return RedirectToAction("Cart", "Home");
         }
 
-        [ChildActionOnly]
-        public ActionResult CartSummary()
-        {
-            int total = 0;
-            if (Session["MaKH"] != null)
-            {
-                int maKH = (int)Session["MaKH"];
-                var gioHang = db.GioHangs.FirstOrDefault(g => g.MaKH == maKH);
-                if (gioHang != null)
-                {
-                    total = (int)(db.ChiTietGioHangs
-                                    .Where(c => c.MaGioHang == gioHang.MaGioHang)
-                                    .Sum(c => c.SoLuong) ?? 0);
-                }
-            }
-            else
-            {
-                var gioHang = Session["Cart"] as GioHang;
-                if (gioHang != null)
-                {
-                    // total = gioHang.TongSoLuong();
-                    total = gioHang.ChiTietGioHangs.Sum(c => c.SoLuong) ?? 0;
-                }
-            }
-            ViewBag.Quantity = total;
-            return PartialView("_CartSummary");
-        }
-
-
         [HttpGet]
+        [Authorize]
         public ActionResult Checkout(string selectedIds) // selectedIds truyền vào là chuỗi: "12,15,18" (các MaBienThe)
         {
             List<ChiTietGioHang> danhSachThanhToan = new List<ChiTietGioHang>();
@@ -607,8 +580,9 @@ namespace ESHOPPER.Controllers.WebPage
             // 5. Xử lý thanh toán và Xóa giỏ hàng
             if (paymentMethod == "VNPay")
             {
-                // return Redirect(CreateVnpayUrl(model)); // Giả định bạn đã có hàm tạo link VNPay
-                return Content("Chuyển hướng VNPay...");
+                return Redirect(CreateVnpayUrl(model)); // Giả định bạn đã có hàm tạo link VNPay
+                //return Content("Chuyển hướng VNPay...");
+
             }
             else
             {
@@ -632,14 +606,15 @@ namespace ESHOPPER.Controllers.WebPage
             }
         }
 
-        private string CreateVnpayUrl(DonHang order)
+        public string CreateVnpayUrl(DonHang order)
         {
-            string vnp_TmnCode = "QE91CB08";
-            string vnp_HashSecret = "R08TH1P0J1N4T0L63X0Q3KDTFWBYS8YT";
-            string vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-            string vnp_Returnurl = Url.Action("PaymentCallback", "Home", null, Request.Url.Scheme);
+            string vnp_TmnCode = ConfigurationManager.AppSettings["vnp_TmnCode"];
+            string vnp_HashSecret = ConfigurationManager.AppSettings["vnp_HashSecret"];
+            string vnp_Url = ConfigurationManager.AppSettings["vnp_Url"];
+            string vnp_Returnurl = ConfigurationManager.AppSettings["vnp_Returnurl"];
 
             VnPayLibrary vnpay = new VnPayLibrary();
+            // Số tiền nhân 100 theo quy tắc VNPay
             long amount = (long)(order.TongTien * 100);
 
             vnpay.AddRequestData("vnp_Version", "2.1.0");
@@ -648,22 +623,28 @@ namespace ESHOPPER.Controllers.WebPage
             vnpay.AddRequestData("vnp_Amount", amount.ToString());
             vnpay.AddRequestData("vnp_CreateDate", DateTime.Now.ToString("yyyyMMddHHmmss"));
             vnpay.AddRequestData("vnp_CurrCode", "VND");
-            vnpay.AddRequestData("vnp_IpAddr", Request.UserHostAddress);
+
+            // Lấy IP người dùng (bắt buộc)
+            vnpay.AddRequestData("vnp_IpAddr", Utils.GetIpAddress());
             vnpay.AddRequestData("vnp_Locale", "vn");
             vnpay.AddRequestData("vnp_OrderInfo", "Thanh toan don hang " + order.MaDH);
             vnpay.AddRequestData("vnp_OrderType", "other");
             vnpay.AddRequestData("vnp_ReturnUrl", vnp_Returnurl);
+
+            // Mã tham chiếu giao dịch (phải là duy nhất)
             vnpay.AddRequestData("vnp_TxnRef", order.MaDH.ToString());
 
             return vnpay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
         }
 
+        // 2. XỬ LÝ KẾT QUẢ TRẢ VỀ (CALLBACK)
         public ActionResult PaymentCallback()
         {
-            string vnp_HashSecret = "R08TH1P0J1N4T0L63X0Q3KDTFWBYS8YT";
+            string vnp_HashSecret = ConfigurationManager.AppSettings["vnp_HashSecret"];
             var vnpayData = Request.QueryString;
             VnPayLibrary vnpay = new VnPayLibrary();
 
+            // Lấy toàn bộ dữ liệu trả về để kiểm tra chữ ký
             foreach (string s in vnpayData)
             {
                 if (!string.IsNullOrEmpty(s) && s.StartsWith("vnp_"))
@@ -676,6 +657,7 @@ namespace ESHOPPER.Controllers.WebPage
             string vnp_TxnRef = vnpay.GetResponseData("vnp_TxnRef");
             string vnp_SecureHash = Request.QueryString["vnp_SecureHash"];
 
+            // Kiểm tra chữ ký bảo mật (Tránh giả mạo URL)
             bool checkSignature = vnpay.ValidateSignature(vnp_SecureHash, vnp_HashSecret);
 
             if (checkSignature)
@@ -687,80 +669,73 @@ namespace ESHOPPER.Controllers.WebPage
                     {
                         if (vnp_ResponseCode == "00") // THÀNH CÔNG
                         {
-                            order.TrangThai = 1;
+                            // 1. Cập nhật trạng thái đơn hàng
+                            order.TrangThai = 1; // Đã thanh toán
                             db.SaveChanges();
 
-                            // Logic xóa giỏ hàng cho VNPay (Xóa các món trong đơn hàng đó)
-                            // Cần lấy lại chi tiết đơn hàng vừa tạo để biết món nào cần xóa
+                            // 2. Xóa sản phẩm đã mua khỏi giỏ hàng
                             var itemsInOrder = db.ChiTietDonHangs.Where(d => d.MaDH == maDH).ToList();
 
+                            // --- XÓA GIỎ HÀNG DB (Đã đăng nhập) ---
                             if (Session["MaKH"] != null)
                             {
                                 int maKH = (int)Session["MaKH"];
                                 var gioHang = db.GioHangs.FirstOrDefault(g => g.MaKH == maKH);
                                 if (gioHang != null)
                                 {
-                                    foreach (var i in itemsInOrder)
+                                    foreach (var itemOrder in itemsInOrder)
                                     {
-                                        // Lưu ý: i.Size và i.Mau ở đây là Text. Trong giỏ hàng lại lưu ID.
-                                        // Đây là vấn đề nan giải khi thiết kế CSDL lệch pha (Order lưu text, Cart lưu ID).
-                                        // Giải pháp tạm thời: Xóa theo MaSP (nếu mua tất cả biến thể).
-                                        // Hoặc phải truy ngược ID từ Text (rủi ro).
-                                        // Giải pháp tốt nhất: Ở bước Checkout, sau khi add DonHang, ta xóa giỏ hàng LUÔN trước khi redirect VNPay.
-                                        // Nếu thanh toán thất bại thì User phải pick lại.
+                                        // Tìm và xóa đúng biến thể đã mua
+                                        var itemToRemove = db.ChiTietGioHangs.FirstOrDefault(c =>
+                                            c.MaGioHang == gioHang.MaGioHang &&
+                                            c.MaBienThe == itemOrder.MaBienThe); // Khớp MaBienThe
 
-                                        // Nhưng để code chạy tạm thời với CSDL hiện tại:
-                                        var itemsToRemove = db.ChiTietGioHangs.Where(c => c.MaGioHang == gioHang.MaGioHang && c.MaBienThe == i.MaBienThe).ToList();
-                                        // Đoạn này xóa hơi "lố" (xóa hết size của sp đó), nhưng an toàn hơn việc ko xóa được.
-                                        db.ChiTietGioHangs.RemoveRange(itemsToRemove);
+                                        if (itemToRemove != null)
+                                        {
+                                            db.ChiTietGioHangs.Remove(itemToRemove);
+                                        }
                                     }
                                     db.SaveChanges();
                                 }
                             }
-                            else
-                            {
-                                // Session cart
-                                var gh = Session["Cart"] as GioHang;
-                                if (gh != null)
-                                {
-                                    foreach (var i in itemsInOrder)
-                                    {
-                                        // 1. Tìm các item cần xóa và chuyển sang List tạm
-                                        var itemsToRemove = gh.ChiTietGioHangs
-                                                              .Where(x => x.MaBienThe == i.MaBienThe)
-                                                              .ToList();
 
-                                        // 2. Lặp và xóa từng item khỏi collection gốc
-                                        foreach (var item in itemsToRemove)
-                                        {
-                                            gh.ChiTietGioHangs.Remove(item);
-                                        }
+                            // --- XÓA GIỎ HÀNG SESSION (Vãng lai) ---
+                            // QUAN TRỌNG: Session Cart là List<ChiTietGioHang>, không phải GioHang Object
+                            var cartSession = Session["Cart"] as List<ChiTietGioHang>;
+                            if (cartSession != null)
+                            {
+                                foreach (var itemOrder in itemsInOrder)
+                                {
+                                    // Tìm item trong list session để xóa
+                                    var itemToRemove = cartSession.FirstOrDefault(x => x.MaBienThe == itemOrder.MaBienThe);
+                                    if (itemToRemove != null)
+                                    {
+                                        cartSession.Remove(itemToRemove);
                                     }
-                                    Session["Cart"] = gh;
                                 }
+                                Session["Cart"] = cartSession; // Cập nhật lại Session
                             }
 
-                            TempData["SuccessMessage"] = "Thanh toán thành công!";
+                            TempData["SuccessMessage"] = "Thanh toán thành công qua VNPay!";
                             return RedirectToAction("OrderSuccess");
                         }
-                        else
+                        else // THANH TOÁN THẤT BẠI (Do hủy hoặc lỗi thẻ)
                         {
-                            order.TrangThai = 0; // Hủy/Lỗi
-                            db.SaveChanges();
-                            TempData["PaymentError"] = "Lỗi thanh toán VNPay: Code " + vnp_ResponseCode;
+                            // Không cập nhật trạng thái đơn (vẫn để là Chờ thanh toán hoặc Hủy)
+                            // order.TrangThai = 0; // Tùy bạn có muốn hủy luôn đơn không
+                            // db.SaveChanges();
+
+                            TempData["PaymentError"] = "Giao dịch thất bại. Mã lỗi: " + vnp_ResponseCode;
                             return RedirectToAction("PaymentFail");
                         }
                     }
                 }
-                TempData["PaymentError"] = "Không tìm thấy đơn hàng.";
-                return RedirectToAction("PaymentFail");
             }
-            else
-            {
-                TempData["PaymentError"] = "Sai chữ ký bảo mật.";
-                return RedirectToAction("PaymentFail");
-            }
+
+            TempData["PaymentError"] = "Chữ ký không hợp lệ!";
+            return RedirectToAction("PaymentFail");
         }
+
 
         public ActionResult OrderSuccess()
         {

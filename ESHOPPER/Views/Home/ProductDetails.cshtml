@@ -40,7 +40,7 @@
     .pd-gallery {
         position: sticky;
         top: 20px;
-        height: 550px; /* Chiều cao cố định */
+        height: 550px;  
         background-color: #fff;
         border: 1px solid var(--border);
         border-radius: 8px;
@@ -54,7 +54,7 @@
         .pd-gallery img {
             width: 100%;
             height: 100%;
-            object-fit: contain; /* Quan trọng: Giúp ảnh nằm gọn trong khung, không bị méo */
+            object-fit: cover; 
             transition: transform 0.5s ease;
         }
 
@@ -391,7 +391,8 @@
         </div>
 
         <div class="row g-5">
-            <div class="col-lg-7">
+            <div class="col-lg-1"></div>
+            <div class="col-lg-4">
                 <div class="pd-gallery">
                     <img id="main-product-image"
                          src="@Url.Content("~/Images/Products/" + (Model.SanPhamChinh.AnhSP ?? "no-image.png"))"
@@ -399,14 +400,14 @@
                 </div>
             </div>
 
-            <div class="col-lg-5">
+            <div class="col-lg-6">
                 <div class="pd-info">
                     <div class="pd-brand">ZELLA ORIGINAL</div>
 
                     <h1 class="pd-title">@Model.SanPhamChinh.TenSanPham</h1>
 
                     <div class="pd-price-row">
-                        <span class="pd-price" id="product-price">@string.Format("{0:N0} ₫", Model.SanPhamChinh.GiaBanLe)</span>
+                        <span class="pd-price" id="product-price">@string.Format("{0:N0} VNĐ", Model.SanPhamChinh.GiaBanLe)</span>
                     </div>
 
                     @using (Html.BeginForm("AddToCart", "Home", FormMethod.Post, new { id = "productForm", onsubmit = "return validateForm()" }))

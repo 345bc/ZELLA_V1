@@ -65,58 +65,61 @@
 
             <div class="my-6 border-t border-blue-200/50 mx-6"></div>
 
-            <div class="px-6 mb-3">
-                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Quản lý dữ liệu</p>
-            </div>
+                <div class="px-6 mb-3">
+                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Quản lý dữ liệu</p>
+                </div>
 
-            <div class="space-y-1 px-3">
-                <a href="@Url.Action("ProductList", "Admin")"
-                   class="flex items-center px-4 py-3.5 text-sm font-semibold rounded-r-lg border-l-[5px] transition-all duration-200
-                   @(ViewBag.Active == "Sanpham"
-                       ? "bg-white border-brand-blue text-brand-blue shadow-sm"
-                       : "border-transparent text-slate-600 hover:bg-blue-100 hover:text-brand-blue")">
-                    Danh sách sản phẩm
-                </a>
+                <div class="space-y-1 px-3">
+                    <a href="@Url.Action("ProductList", "Admin")"
+                       class="flex items-center px-4 py-3.5 text-sm font-semibold rounded-r-lg border-l-[5px] transition-all duration-200
+       @(ViewBag.Active == "Sanpham"
+           ? "bg-white border-brand-blue text-brand-blue shadow-sm"
+           : "border-transparent text-slate-600 hover:bg-blue-100 hover:text-brand-blue")">
+                        Danh sách sản phẩm
+                    </a>
 
-                <a href="@Url.Action("Index", "Category")"
-                   class="flex items-center px-4 py-3.5 text-sm font-semibold rounded-r-lg border-l-[5px] transition-all duration-200
-                   @(ViewBag.Active == "category"
-                       ? "bg-white border-brand-blue text-brand-blue shadow-sm"
-                       : "border-transparent text-slate-600 hover:bg-blue-100 hover:text-brand-blue")">
-                    Danh mục sản phẩm
-                </a>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a href="@Url.Action("Index", "Category")"
+                           class="flex items-center px-4 py-3.5 text-sm font-semibold rounded-r-lg border-l-[5px] transition-all duration-200
+@(ViewBag.Active == "category"
+    ? "bg-white border-brand-blue text-brand-blue shadow-sm"
+    : "border-transparent text-slate-600 hover:bg-blue-100 hover:text-brand-blue")">
+                            Danh mục sản phẩm
+                        </a>
 
-                <a href="@Url.Action("Index", "Order")"
-                   class="flex items-center justify-between px-4 py-3.5 text-sm font-semibold rounded-r-lg border-l-[5px] transition-all duration-200
-                   @(ViewBag.Active == "Donhang"
-                       ? "bg-white border-brand-blue text-brand-blue shadow-sm"
-                       : "border-transparent text-slate-600 hover:bg-blue-100 hover:text-brand-blue")">
-                    <span>Đơn hàng</span>
-                </a>
-            </div>
+                        <a href="@Url.Action("Index", "Order")"
+                           class="flex items-center justify-between px-4 py-3.5 text-sm font-semibold rounded-r-lg border-l-[5px] transition-all duration-200
+@(ViewBag.Active == "Donhang"
+    ? "bg-white border-brand-blue text-brand-blue shadow-sm"
+    : "border-transparent text-slate-600 hover:bg-blue-100 hover:text-brand-blue")">
+                            <span>Đơn hàng</span>
+                        </a>
+                    }
+                </div>
 
             <div class="my-6 border-t border-blue-200/50 mx-6"></div>
 
             @*<div class="px-6 mb-3">
-                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Tài khoản</p>
-            </div>
+            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Tài khoản</p>
+        </div>
 
-            <div class="px-3">
-                <a href="@Url.Action("#", "Customers")"
-                   class="flex items-center px-4 py-3.5 text-sm font-semibold rounded-r-lg border-l-[5px] transition-all duration-200
-                   @(ViewBag.Active == "Khachhang"
-                       ? "bg-white border-brand-blue text-brand-blue shadow-sm"
-                       : "border-transparent text-slate-600 hover:bg-blue-100 hover:text-brand-blue")">
-                    Hồ sơ khách hàng
-                </a>
-                <a href="@Url.Action("Index", "Customers")"
-                   class="flex items-center px-4 py-3.5 text-sm font-semibold rounded-r-lg border-l-[5px] transition-all duration-200
-                     @(ViewBag.Active == "Users"
-                         ? "bg-white border-brand-blue text-brand-blue shadow-sm"
-                         : "border-transparent text-slate-600 hover:bg-blue-100 hover:text-brand-blue")">
-                    Quản lý tài khoản
-                </a>
-            </div>*@
+        <div class="px-3">
+            <a href="@Url.Action("#", "Customers")"
+               class="flex items-center px-4 py-3.5 text-sm font-semibold rounded-r-lg border-l-[5px] transition-all duration-200
+               @(ViewBag.Active == "Khachhang"
+                   ? "bg-white border-brand-blue text-brand-blue shadow-sm"
+                   : "border-transparent text-slate-600 hover:bg-blue-100 hover:text-brand-blue")">
+                Hồ sơ khách hàng
+            </a>
+            <a href="@Url.Action("Index", "Customers")"
+               class="flex items-center px-4 py-3.5 text-sm font-semibold rounded-r-lg border-l-[5px] transition-all duration-200
+                 @(ViewBag.Active == "Users"
+                     ? "bg-white border-brand-blue text-brand-blue shadow-sm"
+                     : "border-transparent text-slate-600 hover:bg-blue-100 hover:text-brand-blue")">
+                Quản lý tài khoản
+            </a>
+        </div>*@
         </nav>
 
     </aside>
