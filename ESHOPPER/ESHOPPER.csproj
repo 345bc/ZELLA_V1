@@ -212,82 +212,82 @@
     <Compile Include="Helper\JwtHelper.cs" />
     <Compile Include="Models\AdminViewModel.cs" />
     <Compile Include="Models\BienTheSanPham.cs">
-      <DependentUpon>SModel.tt</DependentUpon>
+      <DependentUpon>SModell.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CartItem.cs" />
     <Compile Include="Models\CartViewModel.cs" />
     <Compile Include="Models\ChiTietDonHang.cs">
-      <DependentUpon>SModel.tt</DependentUpon>
+      <DependentUpon>SModell.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ChiTietGioHang.cs">
-      <DependentUpon>SModel.tt</DependentUpon>
+      <DependentUpon>SModell.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DanhMucSanPham.cs">
-      <DependentUpon>SModel.tt</DependentUpon>
+      <DependentUpon>SModell.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DonHang.cs">
-      <DependentUpon>SModel.tt</DependentUpon>
+      <DependentUpon>SModell.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GioHang.cs">
-      <DependentUpon>SModel.tt</DependentUpon>
+      <DependentUpon>SModell.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GioHangPartial.cs" />
     <Compile Include="Models\HomeViewModel.cs" />
     <Compile Include="Models\Intro.cs">
-      <DependentUpon>SModel.tt</DependentUpon>
+      <DependentUpon>SModell.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\KhachHang.cs">
-      <DependentUpon>SModel.tt</DependentUpon>
+      <DependentUpon>SModell.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\KhuyenMai.cs">
-      <DependentUpon>SModel.tt</DependentUpon>
+      <DependentUpon>SModell.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\KichThuoc.cs">
-      <DependentUpon>SModel.tt</DependentUpon>
+      <DependentUpon>SModell.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MauSac.cs">
-      <DependentUpon>SModel.tt</DependentUpon>
+      <DependentUpon>SModell.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\NhaCungCap.cs">
-      <DependentUpon>SModel.tt</DependentUpon>
+      <DependentUpon>SModell.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\NhanVien.cs">
-      <DependentUpon>SModel.tt</DependentUpon>
+      <DependentUpon>SModell.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ProductDetailsViewModel.cs" />
     <Compile Include="Models\SanPham.cs">
-      <DependentUpon>SModel.tt</DependentUpon>
+      <DependentUpon>SModell.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ShopViewModel.cs" />
-    <Compile Include="Models\SModel.Context.cs">
+    <Compile Include="Models\SModell.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>SModel.Context.tt</DependentUpon>
+      <DependentUpon>SModell.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\SModel.cs">
+    <Compile Include="Models\SModell.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>SModel.tt</DependentUpon>
+      <DependentUpon>SModell.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\SModel.Designer.cs">
+    <Compile Include="Models\SModell.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>SModel.edmx</DependentUpon>
+      <DependentUpon>SModell.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
-      <DependentUpon>SModel.tt</DependentUpon>
+      <DependentUpon>SModell.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\sp_helpdiagrams_Result.cs">
-      <DependentUpon>SModel.tt</DependentUpon>
+      <DependentUpon>SModell.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\sysdiagram.cs">
-      <DependentUpon>SModel.tt</DependentUpon>
+      <DependentUpon>SModell.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TTDONHANG.cs">
-      <DependentUpon>SModel.tt</DependentUpon>
+      <DependentUpon>SModell.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\User.cs">
-      <DependentUpon>SModel.tt</DependentUpon>
+      <DependentUpon>SModell.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\VnPayLibrary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -379,15 +379,15 @@
     <Content Include="Images\vendor-6.jpg" />
     <Content Include="Images\vendor-7.jpg" />
     <Content Include="Images\vendor-8.jpg" />
-    <Content Include="Models\SModel.Context.tt">
+    <Content Include="Models\SModell.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>SModel.edmx</DependentUpon>
-      <LastGenOutput>SModel.Context.cs</LastGenOutput>
+      <DependentUpon>SModell.edmx</DependentUpon>
+      <LastGenOutput>SModell.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\SModel.tt">
+    <Content Include="Models\SModell.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>SModel.edmx</DependentUpon>
-      <LastGenOutput>SModel.cs</LastGenOutput>
+      <DependentUpon>SModell.edmx</DependentUpon>
+      <LastGenOutput>SModell.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
@@ -489,12 +489,12 @@
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <EntityDeploy Include="Models\SModel.edmx">
+    <EntityDeploy Include="Models\SModell.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>SModel.Designer.cs</LastGenOutput>
+      <LastGenOutput>SModell.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Models\SModel.edmx.diagram">
-      <DependentUpon>SModel.edmx</DependentUpon>
+    <Content Include="Models\SModell.edmx.diagram">
+      <DependentUpon>SModell.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
