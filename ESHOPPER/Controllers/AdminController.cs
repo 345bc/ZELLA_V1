@@ -7,8 +7,6 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
-using System.Drawing; // Để xử lý ảnh
-using System.Drawing.Drawing2D; // Để chỉnh chất lượng ảnh
 
 namespace ESHOPPER.Controllers.Admin
 {
@@ -17,8 +15,6 @@ namespace ESHOPPER.Controllers.Admin
     {
         QlyFashionShopEntities db = new QlyFashionShopEntities();
 
-
-        // GET: Admin
         public ActionResult Dashboard()
         {
             var model = new AdminViewModel();
@@ -27,7 +23,6 @@ namespace ESHOPPER.Controllers.Admin
                 .Where(d => d.TrangThai == 1)
                 .Sum(d => (decimal?)d.TongTien) ?? 0;
 
-            // Đơn hàng trong tháng hiện tại
             var thisMonth = DateTime.Now.Month;
             var thisYear = DateTime.Now.Year;
             model.DonHangMoi = db.DonHangs
@@ -36,23 +31,19 @@ namespace ESHOPPER.Controllers.Admin
             model.TongKhachHang = db.KhachHangs.Count();
             model.TongSanPham = db.SanPhams.Count();
 
-            // --- 2. BIỂU ĐỒ DOANH THU (12 THÁNG) ---
             model.ChartDoanhThu = new List<decimal>();
             model.ChartLabelThang = new List<string>();
 
             for (int i = 1; i <= 12; i++)
             {
                 model.ChartLabelThang.Add("T" + i);
-                // Tính tổng tiền theo từng tháng của năm nay
                 var revenue = db.DonHangs
                     .Where(d => d.NgayDat.HasValue && d.NgayDat.Value.Month == i && d.NgayDat.Value.Year == thisYear && d.TrangThai == 1)
                     .Sum(d => (decimal?)d.TongTien) ?? 0;
 
-                // Chia cho 1.000.000 để biểu đồ hiển thị đơn vị Triệu
                 model.ChartDoanhThu.Add(revenue / 1000000m);
             }
 
-            // --- 3. BIỂU ĐỒ TỶ LỆ DANH MỤC (Top 5 danh mục nhiều sp nhất) ---
             var categoryStats = db.SanPhams
                 .GroupBy(p => p.DanhMucSanPham.TenDanhMuc)
                 .Select(g => new { Name = g.Key, Count = g.Count() })
@@ -63,7 +54,6 @@ namespace ESHOPPER.Controllers.Admin
             model.ChartLabelDanhMuc = categoryStats.Select(x => x.Name).ToList();
             model.ChartDataDanhMuc = categoryStats.Select(x => x.Count).ToList();
 
-            // --- 4. ĐƠN HÀNG GẦN ĐÂY (Lấy 5 đơn mới nhất) ---
             model.ListDonHangMoi = db.DonHangs
                 .OrderByDescending(d => d.NgayDat)
                 .Take(5)
@@ -156,10 +146,6 @@ namespace ESHOPPER.Controllers.Admin
                 }
             }
 
-            // Nếu ModelState không hợp lệ hoặc có lỗi catch, cần load lại các DropDownList để hiển thị lại View
-            // Ví dụ:
-            // ViewBag.MaDM = new SelectList(db.DanhMucs, "MaDM", "TenDM", sanPham.MaDM);
-            // ViewBag.MaNCC = new SelectList(db.NhaCungCaps, "MaNCC", "TenNCC", sanPham.MaNCC);
 
             return View(sanPham);
         }
@@ -191,58 +177,54 @@ namespace ESHOPPER.Controllers.Admin
         {
             if (ModelState.IsValid)
             {
-                // --- XỬ LÝ ẢNH: ĐỔI TÊN THEO ẢNH CŨ & RESIZE ---
-
-                // Kiểm tra nếu người dùng CÓ chọn file ảnh mới
+                // --- XỬ LÝ ẢNH ---
                 if (ImageUpload != null && ImageUpload.ContentLength > 0)
                 {
-                    string finalFileName = ""; // Tên file cuối cùng sẽ lưu
+                    string finalFileName = "";
+                    string uploadFolder = Server.MapPath("~/Images/Products/");
+
+                    // Đảm bảo thư mục tồn tại
+                    if (!Directory.Exists(uploadFolder))
+                    {
+                        Directory.CreateDirectory(uploadFolder);
+                    }
 
                     // TRƯỜNG HỢP 1: Sản phẩm ĐÃ CÓ ảnh cũ
                     if (!string.IsNullOrEmpty(sanPham.AnhSP))
                     {
-                        // 1.1. Lấy tên gốc của ảnh cũ (bỏ đuôi .jpg/.png đi)
-                        // Ví dụ: ảnh cũ là "ao-thun-xanh.jpg" -> lấy được "ao-thun-xanh"
                         string oldBaseName = Path.GetFileNameWithoutExtension(sanPham.AnhSP);
-
-                        // 1.2. Lấy đuôi mở rộng của ảnh MỚI vừa up lên
-                        // Ví dụ: up ảnh PNG -> lấy được ".png"
                         string newExtension = Path.GetExtension(ImageUpload.FileName);
-
-                        // 1.3. Ghép lại thành tên file mới (Tên cũ + Đuôi mới)
                         finalFileName = oldBaseName + newExtension;
 
-                        // 1.4. Dọn dẹp: Nếu đuôi ảnh thay đổi (vd: jpg -> png), cần xóa file jpg cũ đi để tránh rác
-                        string oldFullPath = Path.Combine(Server.MapPath("~/Images/Products/"), sanPham.AnhSP);
-                        // Chỉ xóa nếu tên mới khác tên cũ (nghĩa là khác đuôi)
+                        string oldFullPath = Path.Combine(uploadFolder, sanPham.AnhSP);
+
+                        // Nếu đuôi ảnh thay đổi, xóa ảnh cũ
                         if (finalFileName != sanPham.AnhSP && System.IO.File.Exists(oldFullPath))
                         {
                             System.IO.File.Delete(oldFullPath);
                         }
                     }
-                    // TRƯỜNG HỢP 2: Sản phẩm CHƯA CÓ ảnh (lần đầu up)
+                    // TRƯỜNG HỢP 2: Sản phẩm CHƯA CÓ ảnh
                     else
                     {
-                        // Tạo một tên ngẫu nhiên để tránh trùng
                         finalFileName = "SP_" + DateTime.Now.Ticks + Path.GetExtension(ImageUpload.FileName);
                     }
 
-                    // 2. Xác định đường dẫn lưu file trên server
-                    string savePath = Path.Combine(Server.MapPath("~/Images/Products/"), finalFileName);
+                    // Đường dẫn lưu file
+                    string savePath = Path.Combine(uploadFolder, finalFileName);
 
-                    
+                    // ⭐ QUAN TRỌNG: Lưu file lên server
+                    ImageUpload.SaveAs(savePath);
 
-                    // 4. Cập nhật tên file mới nhất vào database
+                    // Cập nhật tên file vào database
                     sanPham.AnhSP = finalFileName;
                 }
+                // (Nếu không chọn ảnh mới, giữ nguyên ảnh cũ)
 
-                // (Nếu không chọn ảnh mới, sanPham.AnhSP vẫn giữ nguyên giá trị cũ nhờ HiddenFor trong View)
-
-                // --- KẾT THÚC XỬ LÝ ẢNH ---
-
+                // --- LƯU DATABASE ---
                 db.Entry(sanPham).State = EntityState.Modified;
                 db.SaveChanges();
-                // Sửa lại tên Action bạn muốn quay về (ví dụ ProductList hoặc Index)
+
                 return RedirectToAction("ProductList");
             }
 
@@ -251,6 +233,7 @@ namespace ESHOPPER.Controllers.Admin
             ViewBag.MaNCC = new SelectList(db.NhaCungCaps, "MaNCC", "TenNCC", sanPham.MaNCC);
             return View(sanPham);
         }
+
 
 
         // GET: SanPhams/Delete/5
