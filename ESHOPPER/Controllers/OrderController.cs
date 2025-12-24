@@ -21,17 +21,15 @@ namespace ESHOPPER.Controllers
             return View(donHangs.ToList());
         }
 
-        // GET: Order/Details/5
         public ActionResult Details(int id)
         {
-            // Lấy danh sách sản phẩm (Chi tiết đơn hàng) theo Mã Đơn Hàng
             var listChiTiet = db.ChiTietDonHangs
                 .Where(x => x.MaDH == id)
-                .Include("BienTheSanPham.SanPham")    // Để lấy tên & ảnh sản phẩm
-                .Include("BienTheSanPham.MauSac")     // Để lấy tên màu
-                .Include("BienTheSanPham.KichThuoc")  // Để lấy tên size
-                .Include("DonHang")                   // Để lấy thông tin người nhận, địa chỉ
-                .ToList();                            // <--- QUAN TRỌNG: Chuyển thành List để khớp View
+                .Include("BienTheSanPham.SanPham")    
+                .Include("BienTheSanPham.MauSac")     
+                .Include("BienTheSanPham.KichThuoc")  
+                .Include("DonHang")                   
+                .ToList();                            
 
             // Kiểm tra nếu không tìm thấy dữ liệu
             if (listChiTiet == null || listChiTiet.Count == 0)

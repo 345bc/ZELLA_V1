@@ -133,7 +133,6 @@
     @Scripts.Render("~/bundles/jqueryval")
 
     <script>
-        // Script xem trước ảnh khi upload
         document.getElementById('ImageUpload').onchange = function (evt) {
             var tgt = evt.target || window.event.srcElement,
                 files = tgt.files;
@@ -146,7 +145,7 @@
 
                     img.src = fr.result;
                     img.classList.remove('hidden');
-                    placeholder.classList.add('opacity-0'); // Ẩn placeholder nhưng giữ layout
+                    placeholder.classList.add('opacity-0'); 
                 }
                 fr.readAsDataURL(files[0]);
             }

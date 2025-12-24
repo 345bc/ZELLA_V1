@@ -564,11 +564,6 @@
     <Content Include="Views\Category\Index.cshtml" />
     <Content Include="Views\Order\Details.cshtml" />
     <Content Include="Views\Order\Index.cshtml" />
-    <Content Include="Views\ChiTietDonHangs\Create.cshtml" />
-    <Content Include="Views\ChiTietDonHangs\Delete.cshtml" />
-    <Content Include="Views\ChiTietDonHangs\Details.cshtml" />
-    <Content Include="Views\ChiTietDonHangs\Edit.cshtml" />
-    <Content Include="Views\ChiTietDonHangs\Index.cshtml" />
     <Content Include="Views\Home\_CartBadge.cshtml" />
   </ItemGroup>
   <ItemGroup>

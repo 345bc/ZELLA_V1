@@ -57,7 +57,7 @@ namespace ESHOPPER.Controllers.Admin
             model.ListDonHangMoi = db.DonHangs
                 .OrderByDescending(d => d.NgayDat)
                 .Take(5)
-                .Include(d => d.KhachHang) // Join bảng khách hàng để lấy tên
+                .Include(d => d.KhachHang) 
                 .ToList();
 
             return View(model);
@@ -73,7 +73,6 @@ namespace ESHOPPER.Controllers.Admin
         }
 
 
-        // GET: SanPhams/Details/5
         public ActionResult ProductDetails(int? id)
         {
             if (id == null)
@@ -81,6 +80,7 @@ namespace ESHOPPER.Controllers.Admin
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             SanPham sanPham = db.SanPhams.Find(id);
+
             if (sanPham == null)
             {
                 return HttpNotFound();
@@ -88,12 +88,10 @@ namespace ESHOPPER.Controllers.Admin
             return View(sanPham);
         }
 
-        // GET: SanPhams/Create
         public ActionResult ProductCreate()
         {
             ViewBag.MaDM = new SelectList(db.DanhMucSanPhams, "MaDM", "TenDanhMuc");
             ViewBag.MaNCC = new SelectList(db.NhaCungCaps, "MaNCC", "TenNCC");
-            ViewBag.MaSP = new SelectList(db.SanPhams, "MaSP", "MaDM");
             ViewBag.MaSP = new SelectList(db.SanPhams, "MaSP", "MaDM");
             return View();
         }
@@ -236,9 +234,6 @@ namespace ESHOPPER.Controllers.Admin
 
 
 
-        // GET: SanPhams/Delete/5
-        // GET: Admin/ProductDelete/5
-        // Hiển thị trang xác nhận xóa
         public ActionResult ProductDelete(int? id)
         {
             if (id == null)
@@ -253,8 +248,6 @@ namespace ESHOPPER.Controllers.Admin
             return View(sanPham);
         }
 
-        // POST: Admin/ProductDelete/5
-        // Thực hiện xóa sau khi bấm nút xác nhận
         [HttpPost, ActionName("ProductDelete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -278,11 +271,9 @@ namespace ESHOPPER.Controllers.Admin
                 }
             }
 
-            // 2. XÓA DỮ LIỆU TRONG DATABASE
             db.SanPhams.Remove(sanPham);
             db.SaveChanges();
 
-            // 3. Quay về trang danh sách
             return RedirectToAction("ProductList");
         }
         protected override void Dispose(bool disposing)

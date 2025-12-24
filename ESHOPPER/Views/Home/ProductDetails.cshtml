@@ -516,7 +516,7 @@
         <h3 class="sec-title">Sản phẩm tương tự</h3>
         <div class="row px-xl-5 pb-3 row-cols-lg-5 row-cols-md-3 row-cols-sm-2 row-cols-1 g-3">
 
-            @foreach (var item in Model.SanPhamNgauNhiens)
+            @foreach (var item in Model.SanPhamLienQuans)
             {
                 <div class="col">
                     <div class="product-card-modern">
@@ -642,8 +642,6 @@
                 });
             });
 
-            // SỬA LỖI NÚT TĂNG GIẢM
-            // Dùng e.preventDefault() để chặn submit form
             const qtyInput = document.getElementById('quantity');
 
             document.querySelector('.btn-plus').addEventListener('click', function(e) {
@@ -669,9 +667,6 @@
             return true;
         }
         $(document).ready(function () {
-            // Tìm tất cả các element có class ".alert"
-            // Đợi 2 giây (2000ms)
-            // Sau đó trượt lên (slideUp) để ẩn đi
             window.setTimeout(function() {
                 $(".alert").fadeTo(500, 0).slideUp(500, function(){
                     $(this).remove();

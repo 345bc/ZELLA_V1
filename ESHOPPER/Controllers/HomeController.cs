@@ -100,6 +100,11 @@ namespace ESHOPPER.Controllers.WebPage
                 return HttpNotFound();
             }
 
+            var sanPhamLienQuans = db.SanPhams
+            .Where(sp => sp.MaDM == sanPham.MaDM && sp.MaSP != id)
+            .Take(5)
+            .ToList();
+
             var listBienThe = db.BienTheSanPhams.Where(b => b.MaSP == id).ToList();
 
             // 3. Lấy danh sách các Mã Size và Mã Màu xuất hiện trong biến thể (loại bỏ null)
@@ -109,11 +114,7 @@ namespace ESHOPPER.Controllers.WebPage
             var sizes = db.KichThuocs.Where(s => sizeIds.Contains(s.MaSize)).OrderBy(s => s.TenSize).ToList();
             var colors = db.MauSacs.Where(c => colorIds.Contains(c.MaMau)).ToList();
 
-            var randomProducts = db.SanPhams
-                .Where(s => s.MaSP != id && s.TrangThai == "Hoạt động")
-                .OrderBy(r => Guid.NewGuid())
-                .Take(5)
-                .ToList();
+            
 
             // 6. Đóng gói vào ViewModel
             var viewModel = new ProductDetailsViewModel
@@ -121,8 +122,8 @@ namespace ESHOPPER.Controllers.WebPage
                 SanPhamChinh = sanPham,
                 CacSizeDuyNhat = sizes,
                 CacMauDuyNhat = colors,
-                SanPhamNgauNhiens = randomProducts,
-                DanhSachBienThe = listBienThe // Đảm bảo ViewModel đã có thuộc tính này
+                SanPhamLienQuans = sanPhamLienQuans,
+                DanhSachBienThe = listBienThe 
             };
 
             return View(viewModel);
